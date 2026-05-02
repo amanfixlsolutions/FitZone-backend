@@ -1,0 +1,225 @@
+[2026-04-30 13:41:17] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 13:42:12] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 13:42:21] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 13:42:36] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 13:42:53] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 13:47:16] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 13:48:29] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 13:52:54] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 13:54:39] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 13:55:33] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:12:16] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/trainers?limit=100 | IP: ::1
+[2026-04-30 14:34:47] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:37:17] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/me | IP: ::1
+[2026-04-30 14:44:38] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:44:40] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:44:44] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:44:45] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:44:49] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:44:50] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:44:51] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:44:51] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:45:24] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:45:31] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/me | IP: ::1
+[2026-04-30 14:47:07] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/me | IP: ::1
+[2026-04-30 14:47:32] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/me | IP: ::1
+[2026-04-30 14:50:46] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/me | IP: ::1
+[2026-04-30 14:50:51] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:50:53] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:50:55] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:51:56] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:52:54] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:52:59] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 14:53:02] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | OPTIONS /api/auth/login | IP: ::1
+[2026-04-30 15:01:49] ERROR: Cannot set property query of #<IncomingMessage> which has only a getter | POST /api/auth/login | IP: ::1
+[2026-04-30 15:02:45] ERROR: Invalid email or password. | POST /api/auth/login | IP: ::1
+[2026-04-30 15:08:38] ERROR: Not authorized. Please log in. | GET /api/auth/me | IP: ::1
+[2026-04-30 15:08:45] ERROR: Invalid email or password. | POST /api/auth/login | IP: ::1
+[2026-04-30 15:08:58] ERROR: Invalid email or password. | POST /api/auth/login | IP: ::1
+[2026-04-30 15:09:34] ERROR: Invalid email or password. | POST /api/auth/login | IP: ::1
+[2026-04-30 15:24:36] ERROR: Invalid email or password. | POST /api/auth/login | IP: ::1
+[2026-04-30 15:24:38] ERROR: Invalid email or password. | POST /api/auth/login | IP: ::1
+[2026-04-30 15:39:04] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:39:07] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:39:15] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:39:29] ERROR: Not authorized. Please log in. | GET /api/auth/me | IP: ::1
+[2026-04-30 15:39:32] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:39:38] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:40:09] ERROR: Not authorized. Please log in. | GET /api/auth/me | IP: ::1
+[2026-04-30 15:45:44] ERROR: Not authorized. Please log in. | POST /api/auth/logout | IP: ::1
+[2026-04-30 15:45:48] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:46:32] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:46:36] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:46:48] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:46:52] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:47:28] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:47:31] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:47:57] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:50:38] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:53:27] ERROR: next is not a function | POST /api/auth/login | IP: ::1
+[2026-04-30 15:57:07] ERROR: Gym ID is required. | POST /api/members | IP: ::1
+[2026-04-30 15:57:25] ERROR: Gym ID is required. | POST /api/members | IP: ::1
+[2026-04-30 16:02:33] ERROR: User no longer exists. | POST /api/auth/logout | IP: ::1
+[2026-04-30 16:03:03] ERROR: User no longer exists. | GET /api/members/stats | IP: ::1
+[2026-04-30 16:03:03] ERROR: User no longer exists. | GET /api/members?limit=100 | IP: ::1
+[2026-04-30 16:03:03] ERROR: User no longer exists. | GET /api/plans? | IP: ::1
+[2026-04-30 16:05:04] ERROR: ❌ Email failed to amanjoshi9511@gmail.com: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-364bdf81b11sm2418867a91.13 - gsmtp
+[2026-04-30 16:20:09] ERROR: Session expired. Please log in again. | GET /api/members?limit=100 | IP: ::1
+[2026-04-30 16:20:10] ERROR: Session expired. Please log in again. | GET /api/members/stats | IP: ::1
+[2026-04-30 16:20:10] ERROR: Session expired. Please log in again. | GET /api/plans? | IP: ::1
+[2026-04-30 16:20:10] ERROR: Session expired. Please log in again. | GET /api/auth/me | IP: ::1
+[2026-04-30 16:22:43] ERROR: ❌ Email failed to lokesh@gmail.com: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2b988772ea7sm56876415ad.6 - gsmtp
+[2026-04-30 16:37:54] ERROR: Cast to ObjectId failed for value "Yearly" (type string) at path "_id" for model "Plan" | POST /api/members | IP: ::1
+[2026-04-30 16:54:33] ERROR: Session expired. Please log in again. | GET /api/classes?limit=100 | IP: ::1
+[2026-04-30 16:54:34] ERROR: Session expired. Please log in again. | GET /api/trainers?limit=100&status=Active | IP: ::1
+[2026-04-30 16:54:34] ERROR: Session expired. Please log in again. | GET /api/classes?limit=100 | IP: ::1
+[2026-04-30 16:54:34] ERROR: Session expired. Please log in again. | GET /api/trainers?limit=100&status=Active | IP: ::1
+[2026-04-30 16:54:41] ERROR: Session expired. Please log in again. | GET /api/classes?limit=100 | IP: ::1
+[2026-04-30 16:54:41] ERROR: Session expired. Please log in again. | GET /api/trainers?limit=100&status=Active | IP: ::1
+[2026-04-30 16:54:41] ERROR: Session expired. Please log in again. | GET /api/auth/me | IP: ::1
+[2026-04-30 17:13:24] ERROR: Session expired. Please log in again. | GET /api/auth/me | IP: ::1
+[2026-04-30 17:13:24] ERROR: Session expired. Please log in again. | GET /api/trainers?limit=100 | IP: ::1
+[2026-04-30 17:48:06] ERROR: Session expired. Please log in again. | GET /api/trainers?limit=100 | IP: ::1
+[2026-04-30 17:48:06] ERROR: Session expired. Please log in again. | GET /api/auth/me | IP: ::1
+[2026-04-30 21:39:58] ERROR: Session expired. Please log in again. | GET /api/members?limit=100 | IP: ::1
+[2026-04-30 21:39:58] ERROR: Session expired. Please log in again. | GET /api/members/stats | IP: ::1
+[2026-04-30 21:39:58] ERROR: Session expired. Please log in again. | GET /api/members?limit=100 | IP: ::1
+[2026-04-30 21:39:58] ERROR: Session expired. Please log in again. | GET /api/plans? | IP: ::1
+[2026-04-30 21:39:58] ERROR: Session expired. Please log in again. | GET /api/members/stats | IP: ::1
+[2026-04-30 21:39:58] ERROR: Session expired. Please log in again. | GET /api/plans? | IP: ::1
+[2026-04-30 21:40:08] ERROR: Session expired. Please log in again. | GET /api/members?limit=100 | IP: ::1
+[2026-04-30 21:40:08] ERROR: Session expired. Please log in again. | GET /api/members/stats | IP: ::1
+[2026-04-30 21:40:08] ERROR: Session expired. Please log in again. | GET /api/plans? | IP: ::1
+[2026-04-30 21:40:08] ERROR: Session expired. Please log in again. | GET /api/auth/me | IP: ::1
+[2026-05-01 09:15:53] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.jvzhwvi.mongodb.net
+[2026-05-01 09:51:56] ERROR: Invalid token. Please log in again. | POST /api/members | IP: ::1
+[2026-05-01 09:52:33] ERROR: Invalid token. Please log in again. | GET /api/members?limit=100 | IP: ::1
+[2026-05-01 09:52:33] ERROR: Invalid token. Please log in again. | GET /api/members/stats | IP: ::1
+[2026-05-01 09:52:33] ERROR: Invalid token. Please log in again. | GET /api/plans? | IP: ::1
+[2026-05-01 09:52:33] ERROR: Invalid token. Please log in again. | GET /api/auth/me | IP: ::1
+[2026-05-01 09:53:04] ERROR: Refresh token expired. Please log in again. | POST /api/auth/refresh | IP: ::1
+[2026-05-01 09:56:55] ERROR: ❌ Email failed to test@gmail.com: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-83515b87869sm1261812b3a.61 - gsmtp
+[2026-05-01 10:13:17] ERROR: Session expired. Please log in again. | GET /api/classes?limit=100 | IP: ::1
+[2026-05-01 10:13:17] ERROR: Session expired. Please log in again. | GET /api/trainers?limit=100&status=Active | IP: ::1
+[2026-05-01 10:13:17] ERROR: Session expired. Please log in again. | GET /api/classes?limit=100 | IP: ::1
+[2026-05-01 10:13:17] ERROR: Session expired. Please log in again. | GET /api/trainers?limit=100&status=Active | IP: ::1
+[2026-05-01 10:16:32] ERROR: Session expired. Please log in again. | GET /api/classes?limit=100 | IP: ::1
+[2026-05-01 10:16:32] ERROR: Session expired. Please log in again. | GET /api/trainers?limit=100&status=Active | IP: ::1
+[2026-05-01 10:16:32] ERROR: Session expired. Please log in again. | GET /api/auth/me | IP: ::1
+[2026-05-01 10:31:58] ERROR: Session expired. Please log in again. | GET /api/notifications?limit=50 | IP: ::1
+[2026-05-01 10:47:14] ERROR: Session expired. Please log in again. | DELETE /api/notifications/69f330583236f9157bf23e25 | IP: ::1
+[2026-05-01 11:25:48] ERROR: next is not a function | POST /api/inventory | IP: ::1
+[2026-05-01 11:25:57] ERROR: next is not a function | POST /api/inventory | IP: ::1
+[2026-05-01 11:34:32] ERROR: next is not a function | POST /api/inventory | IP: ::1
+[2026-05-01 11:35:05] ERROR: next is not a function | POST /api/inventory | IP: ::1
+[2026-05-01 11:57:09] ERROR: ❌ Email failed to tester@gmail.com: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-8351582dd55sm1546492b3a.1 - gsmtp
+[2026-05-01 12:10:07] ERROR: ❌ Email failed to mukesh@gmail.com: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2b9cae11939sm14310905ad.49 - gsmtp
+[2026-05-01 12:44:45] ERROR: ❌ Email failed to amanjoshi9511@gmail.com: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-83515b4b371sm1627187b3a.49 - gsmtp
+[2026-05-01 14:25:42] ERROR: ❌ Email failed to ishant@gmail.com: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2b9cae363d9sm17162305ad.57 - gsmtp
+[2026-05-01 15:39:43] ERROR: Not authorized. Please log in. | GET /api/analytics/super-admin | IP: ::1
+[2026-05-01 15:39:43] ERROR: Not authorized. Please log in. | GET /api/payments/revenue | IP: ::1
+[2026-05-01 15:39:59] ERROR: Not authorized. Please log in. | GET /api/analytics/gym-owner | IP: ::1
+[2026-05-01 15:57:53] ERROR: Member not found. | POST /api/attendance/checkin | IP: ::1
+[2026-05-01 16:02:38] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-01 16:02:39] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-01 16:02:40] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-01 16:02:40] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-01 16:02:40] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-01 16:02:40] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-01 16:02:41] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-01 22:16:05] ERROR: Invalid token. Please log in again. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:16:28] ERROR: Invalid token. Please log in again. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:16:42] ERROR: Refresh token expired. Please log in again. | POST /api/auth/refresh | IP: ::1
+[2026-05-01 22:17:12] ERROR: Invalid token. Please log in again. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:17:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:18:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:19:38] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:20:34] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:20:36] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:20:44] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:20:44] ERROR: Not authorized. Please log in. | GET /api/payments/revenue | IP: ::1
+[2026-05-01 22:20:45] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:20:45] ERROR: Not authorized. Please log in. | GET /api/payments/revenue | IP: ::1
+[2026-05-01 22:20:45] ERROR: Not authorized. Please log in. | GET /api/analytics/super-admin | IP: ::1
+[2026-05-01 22:20:45] ERROR: Not authorized. Please log in. | GET /api/analytics/super-admin | IP: ::1
+[2026-05-01 22:21:15] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:21:45] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:22:11] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:22:11] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:22:41] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:23:12] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:23:42] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:24:12] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:24:42] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:25:12] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:26:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:27:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:28:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:29:03] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:29:12] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:29:42] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:30:12] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:31:12] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:31:42] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:32:12] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:33:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:34:38] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:35:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:36:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:37:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:38:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:39:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:40:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:41:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:42:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:43:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:44:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:45:38] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:46:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:47:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:48:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:49:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:50:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:51:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:52:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:53:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:54:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:55:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:56:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:57:39] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:58:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 22:59:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 23:00:37] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 23:01:29] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-01 23:01:35] ERROR: Not authorized. Please log in. | POST /api/auth/logout | IP: ::1
+[2026-05-02 09:31:12] ERROR: Invalid token. Please log in again. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-02 09:31:27] ERROR: Invalid token. Please log in again. | POST /api/auth/logout | IP: ::1
+[2026-05-02 09:31:29] ERROR: Invalid token. Please log in again. | POST /api/auth/logout | IP: ::1
+[2026-05-02 09:31:30] ERROR: Invalid token. Please log in again. | POST /api/auth/logout | IP: ::1
+[2026-05-02 09:31:31] ERROR: Invalid token. Please log in again. | POST /api/auth/logout | IP: ::1
+[2026-05-02 09:31:42] ERROR: Invalid token. Please log in again. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-02 09:31:42] ERROR: Refresh token expired. Please log in again. | POST /api/auth/refresh | IP: ::1
+[2026-05-02 09:32:00] ERROR: getaddrinfo ENOTFOUND ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net | POST /api/auth/login | IP: ::1
+[2026-05-02 09:32:26] ERROR: getaddrinfo ENOTFOUND ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net | POST /api/auth/login | IP: ::1
+[2026-05-02 09:32:58] ERROR: getaddrinfo ENOTFOUND ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net | POST /api/auth/login | IP: ::1
+[2026-05-02 09:33:10] ERROR: getaddrinfo ENOTFOUND ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net | POST /api/auth/login | IP: ::1
+[2026-05-02 10:20:19] ERROR: File too large | POST /api/uploads?folder=trainers | IP: ::1
+[2026-05-02 10:20:36] ERROR: File too large | POST /api/uploads?folder=trainers | IP: ::1
+[2026-05-02 10:21:00] ERROR: Only images (jpeg, jpg, png, gif, webp) and PDFs are allowed. | POST /api/uploads?folder=trainers | IP: ::1
+[2026-05-02 10:37:06] ERROR: ❌ Email failed to rohit3@gmail.com: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-364ebf2affdsm5003789a91.8 - gsmtp
+[2026-05-02 14:44:54] ERROR: ❌ Email failed to amanjoshi9511@gmail.com: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-364d1c70d8csm12433469a91.13 - gsmtp
+[2026-05-02 14:44:54] ERROR: Failed to send OTP email. Please try again. | POST /api/auth/send-otp | IP: ::1
+[2026-05-02 14:48:49] ERROR: File too large | POST /api/uploads?folder=trainers | IP: ::1
+[2026-05-02 16:13:14] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-02 16:13:40] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-02 16:21:44] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-02 16:54:14] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1

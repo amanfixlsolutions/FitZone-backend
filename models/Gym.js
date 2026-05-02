@@ -1,0 +1,57 @@
+const mongoose = require("mongoose");
+
+const gymSchema = new mongoose.Schema({
+  name:        { type: String, required: true, trim: true },
+  owner:       { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  ownerName:   { type: String, required: true },
+  email:       { type: String, required: true, lowercase: true },
+  phone:       { type: String, default: "" },
+  city:        { type: String, required: true },
+  address:     { type: String, default: "" },
+  description: { type: String, default: "" },
+  logo:        { type: String, default: "" },
+  images:      [{ type: String }],
+
+  status: {
+    type: String,
+    enum: ["pending", "active", "suspended", "rejected"],
+    default: "pending",
+  },
+
+  // Financials
+  commissionRate: { type: Number, default: 10 },
+  totalRevenue:   { type: Number, default: 0 },
+  monthlyRevenue: { type: Number, default: 0 },
+
+  // Stats
+  totalMembers:   { type: Number, default: 0 },
+  activeMembers:  { type: Number, default: 0 },
+  rating:         { type: Number, default: 0, min: 0, max: 5 },
+  totalRatings:   { type: Number, default: 0 },
+
+  // Documents
+  docs: {
+    submitted:  { type: Boolean, default: false },
+    verified:   { type: Boolean, default: false },
+    files:      [{ type: String }],
+  },
+
+  // Settings
+  openingHours: {
+    weekdays: { open: { type: String, default: "05:30" }, close: { type: String, default: "23:00" } },
+    saturday: { open: { type: String, default: "06:00" }, close: { type: String, default: "22:00" } },
+    sunday:   { open: { type: String, default: "07:00" }, close: { type: String, default: "21:00" } },
+  },
+
+  approvedAt:  { type: Date, default: null },
+  approvedBy:  { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+  rejectedAt:  { type: Date, default: null },
+  rejectedBy:  { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+  rejectReason:{ type: String, default: "" },
+}, { timestamps: true });
+
+gymSchema.index({ status: 1 });
+gymSchema.index({ owner: 1 });
+gymSchema.index({ city: 1 });
+
+module.exports = mongoose.model("Gym", gymSchema);
