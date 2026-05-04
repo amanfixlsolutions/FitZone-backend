@@ -11,10 +11,16 @@ exports.getClasses = asyncHandler(async (req, res) => {
   const { status, level, search, gymId, day } = req.query;
   const filter = {};
 
-  if (req.user.role === "gym-owner") filter.gym = req.user.gym;
-  else if (gymId) filter.gym = gymId;
+  // Public access (no auth) — show only Active classes
+  if (!req.user) {
+    filter.status = "Active";
+  } else if (req.user.role === "gym-owner") {
+    filter.gym = req.user.gym;
+  } else if (gymId) {
+    filter.gym = gymId;
+  }
 
-  if (status) filter.status = status;
+  if (status && req.user) filter.status = status; // only override if authenticated
   if (level)  filter.level = level;
   if (day)    filter.days = day;
   if (search) filter.$or = [

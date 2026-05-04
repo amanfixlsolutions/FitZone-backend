@@ -36,6 +36,7 @@ const logRoutes          = require("./routes/logs");
 const inventoryRoutes    = require("./routes/inventory");
 const campaignRoutes     = require("./routes/campaigns");
 const systemRoutes       = require("./routes/system");
+const liveClassRoutes    = require("./routes/liveClasses");
 
 // ── Connect DB ─────────────────────────────────────────────────────
 connectDB();
@@ -51,7 +52,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowed = [
       process.env.CLIENT_URL || "http://localhost:3000",
-      "http://localhost:3000",
+      "http://localhost:3001",
       "http://127.0.0.1:3000",
     ];
     // Allow requests with no origin (mobile apps, curl, Postman)
@@ -159,6 +160,7 @@ app.use("/api/logs",          logRoutes);
 app.use("/api/inventory",     inventoryRoutes);
 app.use("/api/campaigns",     campaignRoutes);
 app.use("/api/system",        systemRoutes);
+app.use("/api/live-classes",  liveClassRoutes);
 
 // ── 404 Handler ────────────────────────────────────────────────────
 app.use((req, res) => {

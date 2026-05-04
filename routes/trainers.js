@@ -5,6 +5,10 @@ const {
 } = require("../controllers/trainerController");
 const { protect, adminOrSuperAdmin, superAdminOnly } = require("../middleware/auth");
 
+// ── Public — website visitors browse trainers ──────────────────────
+router.get("/public", getTrainers);
+
+// ── Protected routes ───────────────────────────────────────────────
 router.use(protect);
 
 router.get("/",             adminOrSuperAdmin, getTrainers);

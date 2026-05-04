@@ -9,15 +9,17 @@ exports.getPlans = asyncHandler(async (req, res) => {
   const { includeInactive, gymId } = req.query;
   const filter = {};
 
-  // Super-admin sees all plans; gym-owner sees their gym + platform plans
-  if (req.user.role === "gym-owner") {
-    filter.$or = [{ gym: req.user.gym }, { gym: null }];
+  // Public access (no auth) — show only active platform-wide plans
+  if (!req.user) {
+    filter.active = true;
+    filter.gym    = null; // platform-wide plans only
+  } else if (req.user.role === "gym-owner") {
+    filter.$or    = [{ gym: req.user.gym }, { gym: null }];
     filter.active = true;
   } else if (gymId) {
     filter.$or = [{ gym: gymId }, { gym: null }];
     if (!includeInactive) filter.active = true;
   } else {
-    // Super-admin: show all unless filtered
     if (!includeInactive) filter.active = true;
   }
 

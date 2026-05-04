@@ -223,3 +223,51 @@
 [2026-05-02 16:13:40] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
 [2026-05-02 16:21:44] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
 [2026-05-02 16:54:14] ERROR: Member already checked in. | POST /api/attendance/checkin | IP: ::1
+[2026-05-03 19:06:47] ERROR: Scheduled time must be in the future. | POST /api/live-classes | IP: ::1
+[2026-05-03 19:07:20] ERROR: Zoom createMeeting error: Invalid client_id or client_secret
+[2026-05-03 19:19:14] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/classes?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:19:14] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/classes?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:19:23] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:19:23] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:19:45] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/trainers?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:19:45] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/trainers?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:22:27] ERROR: Not authorized. Please log in. | GET /api/classes?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:22:27] ERROR: Not authorized. Please log in. | GET /api/classes?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:22:37] ERROR: Not authorized. Please log in. | GET /api/trainers?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:22:37] ERROR: Not authorized. Please log in. | GET /api/trainers?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:22:40] ERROR: Not authorized. Please log in. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:22:40] ERROR: Not authorized. Please log in. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:22:44] ERROR: Not authorized. Please log in. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:22:44] ERROR: Not authorized. Please log in. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 20:13:56] ERROR: Not authorized. Please log in. | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:13:56] ERROR: Not authorized. Please log in. | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:14:02] ERROR: Not authorized. Please log in. | GET /api/trainers/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:14:02] ERROR: Not authorized. Please log in. | GET /api/trainers/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:14:11] ERROR: Not authorized. Please log in. | GET /api/plans/public?limit=20 | IP: ::1
+[2026-05-03 20:14:11] ERROR: Not authorized. Please log in. | GET /api/plans/public?limit=20 | IP: ::1
+[2026-05-03 20:41:10] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:41:10] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:32] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:32] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:36] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:37] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:38] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:39] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:41] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/trainers/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:41] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/trainers/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:44] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/plans/public?limit=20 | IP: ::1
+[2026-05-03 20:49:44] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/plans/public?limit=20 | IP: ::1
+[2026-05-03 21:16:26] ERROR: Invalid token. Please log in again. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:16:56] ERROR: Invalid token. Please log in again. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:16:56] ERROR: Refresh token expired. Please log in again. | POST /api/auth/refresh | IP: ::1
+[2026-05-03 21:17:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:17:36] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:18:06] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:18:29] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/plans/public?limit=5 | IP: ::1
+[2026-05-03 21:18:55] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/plans/public?limit=5 | IP: ::1
+[2026-05-03 21:19:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:20:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:22:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:23:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:23:55] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:23:59] ERROR: Not authorized. Please log in. | POST /api/auth/logout | IP: ::1

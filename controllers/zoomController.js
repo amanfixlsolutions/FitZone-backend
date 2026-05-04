@@ -91,7 +91,7 @@ exports.deleteMeeting = asyncHandler(async (req, res, next) => {
 
   try {
     await zoomService.deleteMeeting(meeting.zoomMeetingId);
-  } catch (_) {}
+  } catch (_) { }
 
   meeting.status = "cancelled";
   await meeting.save();

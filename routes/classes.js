@@ -6,6 +6,10 @@ const {
 } = require("../controllers/classController");
 const { protect, adminOrSuperAdmin } = require("../middleware/auth");
 
+// ── Public — website visitors browse classes ───────────────────────
+router.get("/public", getClasses);
+
+// ── Protected routes ───────────────────────────────────────────────
 router.use(protect, adminOrSuperAdmin);
 
 router.get("/today",           getTodayClasses);

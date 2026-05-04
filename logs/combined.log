@@ -2553,3 +2553,709 @@
 [2026-05-02 17:00:47] INFO: Socket 0ej3de6vA0ScG_PpAABU joined gym:69f32f1322cd2201d5caea8a
 [2026-05-02 17:00:47] INFO: Socket E8OSmToT2ilPGBFJAABV joined role:gym-owner
 [2026-05-02 17:00:47] INFO: Socket E8OSmToT2ilPGBFJAABV joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:09:51] INFO: 🔌 Socket disconnected: E8OSmToT2ilPGBFJAABV
+[2026-05-02 17:09:51] INFO: 🔌 Socket connected: AJUCzl7gW5UuXLJyAABX | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:09:51] INFO: Socket AJUCzl7gW5UuXLJyAABX joined role:gym-owner
+[2026-05-02 17:09:51] INFO: Socket AJUCzl7gW5UuXLJyAABX joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:09:51] INFO: 🔌 Socket connected: TPf-s4G3dIfjU-e7AABZ | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:09:51] INFO: Socket TPf-s4G3dIfjU-e7AABZ joined role:gym-owner
+[2026-05-02 17:09:51] INFO: Socket TPf-s4G3dIfjU-e7AABZ joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:10:02] INFO: 🔌 Socket disconnected: TPf-s4G3dIfjU-e7AABZ
+[2026-05-02 17:10:06] INFO: 🔌 Socket connected: -KfKVznsG2B7eSy6AABc | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:10:06] INFO: 🔌 Socket connected: KeK-tDKDI5YRcRLHAABd | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:10:06] INFO: Socket -KfKVznsG2B7eSy6AABc joined role:super-admin
+[2026-05-02 17:10:06] INFO: Socket KeK-tDKDI5YRcRLHAABd joined role:super-admin
+[2026-05-02 17:10:11] INFO: 🔌 Socket disconnected: KeK-tDKDI5YRcRLHAABd
+[2026-05-02 17:10:11] INFO: 🔌 Socket connected: LGMFGzaDBBJdO12_AABf | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:10:11] INFO: Socket LGMFGzaDBBJdO12_AABf joined role:super-admin
+[2026-05-02 17:10:11] INFO: 🔌 Socket connected: 1Cga6UH4p-kMgY0CAABh | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:10:11] INFO: Socket 1Cga6UH4p-kMgY0CAABh joined role:super-admin
+[2026-05-02 17:19:53] INFO: 🔌 Socket disconnected: 1Cga6UH4p-kMgY0CAABh
+[2026-05-02 17:19:54] INFO: 🔌 Socket connected: 0lMUBo8iZjMarEQcAABk | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:19:54] INFO: 🔌 Socket connected: 1kob057VHpAZHmmEAABl | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:19:54] INFO: Socket 0lMUBo8iZjMarEQcAABk joined role:super-admin
+[2026-05-02 17:19:54] INFO: Socket 1kob057VHpAZHmmEAABl joined role:super-admin
+[2026-05-02 17:20:13] INFO: 🔌 Socket disconnected: 1kob057VHpAZHmmEAABl
+[2026-05-02 17:20:13] INFO: 🔌 Socket connected: 3w2GT_TLSPfeLFgWAABn | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:20:13] INFO: Socket 3w2GT_TLSPfeLFgWAABn joined role:super-admin
+[2026-05-02 17:20:13] INFO: 🔌 Socket connected: IhRaZitleCfzWn0wAABp | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:20:13] INFO: Socket IhRaZitleCfzWn0wAABp joined role:super-admin
+[2026-05-02 17:20:18] INFO: 🔌 Socket disconnected: IhRaZitleCfzWn0wAABp
+[2026-05-02 17:20:18] INFO: 🔌 Socket connected: hVQYtl5CY4HvO-waAABs | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:20:18] INFO: 🔌 Socket connected: 1ic7qP1bD9iCC4b8AABt | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:20:18] INFO: Socket hVQYtl5CY4HvO-waAABs joined role:super-admin
+[2026-05-02 17:20:18] INFO: Socket 1ic7qP1bD9iCC4b8AABt joined role:super-admin
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: vbMqsPl8pk5i04rOAAA_
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: -KfKVznsG2B7eSy6AABc
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: AJUCzl7gW5UuXLJyAABX
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: 0ej3de6vA0ScG_PpAABU
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: KBf9gZ7NBpQPgGGxAABQ
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: vumd5Boc5wuqxei6AABM
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: 0v_T-IfOuZlmGFL5AABH
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: xxSDRLPXfcHeA1WHAABE
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: 1ic7qP1bD9iCC4b8AABt
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: hVQYtl5CY4HvO-waAABs
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: 3w2GT_TLSPfeLFgWAABn
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: 0lMUBo8iZjMarEQcAABk
+[2026-05-02 17:22:03] INFO: 🔌 Socket disconnected: LGMFGzaDBBJdO12_AABf
+[2026-05-02 17:22:04] INFO: 🔌 Socket connected: AGAKIuGGaYZPbkgUAABv | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:22:04] INFO: Socket AGAKIuGGaYZPbkgUAABv joined role:super-admin
+[2026-05-02 17:22:59] INFO: 🔌 Socket disconnected: AGAKIuGGaYZPbkgUAABv
+[2026-05-02 17:23:00] INFO: 🔌 Socket connected: 87kt_H1nKh5andSEAABy | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:00] INFO: Socket 87kt_H1nKh5andSEAABy joined role:super-admin
+[2026-05-02 17:23:00] INFO: 🔌 Socket connected: mgi49wHXzlrQVPGKAABz | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:00] INFO: Socket mgi49wHXzlrQVPGKAABz joined role:super-admin
+[2026-05-02 17:23:06] INFO: 🔌 Socket disconnected: mgi49wHXzlrQVPGKAABz
+[2026-05-02 17:23:06] INFO: 🔌 Socket connected: zFdaFQtFQVhssFtJAAB2 | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:06] INFO: 🔌 Socket connected: bKHW1GDEPgzBLIhcAAB3 | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:06] INFO: Socket zFdaFQtFQVhssFtJAAB2 joined role:super-admin
+[2026-05-02 17:23:06] INFO: Socket bKHW1GDEPgzBLIhcAAB3 joined role:super-admin
+[2026-05-02 17:23:16] INFO: 🔌 Socket disconnected: bKHW1GDEPgzBLIhcAAB3
+[2026-05-02 17:23:16] INFO: 🔌 Socket connected: pLknSO4qD8YI4hsKAAB6 | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:16] INFO: 🔌 Socket connected: eQJCSEatXAGg7mHIAAB7 | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:16] INFO: Socket pLknSO4qD8YI4hsKAAB6 joined role:super-admin
+[2026-05-02 17:23:16] INFO: Socket eQJCSEatXAGg7mHIAAB7 joined role:super-admin
+[2026-05-02 17:23:21] INFO: 🔌 Socket disconnected: eQJCSEatXAGg7mHIAAB7
+[2026-05-02 17:23:21] INFO: 🔌 Socket connected: Y03ypSy-62p-CD2OAAB- | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:21] INFO: 🔌 Socket connected: bu2m9E4_qkyTOq6gAAB_ | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:21] INFO: Socket Y03ypSy-62p-CD2OAAB- joined role:super-admin
+[2026-05-02 17:23:21] INFO: Socket bu2m9E4_qkyTOq6gAAB_ joined role:super-admin
+[2026-05-02 17:23:33] INFO: 🔌 Socket disconnected: bu2m9E4_qkyTOq6gAAB_
+[2026-05-02 17:23:33] INFO: 🔌 Socket connected: Blt4W-t4ijU416MPAACC | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:33] INFO: Socket Blt4W-t4ijU416MPAACC joined role:super-admin
+[2026-05-02 17:23:33] INFO: 🔌 Socket connected: MnheDGZPaB_LzNJvAACD | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:23:33] INFO: Socket MnheDGZPaB_LzNJvAACD joined role:super-admin
+[2026-05-02 17:24:00] INFO: 🔌 Socket disconnected: MnheDGZPaB_LzNJvAACD
+[2026-05-02 17:24:00] INFO: 🔌 Socket connected: DiVT3JT06HSsuq8-AACG | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:24:00] INFO: 🔌 Socket connected: Is9q-5fbWt1Gx3MmAACH | User: 69f32f1322cd2201d5caea87
+[2026-05-02 17:24:00] INFO: Socket DiVT3JT06HSsuq8-AACG joined role:super-admin
+[2026-05-02 17:24:00] INFO: Socket Is9q-5fbWt1Gx3MmAACH joined role:super-admin
+[2026-05-02 17:38:22] INFO: 🔌 Socket disconnected: Is9q-5fbWt1Gx3MmAACH
+[2026-05-02 17:38:28] INFO: 🔌 Socket connected: JA2A5ZSUn4o2v2lNAACK | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:38:28] INFO: 🔌 Socket connected: 06Xkz2YZGspjQ6RCAACL | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:38:28] INFO: Socket JA2A5ZSUn4o2v2lNAACK joined role:gym-owner
+[2026-05-02 17:38:28] INFO: Socket JA2A5ZSUn4o2v2lNAACK joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:38:28] INFO: Socket 06Xkz2YZGspjQ6RCAACL joined role:gym-owner
+[2026-05-02 17:38:28] INFO: Socket 06Xkz2YZGspjQ6RCAACL joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:38:32] INFO: 🔌 Socket disconnected: 06Xkz2YZGspjQ6RCAACL
+[2026-05-02 17:38:32] INFO: 🔌 Socket connected: WQoxjc5etccHbI9QAACN | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:38:32] INFO: Socket WQoxjc5etccHbI9QAACN joined role:gym-owner
+[2026-05-02 17:38:32] INFO: Socket WQoxjc5etccHbI9QAACN joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:38:32] INFO: 🔌 Socket connected: dXkStWGp-ocammkaAACP | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:38:32] INFO: Socket dXkStWGp-ocammkaAACP joined role:gym-owner
+[2026-05-02 17:38:32] INFO: Socket dXkStWGp-ocammkaAACP joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:38:34] INFO: 🔌 Socket disconnected: dXkStWGp-ocammkaAACP
+[2026-05-02 17:38:34] INFO: 🔌 Socket connected: vZmRJJ6HrXZkyDbEAACR | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:38:34] INFO: Socket vZmRJJ6HrXZkyDbEAACR joined role:gym-owner
+[2026-05-02 17:38:34] INFO: Socket vZmRJJ6HrXZkyDbEAACR joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:38:34] INFO: 🔌 Socket connected: e0Eyvl_fgLKScBlQAACT | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:38:34] INFO: Socket e0Eyvl_fgLKScBlQAACT joined role:gym-owner
+[2026-05-02 17:38:34] INFO: Socket e0Eyvl_fgLKScBlQAACT joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:44:47] INFO: 🔌 Socket disconnected: e0Eyvl_fgLKScBlQAACT
+[2026-05-02 17:44:47] INFO: 🔌 Socket connected: NWB3sBpeseCaZlBJAACW | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:44:47] INFO: 🔌 Socket connected: qy1QuHOgomOcvNr6AACX | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:44:47] INFO: Socket NWB3sBpeseCaZlBJAACW joined role:gym-owner
+[2026-05-02 17:44:47] INFO: Socket NWB3sBpeseCaZlBJAACW joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:44:47] INFO: Socket qy1QuHOgomOcvNr6AACX joined role:gym-owner
+[2026-05-02 17:44:47] INFO: Socket qy1QuHOgomOcvNr6AACX joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:54:42] INFO: 🔌 Socket disconnected: qy1QuHOgomOcvNr6AACX
+[2026-05-02 17:54:42] INFO: 🔌 Socket connected: F1zqaHrVg6UmyOkfAACa | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:54:42] INFO: 🔌 Socket connected: U1PwoPgqQnc3kjcrAACb | User: 69f32f1322cd2201d5caea88
+[2026-05-02 17:54:42] INFO: Socket U1PwoPgqQnc3kjcrAACb joined role:gym-owner
+[2026-05-02 17:54:42] INFO: Socket U1PwoPgqQnc3kjcrAACb joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:54:42] INFO: Socket F1zqaHrVg6UmyOkfAACa joined role:gym-owner
+[2026-05-02 17:54:42] INFO: Socket F1zqaHrVg6UmyOkfAACa joined gym:69f32f1322cd2201d5caea8a
+[2026-05-02 17:54:55] INFO: 🔌 Socket disconnected: U1PwoPgqQnc3kjcrAACb
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: Y03ypSy-62p-CD2OAAB-
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: pLknSO4qD8YI4hsKAAB6
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: NWB3sBpeseCaZlBJAACW
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: WQoxjc5etccHbI9QAACN
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: JA2A5ZSUn4o2v2lNAACK
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: DiVT3JT06HSsuq8-AACG
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: Blt4W-t4ijU416MPAACC
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: 87kt_H1nKh5andSEAABy
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: F1zqaHrVg6UmyOkfAACa
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: vZmRJJ6HrXZkyDbEAACR
+[2026-05-02 17:55:00] INFO: 🔌 Socket disconnected: zFdaFQtFQVhssFtJAAB2
+[2026-05-03 12:18:47] INFO: ✅ Socket.io initialized
+[2026-05-03 12:18:47] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-03 12:18:50] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-03 12:20:25] INFO: 🔌 Socket connected: yeXz0nqpmk5DhQzmAAAC | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:20:25] INFO: Socket yeXz0nqpmk5DhQzmAAAC joined role:gym-owner
+[2026-05-03 12:20:25] INFO: Socket yeXz0nqpmk5DhQzmAAAC joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:20:25] INFO: 🔌 Socket connected: 5NWr_xVYFIV-puvWAAAD | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:20:25] INFO: Socket 5NWr_xVYFIV-puvWAAAD joined role:gym-owner
+[2026-05-03 12:20:25] INFO: Socket 5NWr_xVYFIV-puvWAAAD joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:20:31] INFO: 🔌 Socket disconnected: 5NWr_xVYFIV-puvWAAAD
+[2026-05-03 12:20:31] INFO: 🔌 Socket connected: 6SnEyq49DByuxJkcAAAF | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:20:31] INFO: Socket 6SnEyq49DByuxJkcAAAF joined role:gym-owner
+[2026-05-03 12:20:31] INFO: Socket 6SnEyq49DByuxJkcAAAF joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:20:31] INFO: 🔌 Socket connected: Q4WmNbnoSz4ghUqAAAAH | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:20:31] INFO: Socket Q4WmNbnoSz4ghUqAAAAH joined role:gym-owner
+[2026-05-03 12:20:31] INFO: Socket Q4WmNbnoSz4ghUqAAAAH joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:20:47] INFO: 🔌 Socket disconnected: Q4WmNbnoSz4ghUqAAAAH
+[2026-05-03 12:20:48] INFO: 🔌 Socket connected: pHpghQCMYryxy1SWAAAK | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:20:48] INFO: 🔌 Socket connected: WjXN_jljn6JBZqjNAAAL | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:20:48] INFO: Socket WjXN_jljn6JBZqjNAAAL joined role:gym-owner
+[2026-05-03 12:20:48] INFO: Socket WjXN_jljn6JBZqjNAAAL joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:20:48] INFO: Socket pHpghQCMYryxy1SWAAAK joined role:gym-owner
+[2026-05-03 12:20:48] INFO: Socket pHpghQCMYryxy1SWAAAK joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:20:54] INFO: 🔌 Socket disconnected: WjXN_jljn6JBZqjNAAAL
+[2026-05-03 12:20:54] INFO: 🔌 Socket connected: ATebrsPbLehvT0nPAAAO | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:20:54] INFO: 🔌 Socket connected: 0oZku32L8BY6tVw1AAAP | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:20:54] INFO: Socket ATebrsPbLehvT0nPAAAO joined role:gym-owner
+[2026-05-03 12:20:54] INFO: Socket ATebrsPbLehvT0nPAAAO joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:20:54] INFO: Socket 0oZku32L8BY6tVw1AAAP joined role:gym-owner
+[2026-05-03 12:20:54] INFO: Socket 0oZku32L8BY6tVw1AAAP joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:21:13] INFO: 🔌 Socket disconnected: 0oZku32L8BY6tVw1AAAP
+[2026-05-03 12:21:13] INFO: 🔌 Socket connected: Mu0C_vZzkJ633g1mAAAS | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:21:13] INFO: 🔌 Socket connected: FgXtU5nGHD8gmxUaAAAT | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:21:13] INFO: Socket Mu0C_vZzkJ633g1mAAAS joined role:gym-owner
+[2026-05-03 12:21:13] INFO: Socket Mu0C_vZzkJ633g1mAAAS joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:21:13] INFO: Socket FgXtU5nGHD8gmxUaAAAT joined role:gym-owner
+[2026-05-03 12:21:13] INFO: Socket FgXtU5nGHD8gmxUaAAAT joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:21:19] INFO: 🔌 Socket disconnected: FgXtU5nGHD8gmxUaAAAT
+[2026-05-03 12:21:19] INFO: 🔌 Socket connected: nPO5AbiNP0Hsh1YEAAAW | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:21:19] INFO: 🔌 Socket connected: 5lsGuAicxwZAP6ZOAAAX | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:21:19] INFO: Socket 5lsGuAicxwZAP6ZOAAAX joined role:gym-owner
+[2026-05-03 12:21:19] INFO: Socket 5lsGuAicxwZAP6ZOAAAX joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:21:19] INFO: Socket nPO5AbiNP0Hsh1YEAAAW joined role:gym-owner
+[2026-05-03 12:21:19] INFO: Socket nPO5AbiNP0Hsh1YEAAAW joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:21:40] INFO: 🔌 Socket disconnected: 5lsGuAicxwZAP6ZOAAAX
+[2026-05-03 12:21:41] INFO: 🔌 Socket connected: -KicGrV-pycSo5aSAAAa | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:21:41] INFO: 🔌 Socket connected: 6ldXHuixi8nheLKdAAAb | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:21:41] INFO: Socket -KicGrV-pycSo5aSAAAa joined role:gym-owner
+[2026-05-03 12:21:41] INFO: Socket -KicGrV-pycSo5aSAAAa joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:21:41] INFO: Socket 6ldXHuixi8nheLKdAAAb joined role:gym-owner
+[2026-05-03 12:21:41] INFO: Socket 6ldXHuixi8nheLKdAAAb joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:22:39] INFO: 🔌 Socket disconnected: 6ldXHuixi8nheLKdAAAb
+[2026-05-03 12:22:39] INFO: 🔌 Socket connected: vEyjgXwfL_z_sNkXAAAe | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:22:39] INFO: Socket vEyjgXwfL_z_sNkXAAAe joined role:gym-owner
+[2026-05-03 12:22:39] INFO: Socket vEyjgXwfL_z_sNkXAAAe joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:22:39] INFO: 🔌 Socket connected: pXJxIlP5TrUqEsTbAAAf | User: 69f32f1322cd2201d5caea88
+[2026-05-03 12:22:39] INFO: Socket pXJxIlP5TrUqEsTbAAAf joined role:gym-owner
+[2026-05-03 12:22:39] INFO: Socket pXJxIlP5TrUqEsTbAAAf joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 12:23:34] INFO: 🔌 Socket disconnected: pXJxIlP5TrUqEsTbAAAf
+[2026-05-03 12:23:34] INFO: 🔌 Socket disconnected: -KicGrV-pycSo5aSAAAa
+[2026-05-03 12:23:34] INFO: 🔌 Socket disconnected: nPO5AbiNP0Hsh1YEAAAW
+[2026-05-03 12:23:34] INFO: 🔌 Socket disconnected: pHpghQCMYryxy1SWAAAK
+[2026-05-03 12:23:34] INFO: 🔌 Socket disconnected: vEyjgXwfL_z_sNkXAAAe
+[2026-05-03 12:23:34] INFO: 🔌 Socket disconnected: yeXz0nqpmk5DhQzmAAAC
+[2026-05-03 12:23:34] INFO: 🔌 Socket disconnected: ATebrsPbLehvT0nPAAAO
+[2026-05-03 12:23:34] INFO: 🔌 Socket disconnected: Mu0C_vZzkJ633g1mAAAS
+[2026-05-03 12:23:34] INFO: 🔌 Socket disconnected: 6SnEyq49DByuxJkcAAAF
+[2026-05-03 18:37:56] INFO: ✅ Socket.io initialized
+[2026-05-03 18:37:56] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-03 18:38:00] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-01.jvzhwvi.mongodb.net
+[2026-05-03 18:42:26] INFO: ✅ Socket.io initialized
+[2026-05-03 18:42:26] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-03 18:42:38] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-03 18:42:55] INFO: ✅ Socket.io initialized
+[2026-05-03 18:42:55] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-03 18:42:56] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-02.jvzhwvi.mongodb.net
+[2026-05-03 18:59:31] INFO: ✅ Socket.io initialized
+[2026-05-03 18:59:32] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-03 18:59:34] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-03 19:03:46] INFO: ✅ Socket.io initialized
+[2026-05-03 19:03:46] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-03 19:03:52] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-01.jvzhwvi.mongodb.net
+[2026-05-03 19:05:03] INFO: 🔌 Socket connected: Vx-u5vguOUMearSTAAAC | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:05:03] INFO: 🔌 Socket connected: 5awu_0JFK3InxRUlAAAD | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:05:03] INFO: Socket Vx-u5vguOUMearSTAAAC joined role:gym-owner
+[2026-05-03 19:05:03] INFO: Socket Vx-u5vguOUMearSTAAAC joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:05:03] INFO: Socket 5awu_0JFK3InxRUlAAAD joined role:gym-owner
+[2026-05-03 19:05:03] INFO: Socket 5awu_0JFK3InxRUlAAAD joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:05:34] INFO: 🔌 Socket disconnected: Vx-u5vguOUMearSTAAAC
+[2026-05-03 19:05:34] INFO: 🔌 Socket disconnected: 5awu_0JFK3InxRUlAAAD
+[2026-05-03 19:05:36] INFO: 🔌 Socket connected: sKhiE98Y-9NjuIxYAAAF | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:05:36] INFO: Socket sKhiE98Y-9NjuIxYAAAF joined role:gym-owner
+[2026-05-03 19:05:36] INFO: Socket sKhiE98Y-9NjuIxYAAAF joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:05:39] INFO: 🔌 Socket disconnected: sKhiE98Y-9NjuIxYAAAF
+[2026-05-03 19:05:40] INFO: 🔌 Socket connected: z74QrBOpy5HA1k4CAAAI | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:05:40] INFO: 🔌 Socket connected: zxsqNYY7hyfRq765AAAJ | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:05:40] INFO: Socket z74QrBOpy5HA1k4CAAAI joined role:gym-owner
+[2026-05-03 19:05:40] INFO: Socket z74QrBOpy5HA1k4CAAAI joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:05:40] INFO: Socket zxsqNYY7hyfRq765AAAJ joined role:gym-owner
+[2026-05-03 19:05:40] INFO: Socket zxsqNYY7hyfRq765AAAJ joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:06:47] ERROR: Scheduled time must be in the future. | POST /api/live-classes | IP: ::1
+[2026-05-03 19:07:20] ERROR: Zoom createMeeting error: Invalid client_id or client_secret
+[2026-05-03 19:08:24] INFO: 🔌 Socket disconnected: zxsqNYY7hyfRq765AAAJ
+[2026-05-03 19:19:04] INFO: 🔌 Socket disconnected: z74QrBOpy5HA1k4CAAAI
+[2026-05-03 19:19:14] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/classes?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:19:14] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/classes?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:19:23] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:19:23] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:19:45] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/trainers?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:19:45] ERROR: Access denied. Required role: super-admin or gym-owner. | GET /api/trainers?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:20:22] INFO: 🔌 Socket connected: nQCP5j5qbjrVPB3fAAAM | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:22] INFO: 🔌 Socket connected: 6CICXr0gZahIUp6UAAAN | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:22] INFO: Socket nQCP5j5qbjrVPB3fAAAM joined role:gym-owner
+[2026-05-03 19:20:22] INFO: Socket nQCP5j5qbjrVPB3fAAAM joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:20:22] INFO: Socket 6CICXr0gZahIUp6UAAAN joined role:gym-owner
+[2026-05-03 19:20:22] INFO: Socket 6CICXr0gZahIUp6UAAAN joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:20:29] INFO: 🔌 Socket disconnected: 6CICXr0gZahIUp6UAAAN
+[2026-05-03 19:20:29] INFO: 🔌 Socket connected: 2Py1kU57samz9AXGAAAQ | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:29] INFO: Socket 2Py1kU57samz9AXGAAAQ joined role:gym-owner
+[2026-05-03 19:20:29] INFO: Socket 2Py1kU57samz9AXGAAAQ joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:20:29] INFO: 🔌 Socket connected: Halb019tSvsaosaGAAAR | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:29] INFO: Socket Halb019tSvsaosaGAAAR joined role:gym-owner
+[2026-05-03 19:20:29] INFO: Socket Halb019tSvsaosaGAAAR joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:20:38] INFO: 🔌 Socket disconnected: Halb019tSvsaosaGAAAR
+[2026-05-03 19:20:38] INFO: 🔌 Socket connected: HAVL8a6Xqc36csLvAAAU | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:38] INFO: 🔌 Socket connected: AaXit-4gGcXaH3gJAAAV | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:38] INFO: Socket HAVL8a6Xqc36csLvAAAU joined role:gym-owner
+[2026-05-03 19:20:38] INFO: Socket HAVL8a6Xqc36csLvAAAU joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:20:38] INFO: Socket AaXit-4gGcXaH3gJAAAV joined role:gym-owner
+[2026-05-03 19:20:38] INFO: Socket AaXit-4gGcXaH3gJAAAV joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:20:51] INFO: 🔌 Socket disconnected: AaXit-4gGcXaH3gJAAAV
+[2026-05-03 19:20:51] INFO: 🔌 Socket connected: G46VLrTeat4Sx3hDAAAY | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:51] INFO: Socket G46VLrTeat4Sx3hDAAAY joined role:gym-owner
+[2026-05-03 19:20:51] INFO: Socket G46VLrTeat4Sx3hDAAAY joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:20:51] INFO: 🔌 Socket connected: FPQX5CMKjhjFrUyqAAAZ | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:51] INFO: Socket FPQX5CMKjhjFrUyqAAAZ joined role:gym-owner
+[2026-05-03 19:20:51] INFO: Socket FPQX5CMKjhjFrUyqAAAZ joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:20:54] INFO: 🔌 Socket disconnected: FPQX5CMKjhjFrUyqAAAZ
+[2026-05-03 19:20:54] INFO: 🔌 Socket connected: ewFgzP95IG7U-bAnAAAc | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:54] INFO: Socket ewFgzP95IG7U-bAnAAAc joined role:gym-owner
+[2026-05-03 19:20:54] INFO: Socket ewFgzP95IG7U-bAnAAAc joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:20:54] INFO: 🔌 Socket connected: absSjgHL2scT4p-hAAAd | User: 69f32f1322cd2201d5caea88
+[2026-05-03 19:20:54] INFO: Socket absSjgHL2scT4p-hAAAd joined role:gym-owner
+[2026-05-03 19:20:54] INFO: Socket absSjgHL2scT4p-hAAAd joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 19:21:59] INFO: 🔌 Socket disconnected: nQCP5j5qbjrVPB3fAAAM
+[2026-05-03 19:21:59] INFO: 🔌 Socket disconnected: absSjgHL2scT4p-hAAAd
+[2026-05-03 19:21:59] INFO: 🔌 Socket disconnected: 2Py1kU57samz9AXGAAAQ
+[2026-05-03 19:21:59] INFO: 🔌 Socket disconnected: HAVL8a6Xqc36csLvAAAU
+[2026-05-03 19:21:59] INFO: 🔌 Socket disconnected: G46VLrTeat4Sx3hDAAAY
+[2026-05-03 19:21:59] INFO: 🔌 Socket disconnected: ewFgzP95IG7U-bAnAAAc
+[2026-05-03 19:22:27] ERROR: Not authorized. Please log in. | GET /api/classes?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:22:27] ERROR: Not authorized. Please log in. | GET /api/classes?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:22:37] ERROR: Not authorized. Please log in. | GET /api/trainers?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:22:37] ERROR: Not authorized. Please log in. | GET /api/trainers?status=Active&limit=50 | IP: ::1
+[2026-05-03 19:22:40] ERROR: Not authorized. Please log in. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:22:40] ERROR: Not authorized. Please log in. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:22:44] ERROR: Not authorized. Please log in. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 19:22:44] ERROR: Not authorized. Please log in. | GET /api/plans?limit=20 | IP: ::1
+[2026-05-03 20:13:56] ERROR: Not authorized. Please log in. | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:13:56] ERROR: Not authorized. Please log in. | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:14:02] ERROR: Not authorized. Please log in. | GET /api/trainers/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:14:02] ERROR: Not authorized. Please log in. | GET /api/trainers/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:14:11] ERROR: Not authorized. Please log in. | GET /api/plans/public?limit=20 | IP: ::1
+[2026-05-03 20:14:11] ERROR: Not authorized. Please log in. | GET /api/plans/public?limit=20 | IP: ::1
+[2026-05-03 20:40:49] INFO: ✅ Socket.io initialized
+[2026-05-03 20:40:49] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-03 20:41:10] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:41:10] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:41:38] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-02.jvzhwvi.mongodb.net
+[2026-05-03 20:49:32] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:32] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:36] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:37] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:38] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:39] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/classes/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:41] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/trainers/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:41] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/trainers/public?status=Active&limit=50 | IP: ::1
+[2026-05-03 20:49:44] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/plans/public?limit=20 | IP: ::1
+[2026-05-03 20:49:44] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/plans/public?limit=20 | IP: ::1
+[2026-05-03 20:50:00] INFO: 🔌 Socket connected: 9nWQnDjv1djSewzPAAAC | User: 69f32f1322cd2201d5caea87
+[2026-05-03 20:50:00] INFO: 🔌 Socket connected: oKlkv3EpGhqdL3iNAAAD | User: 69f32f1322cd2201d5caea87
+[2026-05-03 20:50:00] INFO: Socket 9nWQnDjv1djSewzPAAAC joined role:super-admin
+[2026-05-03 20:50:00] INFO: Socket oKlkv3EpGhqdL3iNAAAD joined role:super-admin
+[2026-05-03 20:50:18] INFO: 🔌 Socket disconnected: oKlkv3EpGhqdL3iNAAAD
+[2026-05-03 20:50:19] INFO: 🔌 Socket connected: _TR3DIZxE2npe8P9AAAG | User: 69f32f1322cd2201d5caea87
+[2026-05-03 20:50:19] INFO: 🔌 Socket connected: zgEI_YanT7PPWesEAAAH | User: 69f32f1322cd2201d5caea87
+[2026-05-03 20:50:19] INFO: Socket _TR3DIZxE2npe8P9AAAG joined role:super-admin
+[2026-05-03 20:50:19] INFO: Socket zgEI_YanT7PPWesEAAAH joined role:super-admin
+[2026-05-03 21:02:48] INFO: 🔌 Socket disconnected: zgEI_YanT7PPWesEAAAH
+[2026-05-03 21:02:48] INFO: 🔌 Socket connected: LwBm2SLEmXXS5PvgAAAK | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:02:48] INFO: 🔌 Socket connected: i32ONQ4jCXFDHUYSAAAL | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:02:48] INFO: Socket i32ONQ4jCXFDHUYSAAAL joined role:super-admin
+[2026-05-03 21:02:48] INFO: Socket LwBm2SLEmXXS5PvgAAAK joined role:super-admin
+[2026-05-03 21:02:51] INFO: 🔌 Socket disconnected: i32ONQ4jCXFDHUYSAAAL
+[2026-05-03 21:02:51] INFO: 🔌 Socket connected: 5ILphQU8reNy9Qx-AAAO | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:02:51] INFO: Socket 5ILphQU8reNy9Qx-AAAO joined role:super-admin
+[2026-05-03 21:02:51] INFO: 🔌 Socket connected: DGWaAVxF5QNWSbpmAAAP | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:02:51] INFO: Socket DGWaAVxF5QNWSbpmAAAP joined role:super-admin
+[2026-05-03 21:02:53] INFO: 🔌 Socket disconnected: DGWaAVxF5QNWSbpmAAAP
+[2026-05-03 21:02:53] INFO: 🔌 Socket connected: 0JfICcT6Zj6cNvuxAAAS | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:02:53] INFO: 🔌 Socket connected: qDC1hGEzabhNlNBOAAAT | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:02:53] INFO: Socket 0JfICcT6Zj6cNvuxAAAS joined role:super-admin
+[2026-05-03 21:02:53] INFO: Socket qDC1hGEzabhNlNBOAAAT joined role:super-admin
+[2026-05-03 21:02:57] INFO: 🔌 Socket disconnected: qDC1hGEzabhNlNBOAAAT
+[2026-05-03 21:02:57] INFO: 🔌 Socket connected: 7rn8hmJbJBuqo2DEAAAW | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:02:57] INFO: Socket 7rn8hmJbJBuqo2DEAAAW joined role:super-admin
+[2026-05-03 21:02:57] INFO: 🔌 Socket connected: eYQeieV5GL4rcGXuAAAX | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:02:57] INFO: Socket eYQeieV5GL4rcGXuAAAX joined role:super-admin
+[2026-05-03 21:03:18] INFO: 🔌 Socket disconnected: eYQeieV5GL4rcGXuAAAX
+[2026-05-03 21:03:20] INFO: 🔌 Socket connected: HX5Vo4oGqm5_xW0yAAAZ | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:03:20] INFO: Socket HX5Vo4oGqm5_xW0yAAAZ joined role:super-admin
+[2026-05-03 21:03:20] INFO: 🔌 Socket connected: kB8QtV-Gc-sJ2soPAAAb | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:03:20] INFO: Socket kB8QtV-Gc-sJ2soPAAAb joined role:super-admin
+[2026-05-03 21:03:36] INFO: 🔌 Socket disconnected: kB8QtV-Gc-sJ2soPAAAb
+[2026-05-03 21:03:36] INFO: 🔌 Socket connected: TuzcFODMAJoqxYzCAAAe | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:03:36] INFO: 🔌 Socket connected: wk8CiX1P6vsy9tsVAAAf | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:03:36] INFO: Socket TuzcFODMAJoqxYzCAAAe joined role:super-admin
+[2026-05-03 21:03:36] INFO: Socket wk8CiX1P6vsy9tsVAAAf joined role:super-admin
+[2026-05-03 21:13:13] INFO: 🔌 Socket disconnected: TuzcFODMAJoqxYzCAAAe
+[2026-05-03 21:13:13] INFO: 🔌 Socket disconnected: wk8CiX1P6vsy9tsVAAAf
+[2026-05-03 21:13:13] INFO: 🔌 Socket disconnected: 0JfICcT6Zj6cNvuxAAAS
+[2026-05-03 21:13:13] INFO: 🔌 Socket disconnected: 9nWQnDjv1djSewzPAAAC
+[2026-05-03 21:13:13] INFO: 🔌 Socket disconnected: _TR3DIZxE2npe8P9AAAG
+[2026-05-03 21:13:13] INFO: 🔌 Socket disconnected: 5ILphQU8reNy9Qx-AAAO
+[2026-05-03 21:13:13] INFO: 🔌 Socket disconnected: 7rn8hmJbJBuqo2DEAAAW
+[2026-05-03 21:13:13] INFO: 🔌 Socket disconnected: HX5Vo4oGqm5_xW0yAAAZ
+[2026-05-03 21:13:13] INFO: 🔌 Socket disconnected: LwBm2SLEmXXS5PvgAAAK
+[2026-05-03 21:15:56] INFO: 🔌 Socket connected: Du4NuFHE1n0pQVxzAAAh | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:15:56] INFO: Socket Du4NuFHE1n0pQVxzAAAh joined role:super-admin
+[2026-05-03 21:15:56] INFO: 🔌 Socket connected: JKhgEH3q8i---Q-iAAAk | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:15:56] INFO: Socket JKhgEH3q8i---Q-iAAAk joined role:super-admin
+[2026-05-03 21:15:56] INFO: 🔌 Socket connected: wZ12YeHtvgqylgAyAAAl | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:15:56] INFO: Socket wZ12YeHtvgqylgAyAAAl joined role:super-admin
+[2026-05-03 21:15:56] INFO: 🔌 Socket connected: 4difMPH15hwEd9FLAAAn | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:15:56] INFO: Socket 4difMPH15hwEd9FLAAAn joined role:super-admin
+[2026-05-03 21:15:56] INFO: 🔌 Socket connected: t_5aLkszabCj9xfCAAAp | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:15:56] INFO: Socket t_5aLkszabCj9xfCAAAp joined role:super-admin
+[2026-05-03 21:15:56] INFO: 🔌 Socket connected: RW0tWupjiHFanhafAAAr | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:15:56] INFO: Socket RW0tWupjiHFanhafAAAr joined role:super-admin
+[2026-05-03 21:15:56] INFO: 🔌 Socket connected: hfpajLuKNtlJPFe2AAAt | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:15:56] INFO: Socket hfpajLuKNtlJPFe2AAAt joined role:super-admin
+[2026-05-03 21:15:56] INFO: 🔌 Socket connected: 8EO6AJMEgPvJW_oWAAAv | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:15:56] INFO: Socket 8EO6AJMEgPvJW_oWAAAv joined role:super-admin
+[2026-05-03 21:15:56] INFO: 🔌 Socket connected: deWWnJXwHkgrtirsAAAx | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:15:56] INFO: Socket deWWnJXwHkgrtirsAAAx joined role:super-admin
+[2026-05-03 21:16:26] ERROR: Invalid token. Please log in again. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:16:56] ERROR: Invalid token. Please log in again. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:16:56] ERROR: Refresh token expired. Please log in again. | POST /api/auth/refresh | IP: ::1
+[2026-05-03 21:17:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:17:36] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:18:06] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:18:29] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/plans/public?limit=5 | IP: ::1
+[2026-05-03 21:18:55] ERROR: Cannot read properties of undefined (reading 'role') | GET /api/plans/public?limit=5 | IP: ::1
+[2026-05-03 21:19:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:20:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:21:52] INFO: ✅ Socket.io initialized
+[2026-05-03 21:21:52] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-03 21:21:52] INFO: 🔌 Socket connected: DL14lqNh1DazRzLNAAAB | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:21:52] INFO: Socket DL14lqNh1DazRzLNAAAB joined role:super-admin
+[2026-05-03 21:21:52] INFO: 🔌 Socket connected: wc3AuTYu0NDZgFgoAAAE | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:21:52] INFO: Socket wc3AuTYu0NDZgFgoAAAE joined role:super-admin
+[2026-05-03 21:21:52] INFO: 🔌 Socket connected: IKq60hP8KCPbfdKTAAAF | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:21:52] INFO: Socket IKq60hP8KCPbfdKTAAAF joined role:super-admin
+[2026-05-03 21:21:52] INFO: 🔌 Socket connected: BRFZoCSGGGtn2dPQAAAI | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:21:52] INFO: Socket BRFZoCSGGGtn2dPQAAAI joined role:super-admin
+[2026-05-03 21:21:52] INFO: 🔌 Socket connected: 3teiYq6LdtfML5XtAAAJ | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:21:52] INFO: Socket 3teiYq6LdtfML5XtAAAJ joined role:super-admin
+[2026-05-03 21:21:52] INFO: 🔌 Socket connected: 6Mif2BlrQDLu06RKAAAL | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:21:52] INFO: Socket 6Mif2BlrQDLu06RKAAAL joined role:super-admin
+[2026-05-03 21:21:53] INFO: 🔌 Socket connected: UcDsbPpuNp3K2-RlAAAN | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:21:53] INFO: Socket UcDsbPpuNp3K2-RlAAAN joined role:super-admin
+[2026-05-03 21:21:53] INFO: 🔌 Socket connected: 2OOXmSDMWsJzHGK8AAAP | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:21:53] INFO: Socket 2OOXmSDMWsJzHGK8AAAP joined role:super-admin
+[2026-05-03 21:21:54] INFO: 🔌 Socket connected: gFgNEHAUD_biDQxzAAAR | User: 69f32f1322cd2201d5caea87
+[2026-05-03 21:21:54] INFO: Socket gFgNEHAUD_biDQxzAAAR joined role:super-admin
+[2026-05-03 21:21:55] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-03 21:22:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:23:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:23:55] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
+[2026-05-03 21:23:59] ERROR: Not authorized. Please log in. | POST /api/auth/logout | IP: ::1
+[2026-05-03 21:23:59] INFO: 🔌 Socket disconnected: 6Mif2BlrQDLu06RKAAAL
+[2026-05-03 21:24:06] INFO: 🔌 Socket connected: -ra3wYmVwIVFq3cgAAAU | User: 69f32f1322cd2201d5caea88
+[2026-05-03 21:24:06] INFO: 🔌 Socket connected: Z61N6xpyRZDcP0GqAAAV | User: 69f32f1322cd2201d5caea88
+[2026-05-03 21:24:06] INFO: Socket -ra3wYmVwIVFq3cgAAAU joined role:gym-owner
+[2026-05-03 21:24:06] INFO: Socket -ra3wYmVwIVFq3cgAAAU joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 21:24:06] INFO: Socket Z61N6xpyRZDcP0GqAAAV joined role:gym-owner
+[2026-05-03 21:24:06] INFO: Socket Z61N6xpyRZDcP0GqAAAV joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 21:24:10] INFO: 🔌 Socket disconnected: Z61N6xpyRZDcP0GqAAAV
+[2026-05-03 22:15:53] INFO: 🔌 Socket disconnected: -ra3wYmVwIVFq3cgAAAU
+[2026-05-03 22:15:53] INFO: 🔌 Socket disconnected: gFgNEHAUD_biDQxzAAAR
+[2026-05-03 22:15:53] INFO: 🔌 Socket disconnected: 2OOXmSDMWsJzHGK8AAAP
+[2026-05-03 22:15:53] INFO: 🔌 Socket disconnected: DL14lqNh1DazRzLNAAAB
+[2026-05-03 22:15:53] INFO: 🔌 Socket disconnected: IKq60hP8KCPbfdKTAAAF
+[2026-05-03 22:15:53] INFO: 🔌 Socket disconnected: 3teiYq6LdtfML5XtAAAJ
+[2026-05-03 22:15:53] INFO: 🔌 Socket disconnected: UcDsbPpuNp3K2-RlAAAN
+[2026-05-03 22:15:53] INFO: 🔌 Socket disconnected: wc3AuTYu0NDZgFgoAAAE
+[2026-05-03 22:15:53] INFO: 🔌 Socket disconnected: BRFZoCSGGGtn2dPQAAAI
+[2026-05-03 22:20:33] INFO: 🔌 Socket connected: vOhpKcCBBdJJGb4-AAAX | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:20:33] INFO: Socket vOhpKcCBBdJJGb4-AAAX joined role:super-admin
+[2026-05-03 22:20:35] INFO: 🔌 Socket connected: ZeGonnh60o5y-I9NAAAe | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:20:35] INFO: 🔌 Socket connected: oWZhQMH8TGO4tmatAAAh | User: 69f32f1322cd2201d5caea88
+[2026-05-03 22:20:35] INFO: 🔌 Socket connected: 8YIbKYuYL5kueMH7AAAi | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:20:35] INFO: Socket ZeGonnh60o5y-I9NAAAe joined role:super-admin
+[2026-05-03 22:20:35] INFO: 🔌 Socket connected: kV_TitlzMQHvP5lhAAAj | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:20:35] INFO: 🔌 Socket connected: nxUfmGSImNvDccUsAAAk | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:20:36] INFO: Socket oWZhQMH8TGO4tmatAAAh joined role:gym-owner
+[2026-05-03 22:20:36] INFO: Socket oWZhQMH8TGO4tmatAAAh joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 22:20:36] INFO: Socket 8YIbKYuYL5kueMH7AAAi joined role:super-admin
+[2026-05-03 22:20:36] INFO: Socket kV_TitlzMQHvP5lhAAAj joined role:super-admin
+[2026-05-03 22:20:36] INFO: 🔌 Socket connected: -R33uXqDCzIBEFGwAAAl | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:20:36] INFO: Socket nxUfmGSImNvDccUsAAAk joined role:super-admin
+[2026-05-03 22:20:36] INFO: 🔌 Socket connected: tEhqKjO57uNh0SfLAAAm | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:20:36] INFO: 🔌 Socket connected: L0YZhUqkBNLMog_mAAAn | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:20:36] INFO: Socket -R33uXqDCzIBEFGwAAAl joined role:super-admin
+[2026-05-03 22:20:36] INFO: Socket tEhqKjO57uNh0SfLAAAm joined role:super-admin
+[2026-05-03 22:20:36] INFO: Socket L0YZhUqkBNLMog_mAAAn joined role:super-admin
+[2026-05-03 22:36:56] INFO: 🔌 Socket disconnected: tEhqKjO57uNh0SfLAAAm
+[2026-05-03 22:36:56] INFO: 🔌 Socket disconnected: ZeGonnh60o5y-I9NAAAe
+[2026-05-03 22:36:56] INFO: 🔌 Socket disconnected: oWZhQMH8TGO4tmatAAAh
+[2026-05-03 22:36:56] INFO: 🔌 Socket disconnected: vOhpKcCBBdJJGb4-AAAX
+[2026-05-03 22:36:56] INFO: 🔌 Socket disconnected: kV_TitlzMQHvP5lhAAAj
+[2026-05-03 22:36:56] INFO: 🔌 Socket disconnected: -R33uXqDCzIBEFGwAAAl
+[2026-05-03 22:36:56] INFO: 🔌 Socket disconnected: L0YZhUqkBNLMog_mAAAn
+[2026-05-03 22:36:56] INFO: 🔌 Socket disconnected: 8YIbKYuYL5kueMH7AAAi
+[2026-05-03 22:36:56] INFO: 🔌 Socket disconnected: nxUfmGSImNvDccUsAAAk
+[2026-05-03 22:42:27] INFO: 🔌 Socket connected: O7bQZvnW43dBuU0XAAAx | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:42:27] INFO: 🔌 Socket connected: 50QJUzat3uY9MHayAAAy | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:42:27] INFO: 🔌 Socket connected: O-H38ZHKmxzqYQCeAAAz | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:42:27] INFO: 🔌 Socket connected: OrUWLxYxzNHS3gLcAAA0 | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:42:27] INFO: 🔌 Socket connected: LbHnMMLk6c1iw4vaAAA1 | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:42:27] INFO: Socket O7bQZvnW43dBuU0XAAAx joined role:super-admin
+[2026-05-03 22:42:27] INFO: Socket 50QJUzat3uY9MHayAAAy joined role:super-admin
+[2026-05-03 22:42:27] INFO: Socket O-H38ZHKmxzqYQCeAAAz joined role:super-admin
+[2026-05-03 22:42:27] INFO: Socket OrUWLxYxzNHS3gLcAAA0 joined role:super-admin
+[2026-05-03 22:42:28] INFO: Socket LbHnMMLk6c1iw4vaAAA1 joined role:super-admin
+[2026-05-03 22:42:29] INFO: 🔌 Socket connected: bKAh4p-C61VvJkWVAAA2 | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:42:29] INFO: 🔌 Socket connected: grASL1-pT9vt1txMAAA3 | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:42:29] INFO: 🔌 Socket connected: uUz4E2JTZjMrn4H-AAA4 | User: 69f32f1322cd2201d5caea88
+[2026-05-03 22:42:29] INFO: 🔌 Socket connected: q1KIORbiqyYNPdR5AAA5 | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:42:30] INFO: Socket bKAh4p-C61VvJkWVAAA2 joined role:super-admin
+[2026-05-03 22:42:30] INFO: Socket grASL1-pT9vt1txMAAA3 joined role:super-admin
+[2026-05-03 22:42:30] INFO: Socket uUz4E2JTZjMrn4H-AAA4 joined role:gym-owner
+[2026-05-03 22:42:30] INFO: Socket uUz4E2JTZjMrn4H-AAA4 joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 22:42:30] INFO: Socket q1KIORbiqyYNPdR5AAA5 joined role:super-admin
+[2026-05-03 22:48:07] INFO: 🔌 Socket disconnected: q1KIORbiqyYNPdR5AAA5
+[2026-05-03 22:48:07] INFO: 🔌 Socket disconnected: 50QJUzat3uY9MHayAAAy
+[2026-05-03 22:48:07] INFO: 🔌 Socket disconnected: O7bQZvnW43dBuU0XAAAx
+[2026-05-03 22:48:07] INFO: 🔌 Socket disconnected: O-H38ZHKmxzqYQCeAAAz
+[2026-05-03 22:48:07] INFO: 🔌 Socket disconnected: OrUWLxYxzNHS3gLcAAA0
+[2026-05-03 22:48:07] INFO: 🔌 Socket disconnected: LbHnMMLk6c1iw4vaAAA1
+[2026-05-03 22:48:07] INFO: 🔌 Socket disconnected: bKAh4p-C61VvJkWVAAA2
+[2026-05-03 22:48:07] INFO: 🔌 Socket disconnected: grASL1-pT9vt1txMAAA3
+[2026-05-03 22:48:07] INFO: 🔌 Socket disconnected: uUz4E2JTZjMrn4H-AAA4
+[2026-05-03 22:52:11] INFO: 🔌 Socket connected: TEsP2duLQNGv8ItwAAA9 | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:52:11] INFO: 🔌 Socket connected: 5lHFe9tTGEvRCc1rAABA | User: 69f32f1322cd2201d5caea87
+[2026-05-03 22:52:11] INFO: Socket TEsP2duLQNGv8ItwAAA9 joined role:super-admin
+[2026-05-03 22:52:12] INFO: Socket 5lHFe9tTGEvRCc1rAABA joined role:super-admin
+[2026-05-03 22:52:12] INFO: 🔌 Socket disconnected: TEsP2duLQNGv8ItwAAA9
+[2026-05-03 22:52:12] INFO: 🔌 Socket disconnected: 5lHFe9tTGEvRCc1rAABA
+[2026-05-03 23:19:32] INFO: 🔌 Socket connected: 8ZtWKLehl6k82jo0AABJ | User: 69f32f1322cd2201d5caea87
+[2026-05-03 23:19:32] INFO: 🔌 Socket connected: Zw00XDrMIo8Rw3PzAABK | User: 69f32f1322cd2201d5caea87
+[2026-05-03 23:19:32] INFO: 🔌 Socket connected: fPl7rJBHi9_M26_tAABL | User: 69f32f1322cd2201d5caea87
+[2026-05-03 23:19:32] INFO: 🔌 Socket connected: mW2MrM7kFljak-hqAABM | User: 69f32f1322cd2201d5caea87
+[2026-05-03 23:19:32] INFO: Socket 8ZtWKLehl6k82jo0AABJ joined role:super-admin
+[2026-05-03 23:19:33] INFO: Socket Zw00XDrMIo8Rw3PzAABK joined role:super-admin
+[2026-05-03 23:19:33] INFO: Socket fPl7rJBHi9_M26_tAABL joined role:super-admin
+[2026-05-03 23:19:33] INFO: Socket mW2MrM7kFljak-hqAABM joined role:super-admin
+[2026-05-03 23:19:34] INFO: 🔌 Socket connected: cwFlm3_5zmjzyPULAABO | User: 69f32f1322cd2201d5caea88
+[2026-05-03 23:19:34] INFO: Socket cwFlm3_5zmjzyPULAABO joined role:gym-owner
+[2026-05-03 23:19:34] INFO: Socket cwFlm3_5zmjzyPULAABO joined gym:69f32f1322cd2201d5caea8a
+[2026-05-03 23:19:34] INFO: 🔌 Socket connected: tkZ7-W-3ThJu9pkpAABR | User: 69f32f1322cd2201d5caea87
+[2026-05-03 23:19:34] INFO: Socket tkZ7-W-3ThJu9pkpAABR joined role:super-admin
+[2026-05-03 23:19:34] INFO: 🔌 Socket connected: pLuCgEUlMpvVBPjXAABS | User: 69f32f1322cd2201d5caea87
+[2026-05-03 23:19:34] INFO: Socket pLuCgEUlMpvVBPjXAABS joined role:super-admin
+[2026-05-03 23:19:35] INFO: 🔌 Socket connected: QR2uHgRKIyJcHZwfAABV | User: 69f32f1322cd2201d5caea87
+[2026-05-03 23:19:35] INFO: 🔌 Socket connected: IZf-mCq2lbU54N2pAABW | User: 69f32f1322cd2201d5caea87
+[2026-05-03 23:19:35] INFO: Socket IZf-mCq2lbU54N2pAABW joined role:super-admin
+[2026-05-03 23:19:35] INFO: Socket QR2uHgRKIyJcHZwfAABV joined role:super-admin
+[2026-05-04 00:54:42] INFO: 🔌 Socket disconnected: pLuCgEUlMpvVBPjXAABS
+[2026-05-04 00:54:42] INFO: 🔌 Socket disconnected: mW2MrM7kFljak-hqAABM
+[2026-05-04 00:54:42] INFO: 🔌 Socket disconnected: cwFlm3_5zmjzyPULAABO
+[2026-05-04 00:54:42] INFO: 🔌 Socket disconnected: IZf-mCq2lbU54N2pAABW
+[2026-05-04 00:54:42] INFO: 🔌 Socket disconnected: QR2uHgRKIyJcHZwfAABV
+[2026-05-04 00:54:42] INFO: 🔌 Socket disconnected: 8ZtWKLehl6k82jo0AABJ
+[2026-05-04 00:54:42] INFO: 🔌 Socket disconnected: Zw00XDrMIo8Rw3PzAABK
+[2026-05-04 00:54:42] INFO: 🔌 Socket disconnected: tkZ7-W-3ThJu9pkpAABR
+[2026-05-04 00:54:42] INFO: 🔌 Socket disconnected: fPl7rJBHi9_M26_tAABL
+[2026-05-04 15:13:37] INFO: ✅ Socket.io initialized
+[2026-05-04 15:13:37] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-04 15:13:38] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-04 15:18:19] INFO: 🔌 Socket connected: EoCDok2Kcd4VQ-hcAAAC | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:19] INFO: 🔌 Socket connected: eXC7eHhbjDx8RcL9AAAD | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:19] INFO: Socket EoCDok2Kcd4VQ-hcAAAC joined role:gym-owner
+[2026-05-04 15:18:19] INFO: Socket EoCDok2Kcd4VQ-hcAAAC joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:19] INFO: Socket eXC7eHhbjDx8RcL9AAAD joined role:gym-owner
+[2026-05-04 15:18:19] INFO: Socket eXC7eHhbjDx8RcL9AAAD joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:21] INFO: 🔌 Socket disconnected: eXC7eHhbjDx8RcL9AAAD
+[2026-05-04 15:18:21] INFO: 🔌 Socket connected: rAZo8CyrJQkhS1yBAAAF | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:21] INFO: Socket rAZo8CyrJQkhS1yBAAAF joined role:gym-owner
+[2026-05-04 15:18:21] INFO: Socket rAZo8CyrJQkhS1yBAAAF joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:21] INFO: 🔌 Socket connected: M5aOlRQCFgFU6rFYAAAH | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:21] INFO: Socket M5aOlRQCFgFU6rFYAAAH joined role:gym-owner
+[2026-05-04 15:18:21] INFO: Socket M5aOlRQCFgFU6rFYAAAH joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:26] INFO: 🔌 Socket disconnected: M5aOlRQCFgFU6rFYAAAH
+[2026-05-04 15:18:26] INFO: 🔌 Socket connected: WNB1K1Rm3CiFmsNTAAAK | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:26] INFO: 🔌 Socket connected: eROIlH5GM0B7UYwuAAAL | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:26] INFO: Socket WNB1K1Rm3CiFmsNTAAAK joined role:gym-owner
+[2026-05-04 15:18:26] INFO: Socket WNB1K1Rm3CiFmsNTAAAK joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:26] INFO: Socket eROIlH5GM0B7UYwuAAAL joined role:gym-owner
+[2026-05-04 15:18:26] INFO: Socket eROIlH5GM0B7UYwuAAAL joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:30] INFO: 🔌 Socket disconnected: eROIlH5GM0B7UYwuAAAL
+[2026-05-04 15:18:30] INFO: 🔌 Socket connected: 4zaSKBmQcuhW7GQ1AAAO | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:30] INFO: Socket 4zaSKBmQcuhW7GQ1AAAO joined role:gym-owner
+[2026-05-04 15:18:30] INFO: Socket 4zaSKBmQcuhW7GQ1AAAO joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:30] INFO: 🔌 Socket connected: E6IvstLb7N5IfpjrAAAP | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:30] INFO: Socket E6IvstLb7N5IfpjrAAAP joined role:gym-owner
+[2026-05-04 15:18:30] INFO: Socket E6IvstLb7N5IfpjrAAAP joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:33] INFO: 🔌 Socket disconnected: E6IvstLb7N5IfpjrAAAP
+[2026-05-04 15:18:33] INFO: 🔌 Socket connected: TbxtpT2BZK2m11hyAAAS | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:33] INFO: Socket TbxtpT2BZK2m11hyAAAS joined role:gym-owner
+[2026-05-04 15:18:33] INFO: Socket TbxtpT2BZK2m11hyAAAS joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:33] INFO: 🔌 Socket connected: SSNhQ4xL0L8o81H8AAAT | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:33] INFO: Socket SSNhQ4xL0L8o81H8AAAT joined role:gym-owner
+[2026-05-04 15:18:33] INFO: Socket SSNhQ4xL0L8o81H8AAAT joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:35] INFO: 🔌 Socket disconnected: SSNhQ4xL0L8o81H8AAAT
+[2026-05-04 15:18:36] INFO: 🔌 Socket connected: L1yQDk5BU7UJXBC_AAAW | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:36] INFO: 🔌 Socket connected: RVc5wWIQKhzlm3GdAAAX | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:36] INFO: Socket RVc5wWIQKhzlm3GdAAAX joined role:gym-owner
+[2026-05-04 15:18:36] INFO: Socket RVc5wWIQKhzlm3GdAAAX joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:36] INFO: Socket L1yQDk5BU7UJXBC_AAAW joined role:gym-owner
+[2026-05-04 15:18:36] INFO: Socket L1yQDk5BU7UJXBC_AAAW joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:41] INFO: 🔌 Socket disconnected: RVc5wWIQKhzlm3GdAAAX
+[2026-05-04 15:18:41] INFO: 🔌 Socket connected: e3CrUgbeliZONUh2AAAZ | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:41] INFO: Socket e3CrUgbeliZONUh2AAAZ joined role:gym-owner
+[2026-05-04 15:18:41] INFO: Socket e3CrUgbeliZONUh2AAAZ joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:41] INFO: 🔌 Socket connected: Y5Az_pO4gvlHHTRhAAAb | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:41] INFO: Socket Y5Az_pO4gvlHHTRhAAAb joined role:gym-owner
+[2026-05-04 15:18:41] INFO: Socket Y5Az_pO4gvlHHTRhAAAb joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:45] INFO: 🔌 Socket disconnected: Y5Az_pO4gvlHHTRhAAAb
+[2026-05-04 15:18:45] INFO: 🔌 Socket connected: -2Rwj14QvmZ6sZ3lAAAe | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:45] INFO: 🔌 Socket connected: AKrnAPXwMF06PHtKAAAf | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:18:45] INFO: Socket -2Rwj14QvmZ6sZ3lAAAe joined role:gym-owner
+[2026-05-04 15:18:45] INFO: Socket -2Rwj14QvmZ6sZ3lAAAe joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:45] INFO: Socket AKrnAPXwMF06PHtKAAAf joined role:gym-owner
+[2026-05-04 15:18:45] INFO: Socket AKrnAPXwMF06PHtKAAAf joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:18:59] INFO: 🔌 Socket disconnected: AKrnAPXwMF06PHtKAAAf
+[2026-05-04 15:19:00] INFO: 🔌 Socket connected: j1ygAKtedVinmGfDAAAi | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:00] INFO: 🔌 Socket connected: 5ICwgyRYBjxm9oULAAAj | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:00] INFO: Socket j1ygAKtedVinmGfDAAAi joined role:gym-owner
+[2026-05-04 15:19:00] INFO: Socket j1ygAKtedVinmGfDAAAi joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:00] INFO: Socket 5ICwgyRYBjxm9oULAAAj joined role:gym-owner
+[2026-05-04 15:19:00] INFO: Socket 5ICwgyRYBjxm9oULAAAj joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:05] INFO: 🔌 Socket disconnected: 5ICwgyRYBjxm9oULAAAj
+[2026-05-04 15:19:06] INFO: 🔌 Socket connected: nZDkRg37rV7EX4TbAAAm | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:06] INFO: 🔌 Socket connected: 9Q86BHNP-xqSIaHGAAAn | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:06] INFO: Socket nZDkRg37rV7EX4TbAAAm joined role:gym-owner
+[2026-05-04 15:19:06] INFO: Socket nZDkRg37rV7EX4TbAAAm joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:06] INFO: Socket 9Q86BHNP-xqSIaHGAAAn joined role:gym-owner
+[2026-05-04 15:19:06] INFO: Socket 9Q86BHNP-xqSIaHGAAAn joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:10] INFO: 🔌 Socket disconnected: 9Q86BHNP-xqSIaHGAAAn
+[2026-05-04 15:19:10] INFO: 🔌 Socket connected: O1G5G5lU2-SZNYSUAAAq | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:10] INFO: 🔌 Socket connected: bqv3ohmdFAW_mIPrAAAr | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:10] INFO: Socket bqv3ohmdFAW_mIPrAAAr joined role:gym-owner
+[2026-05-04 15:19:10] INFO: Socket bqv3ohmdFAW_mIPrAAAr joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:10] INFO: Socket O1G5G5lU2-SZNYSUAAAq joined role:gym-owner
+[2026-05-04 15:19:10] INFO: Socket O1G5G5lU2-SZNYSUAAAq joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:15] INFO: 🔌 Socket disconnected: bqv3ohmdFAW_mIPrAAAr
+[2026-05-04 15:19:15] INFO: 🔌 Socket connected: bGiYTXQhsVvJZ6pEAAAu | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:15] INFO: Socket bGiYTXQhsVvJZ6pEAAAu joined role:gym-owner
+[2026-05-04 15:19:15] INFO: Socket bGiYTXQhsVvJZ6pEAAAu joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:15] INFO: 🔌 Socket connected: wovUKex3uWRh0nbGAAAv | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:15] INFO: Socket wovUKex3uWRh0nbGAAAv joined role:gym-owner
+[2026-05-04 15:19:15] INFO: Socket wovUKex3uWRh0nbGAAAv joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:20] INFO: 🔌 Socket disconnected: wovUKex3uWRh0nbGAAAv
+[2026-05-04 15:19:20] INFO: 🔌 Socket connected: IgL-MNTJJ3iy9yMOAAAy | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:20] INFO: 🔌 Socket connected: S0J77TCSSmZlkZRXAAAz | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:19:20] INFO: Socket IgL-MNTJJ3iy9yMOAAAy joined role:gym-owner
+[2026-05-04 15:19:20] INFO: Socket IgL-MNTJJ3iy9yMOAAAy joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:20] INFO: Socket S0J77TCSSmZlkZRXAAAz joined role:gym-owner
+[2026-05-04 15:19:20] INFO: Socket S0J77TCSSmZlkZRXAAAz joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:19:31] INFO: 🔌 Socket disconnected: S0J77TCSSmZlkZRXAAAz
+[2026-05-04 15:19:35] INFO: 🔌 Socket connected: 8cJm7nghCKSBHYnTAAA2 | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:19:35] INFO: 🔌 Socket connected: eB9NZkx949R3o4qMAAA3 | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:19:35] INFO: Socket 8cJm7nghCKSBHYnTAAA2 joined role:super-admin
+[2026-05-04 15:19:35] INFO: Socket eB9NZkx949R3o4qMAAA3 joined role:super-admin
+[2026-05-04 15:22:13] INFO: 🔌 Socket disconnected: eB9NZkx949R3o4qMAAA3
+[2026-05-04 15:22:13] INFO: 🔌 Socket connected: 264in6T7twO2XmTtAAA6 | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:22:13] INFO: Socket 264in6T7twO2XmTtAAA6 joined role:super-admin
+[2026-05-04 15:22:13] INFO: 🔌 Socket connected: aSRHHQbmFS-RQcgrAAA7 | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:22:13] INFO: Socket aSRHHQbmFS-RQcgrAAA7 joined role:super-admin
+[2026-05-04 15:22:17] INFO: 🔌 Socket disconnected: aSRHHQbmFS-RQcgrAAA7
+[2026-05-04 15:22:17] INFO: 🔌 Socket connected: mJ00zNYYG4F_qvRrAAA- | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:22:17] INFO: Socket mJ00zNYYG4F_qvRrAAA- joined role:super-admin
+[2026-05-04 15:22:17] INFO: 🔌 Socket connected: R8UYGVG9-8NRC0xKAAA_ | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:22:17] INFO: Socket R8UYGVG9-8NRC0xKAAA_ joined role:super-admin
+[2026-05-04 15:22:52] INFO: 🔌 Socket disconnected: R8UYGVG9-8NRC0xKAAA_
+[2026-05-04 15:22:52] INFO: 🔌 Socket connected: xSqPznVnEz4saUw1AABC | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:22:52] INFO: Socket xSqPznVnEz4saUw1AABC joined role:super-admin
+[2026-05-04 15:22:52] INFO: 🔌 Socket connected: gti3b3yAaj9U0axEAABD | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:22:52] INFO: Socket gti3b3yAaj9U0axEAABD joined role:super-admin
+[2026-05-04 15:23:05] INFO: 🔌 Socket disconnected: gti3b3yAaj9U0axEAABD
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: xSqPznVnEz4saUw1AABC
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: mJ00zNYYG4F_qvRrAAA-
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: 264in6T7twO2XmTtAAA6
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: -2Rwj14QvmZ6sZ3lAAAe
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: bGiYTXQhsVvJZ6pEAAAu
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: j1ygAKtedVinmGfDAAAi
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: nZDkRg37rV7EX4TbAAAm
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: IgL-MNTJJ3iy9yMOAAAy
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: 8cJm7nghCKSBHYnTAAA2
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: WNB1K1Rm3CiFmsNTAAAK
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: 4zaSKBmQcuhW7GQ1AAAO
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: rAZo8CyrJQkhS1yBAAAF
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: EoCDok2Kcd4VQ-hcAAAC
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: TbxtpT2BZK2m11hyAAAS
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: e3CrUgbeliZONUh2AAAZ
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: L1yQDk5BU7UJXBC_AAAW
+[2026-05-04 15:24:17] INFO: 🔌 Socket disconnected: O1G5G5lU2-SZNYSUAAAq
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: 0kWIK3uiel6E6BGlAABR | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: KEkLXIlm1ohANIaZAABS | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: k6wwxr_fwl_XZchjAABU | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: gZSOJ8zGoVacOK6aAABV | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: V6Eiv1YlLyg0ude7AABW | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: cKW-gG4CXd-S-jlnAABX | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: NaOTy0P8JHI2n3w-AABY | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: rZQ-MUPKbMicq6jhAABZ | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: pseqsjAb8nCH112bAABa | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: fN-xf9itBEg6SsqEAABb | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: vCNBY9-nlIzPpTTPAABc | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: Socket 0kWIK3uiel6E6BGlAABR joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket 0kWIK3uiel6E6BGlAABR joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: 67MJuzijzAThhnssAABe | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: Socket KEkLXIlm1ohANIaZAABS joined role:super-admin
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: VONMlOkeVCm8WTXsAABf | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: Socket k6wwxr_fwl_XZchjAABU joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket k6wwxr_fwl_XZchjAABU joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: Socket gZSOJ8zGoVacOK6aAABV joined role:super-admin
+[2026-05-04 15:50:41] INFO: Socket V6Eiv1YlLyg0ude7AABW joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket V6Eiv1YlLyg0ude7AABW joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: Socket cKW-gG4CXd-S-jlnAABX joined role:super-admin
+[2026-05-04 15:50:41] INFO: Socket NaOTy0P8JHI2n3w-AABY joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket NaOTy0P8JHI2n3w-AABY joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: Socket rZQ-MUPKbMicq6jhAABZ joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket rZQ-MUPKbMicq6jhAABZ joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: Socket pseqsjAb8nCH112bAABa joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket pseqsjAb8nCH112bAABa joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: Socket fN-xf9itBEg6SsqEAABb joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket fN-xf9itBEg6SsqEAABb joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: Socket vCNBY9-nlIzPpTTPAABc joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket vCNBY9-nlIzPpTTPAABc joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: Socket 67MJuzijzAThhnssAABe joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket 67MJuzijzAThhnssAABe joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: Socket VONMlOkeVCm8WTXsAABf joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket VONMlOkeVCm8WTXsAABf joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: iRB7UX8d9zRFzqJxAABg | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: zjYCGlwbmW3SOzlPAABh | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:41] INFO: Socket iRB7UX8d9zRFzqJxAABg joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket iRB7UX8d9zRFzqJxAABg joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: Socket zjYCGlwbmW3SOzlPAABh joined role:gym-owner
+[2026-05-04 15:50:41] INFO: Socket zjYCGlwbmW3SOzlPAABh joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:50:41] INFO: 🔌 Socket connected: q82it6XETBrpk9n_AABj | User: 69f32f1322cd2201d5caea87
+[2026-05-04 15:50:41] INFO: Socket q82it6XETBrpk9n_AABj joined role:super-admin
+[2026-05-04 15:50:42] INFO: 🔌 Socket connected: jal2N4GwlyOiqbiQAABl | User: 69f32f1322cd2201d5caea88
+[2026-05-04 15:50:42] INFO: Socket jal2N4GwlyOiqbiQAABl joined role:gym-owner
+[2026-05-04 15:50:42] INFO: Socket jal2N4GwlyOiqbiQAABl joined gym:69f32f1322cd2201d5caea8a
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: k6wwxr_fwl_XZchjAABU
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: cKW-gG4CXd-S-jlnAABX
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: pseqsjAb8nCH112bAABa
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: gZSOJ8zGoVacOK6aAABV
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: fN-xf9itBEg6SsqEAABb
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: KEkLXIlm1ohANIaZAABS
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: V6Eiv1YlLyg0ude7AABW
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: 67MJuzijzAThhnssAABe
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: zjYCGlwbmW3SOzlPAABh
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: rZQ-MUPKbMicq6jhAABZ
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: NaOTy0P8JHI2n3w-AABY
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: q82it6XETBrpk9n_AABj
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: VONMlOkeVCm8WTXsAABf
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: vCNBY9-nlIzPpTTPAABc
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: 0kWIK3uiel6E6BGlAABR
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: jal2N4GwlyOiqbiQAABl
+[2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: iRB7UX8d9zRFzqJxAABg

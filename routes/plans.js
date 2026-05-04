@@ -3,6 +3,10 @@ const router = express.Router();
 const { getPlans, getPlan, createPlan, updatePlan, deletePlan, togglePlan } = require("../controllers/planController");
 const { protect, adminOrSuperAdmin } = require("../middleware/auth");
 
+// ── Public — website visitors browse plans ─────────────────────────
+router.get("/public", getPlans);
+
+// ── Protected routes ───────────────────────────────────────────────
 router.use(protect, adminOrSuperAdmin);
 
 router.get("/",              getPlans);

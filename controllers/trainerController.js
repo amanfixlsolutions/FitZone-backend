@@ -10,10 +10,16 @@ exports.getTrainers = asyncHandler(async (req, res) => {
   const { status, specialty, search, gymId } = req.query;
   const filter = {};
 
-  if (req.user.role === "gym-owner") filter.gym = req.user.gym;
-  else if (gymId) filter.gym = gymId;
+  // Public access (no auth) — show only Active trainers
+  if (!req.user) {
+    filter.status = "Active";
+  } else if (req.user.role === "gym-owner") {
+    filter.gym = req.user.gym;
+  } else if (gymId) {
+    filter.gym = gymId;
+  }
 
-  if (status)    filter.status = status;
+  if (status && req.user) filter.status = status; // only override if authenticated
   if (specialty) filter.specialty = new RegExp(specialty, "i");
   if (search)    filter.$or = [
     { name: new RegExp(search, "i") },
