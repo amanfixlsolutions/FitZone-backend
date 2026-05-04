@@ -50,23 +50,29 @@ initSocket(server);
 // ── CORS — MUST be first, before rate limiter and helmet ───────────
 const corsOptions = {
   origin: function (origin, callback) {
-     const allowed = [
+    const allowed = [
       "http://localhost:3000",
       "http://localhost:3001",
       process.env.CLIENT_URL,
+      "https://gym-fit-zone.vercel.app",
     ].filter(Boolean).map(o => o.replace(/\/+$/, "")); // Remove trailing slashes
-    // Allow requests with no origin (mobile apps, curl, Postman)
-    if (!origin || allowed.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS blocked: ${origin}`));
-    }
+
+    // Allow requests with no origin (mobile apps, curl, Postman, Render health checks)
+    if (!origin) return callback(null, true);
+
+    // Allow exact matches
+    if (allowed.includes(origin)) return callback(null, true);
+
+    // Allow any *.vercel.app preview deployments
+    if (origin.endsWith(".vercel.app")) return callback(null, true);
+
+    callback(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   exposedHeaders: ["Set-Cookie"],
-  optionsSuccessStatus: 200, // Some browsers (IE11) choke on 204
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
