@@ -51,15 +51,10 @@ initSocket(server);
 const corsOptions = {
   origin: function (origin, callback) {
      const allowed = [
-      process.env.CLIENT_URL || "http://localhost:3000",
       "http://localhost:3000",
       "http://localhost:3001",
-      "http://127.0.0.1:3000",
-      "https://gym-fit-zone.vercel.app",  // ← ADD THIS LINE
-      "https://gym-fit-zone.vercel.app/", // ← With trailing slash
-      // Add any other production domains
-      /\.vercel\.app$/,  // Allow all vercel.app subdomains (optional)
-    ];
+      process.env.CLIENT_URL,
+    ].filter(Boolean).map(o => o.replace(/\/+$/, "")); // Remove trailing slashes
     // Allow requests with no origin (mobile apps, curl, Postman)
     if (!origin || allowed.includes(origin)) {
       callback(null, true);

@@ -3265,3 +3265,15 @@
 [2026-05-04 16:05:07] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
 [2026-05-04 16:05:10] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
 [2026-05-04 16:06:21] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
+[2026-05-04 16:23:51] INFO: ✅ Socket.io initialized
+[2026-05-04 16:23:51] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-04 16:23:52] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-04 16:28:38] INFO: ✅ Socket.io initialized
+[2026-05-04 16:28:38] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-04 16:28:39] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-04 16:28:45] INFO: ✅ Socket.io initialized
+[2026-05-04 16:28:45] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-04 16:28:46] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-04 16:29:27] INFO: ✅ Socket.io initialized
+[2026-05-04 16:29:27] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-04 16:29:28] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
