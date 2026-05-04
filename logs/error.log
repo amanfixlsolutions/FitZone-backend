@@ -271,3 +271,6 @@
 [2026-05-03 21:23:14] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
 [2026-05-03 21:23:55] ERROR: Not authorized. Please log in. | GET /api/notifications?limit=5&unread=false | IP: ::1
 [2026-05-03 21:23:59] ERROR: Not authorized. Please log in. | POST /api/auth/logout | IP: ::1
+[2026-05-04 16:05:07] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
+[2026-05-04 16:05:10] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
+[2026-05-04 16:06:21] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1

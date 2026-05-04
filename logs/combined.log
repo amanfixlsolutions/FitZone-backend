@@ -3259,3 +3259,9 @@
 [2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: 0kWIK3uiel6E6BGlAABR
 [2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: jal2N4GwlyOiqbiQAABl
 [2026-05-04 15:51:42] INFO: 🔌 Socket disconnected: iRB7UX8d9zRFzqJxAABg
+[2026-05-04 16:01:02] INFO: ✅ Socket.io initialized
+[2026-05-04 16:01:02] INFO: 🚀 FitZone Server running on port 5000 [development]
+[2026-05-04 16:01:03] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-04 16:05:07] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
+[2026-05-04 16:05:10] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
+[2026-05-04 16:06:21] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
