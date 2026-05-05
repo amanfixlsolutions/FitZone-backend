@@ -59,23 +59,24 @@ router.get("/zoom-debug", asyncHandler(async (req, res) => {
 router.use(protect);
 
 // ── Member routes ──────────────────────────────────────────────────
-router.get("/member/history",  getMemberHistory);
-router.get("/member/spending", getMemberSpending);
+router.get("/member/history",      getMemberHistory);
+router.get("/member/spending",     getMemberSpending);
 router.post("/:id/book",           bookClass);
 router.post("/:id/verify-payment", verifyPayment);
 router.post("/:id/join",           joinClass);
 
-// ── Gym Owner / Super Admin routes ─────────────────────────────────
-router.get("/analytics",       adminOrSuperAdmin, getAnalytics);
-router.get("/",                adminOrSuperAdmin, getLiveClasses);
-router.get("/:id",             adminOrSuperAdmin, getLiveClass);
-router.post("/",               adminOrSuperAdmin, createLiveClass);  // gym-owner OR super-admin
-router.put("/:id",             adminOrSuperAdmin, updateLiveClass);
-router.delete("/:id",          adminOrSuperAdmin, deleteLiveClass);
-router.post("/:id/start",           adminOrSuperAdmin, startLiveClass);
-router.post("/:id/complete",        adminOrSuperAdmin, completeLiveClass);
-router.post("/:id/cancel",          adminOrSuperAdmin, cancelLiveClass);
-router.post("/:id/regenerate-zoom", adminOrSuperAdmin, regenerateZoom);
-router.get("/:id/bookings",         adminOrSuperAdmin, getClassBookings);
+// ── Gym Owner / Super Admin only ───────────────────────────────────
+router.get("/analytics",                adminOrSuperAdmin, getAnalytics);
+router.get("/",                         adminOrSuperAdmin, getLiveClasses);
+router.post("/",                        adminOrSuperAdmin, createLiveClass);
+router.put("/:id",                      adminOrSuperAdmin, updateLiveClass);
+router.delete("/:id",                   adminOrSuperAdmin, deleteLiveClass);
+router.post("/:id/start",               adminOrSuperAdmin, startLiveClass);
+router.post("/:id/complete",            adminOrSuperAdmin, completeLiveClass);
+router.post("/:id/cancel",              adminOrSuperAdmin, cancelLiveClass);
+router.post("/:id/regenerate-zoom",     adminOrSuperAdmin, regenerateZoom);
+router.get("/:id/bookings",             adminOrSuperAdmin, getClassBookings);
+// /:id GET must be last to avoid swallowing other GET routes
+router.get("/:id",                      adminOrSuperAdmin, getLiveClass);
 
 module.exports = router;
