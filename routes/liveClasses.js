@@ -16,13 +16,42 @@ router.get("/upcoming", getUpcomingClasses);
 // ── Zoom connection test (admin only) ─────────────────────────────
 router.get("/zoom-test", protect, adminOrSuperAdmin, asyncHandler(async (req, res) => {
   if (!zoomService.isConfigured()) {
-    return res.json({ success: false, message: "Zoom credentials not set in environment variables." });
+    return res.json({
+      success: false,
+      message: "Zoom credentials not set in environment variables.",
+      env: {
+        ZOOM_ACCOUNT_ID: process.env.ZOOM_ACCOUNT_ID ? "✓ set" : "✗ missing",
+        ZOOM_CLIENT_ID:  process.env.ZOOM_CLIENT_ID  ? "✓ set" : "✗ missing",
+        ZOOM_CLIENT_SECRET: process.env.ZOOM_CLIENT_SECRET ? "✓ set" : "✗ missing",
+      }
+    });
   }
   try {
     const result = await zoomService.testConnection();
     res.json({ success: true, message: "Zoom connected!", data: result });
   } catch (err) {
     res.json({ success: false, message: err.message });
+  }
+}));
+
+// ── Public Zoom debug (no auth — remove after fixing) ─────────────
+router.get("/zoom-debug", asyncHandler(async (req, res) => {
+  const env = {
+    ZOOM_ACCOUNT_ID:    process.env.ZOOM_ACCOUNT_ID    ? `✓ (${process.env.ZOOM_ACCOUNT_ID.slice(0,6)}...)` : "✗ MISSING",
+    ZOOM_CLIENT_ID:     process.env.ZOOM_CLIENT_ID     ? `✓ (${process.env.ZOOM_CLIENT_ID.slice(0,6)}...)`  : "✗ MISSING",
+    ZOOM_CLIENT_SECRET: process.env.ZOOM_CLIENT_SECRET ? `✓ set` : "✗ MISSING",
+    isConfigured:       zoomService.isConfigured(),
+  };
+
+  if (!zoomService.isConfigured()) {
+    return res.json({ success: false, env, message: "Zoom not configured on this server" });
+  }
+
+  try {
+    const result = await zoomService.testConnection();
+    res.json({ success: true, env, zoom: result });
+  } catch (err) {
+    res.json({ success: false, env, error: err.message });
   }
 }));
 
