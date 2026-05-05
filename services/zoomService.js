@@ -5,45 +5,50 @@ const logger = require("../utils/logger");
 let _cachedToken    = null;
 let _tokenExpiresAt = 0;
 
-// ── Get Zoom OAuth Token (Server-to-Server) with caching ──────────
+// ── Get Zoom OAuth Token (Server-to-Server) ────────────────────────
 const getZoomToken = async () => {
   if (_cachedToken && Date.now() < _tokenExpiresAt - 60000) {
     return _cachedToken;
   }
 
-  if (!process.env.ZOOM_CLIENT_ID || !process.env.ZOOM_CLIENT_SECRET || !process.env.ZOOM_ACCOUNT_ID) {
-    throw new Error("Zoom credentials not configured. Set ZOOM_ACCOUNT_ID, ZOOM_CLIENT_ID, ZOOM_CLIENT_SECRET in .env");
+  const accountId    = process.env.ZOOM_ACCOUNT_ID;
+  const clientId     = process.env.ZOOM_CLIENT_ID;
+  const clientSecret = process.env.ZOOM_CLIENT_SECRET;
+
+  if (!accountId || !clientId || !clientSecret) {
+    throw new Error("Zoom credentials not configured.");
   }
 
-  const credentials = Buffer.from(
-    `${process.env.ZOOM_CLIENT_ID}:${process.env.ZOOM_CLIENT_SECRET}`
-  ).toString("base64");
+  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+  const postData    = `grant_type=account_credentials&account_id=${accountId}`;
 
   return new Promise((resolve, reject) => {
-    const postData = `grant_type=account_credentials&account_id=${process.env.ZOOM_ACCOUNT_ID}`;
-    const options  = {
+    const options = {
       hostname: "zoom.us",
       path:     "/oauth/token",
       method:   "POST",
       headers:  {
-        Authorization:  `Basic ${credentials}`,
-        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization:    `Basic ${credentials}`,
+        "Content-Type":   "application/x-www-form-urlencoded",
         "Content-Length": Buffer.byteLength(postData),
       },
     };
 
     const req = https.request(options, (res) => {
       let data = "";
-      res.on("data", (chunk) => (data += chunk));
+      res.on("data", c => (data += c));
       res.on("end", () => {
         try {
           const parsed = JSON.parse(data);
           if (parsed.access_token) {
             _cachedToken    = parsed.access_token;
             _tokenExpiresAt = Date.now() + (parsed.expires_in || 3600) * 1000;
+            logger.info("✅ Zoom token obtained successfully");
             resolve(_cachedToken);
           } else {
-            reject(new Error(parsed.reason || parsed.error || "Failed to get Zoom token"));
+            const msg = parsed.reason || parsed.error_description || parsed.error || "Failed to get Zoom token";
+            logger.error(`Zoom token error: ${msg} | Response: ${data}`);
+            reject(new Error(msg));
           }
         } catch (e) { reject(e); }
       });
@@ -73,7 +78,7 @@ const zoomRequest = async (method, path, body = null, retry = true) => {
 
     const req = https.request(options, (res) => {
       let data = "";
-      res.on("data", (chunk) => (data += chunk));
+      res.on("data", c => (data += c));
       res.on("end", async () => {
         try {
           const parsed = data ? JSON.parse(data) : {};
@@ -87,7 +92,9 @@ const zoomRequest = async (method, path, body = null, retry = true) => {
           }
 
           if (res.statusCode >= 400) {
-            reject(new Error(parsed.message || `Zoom API error ${res.statusCode}`));
+            const msg = parsed.message || parsed.error || `Zoom API error ${res.statusCode}`;
+            logger.error(`Zoom API ${method} ${path} → ${res.statusCode}: ${msg}`);
+            reject(new Error(msg));
             return;
           }
           resolve(parsed);
@@ -100,31 +107,48 @@ const zoomRequest = async (method, path, body = null, retry = true) => {
   });
 };
 
-// ── Create Meeting ─────────────────────────────────────────────────
-exports.createMeeting = async ({ topic, agenda, startTime, duration, hostEmail }) => {
+// ── Get account's first user (me) ─────────────────────────────────
+// Server-to-Server OAuth creates meetings under the account owner
+const getAccountUserId = async () => {
   try {
-    const meeting = await zoomRequest("POST", `/users/${hostEmail}/meetings`, {
+    const res = await zoomRequest("GET", "/users/me");
+    return res.id || "me";
+  } catch {
+    return "me"; // fallback
+  }
+};
+
+// ── Create Meeting ─────────────────────────────────────────────────
+exports.createMeeting = async ({ topic, agenda, startTime, duration }) => {
+  try {
+    // Use "me" — Server-to-Server OAuth always creates under the account owner
+    const userId = await getAccountUserId();
+
+    const meeting = await zoomRequest("POST", `/users/${userId}/meetings`, {
       topic,
       agenda:      agenda || topic,
-      type:        2,
+      type:        2, // scheduled meeting
       start_time:  new Date(startTime).toISOString(),
-      duration,
+      duration:    duration || 60,
       timezone:    "Asia/Kolkata",
       settings: {
         host_video:        true,
         participant_video: true,
-        join_before_host:  false,
-        waiting_room:      true,
+        join_before_host:  true,   // allow joining before host
+        waiting_room:      false,  // no waiting room — direct join
         auto_recording:    "none",
         mute_upon_entry:   false,
+        approval_type:     0,      // automatically approve
       },
     });
+
+    logger.info(`✅ Zoom meeting created: ${meeting.id} — ${topic}`);
+
     return {
       meetingId: String(meeting.id),
       joinUrl:   meeting.join_url,
       startUrl:  meeting.start_url,
       password:  meeting.password || "",
-      hostEmail,
     };
   } catch (err) {
     logger.error(`Zoom createMeeting error: ${err.message}`);
@@ -147,12 +171,20 @@ exports.deleteMeeting = async (meetingId) => {
   }
 };
 
-// ── List Meetings ──────────────────────────────────────────────────
-exports.listMeetings = async (hostEmail) => {
-  return zoomRequest("GET", `/users/${hostEmail}/meetings?type=scheduled`);
-};
-
 // ── Check if Zoom is configured ────────────────────────────────────
 exports.isConfigured = () => {
-  return !!(process.env.ZOOM_ACCOUNT_ID && process.env.ZOOM_CLIENT_ID && process.env.ZOOM_CLIENT_SECRET);
+  return !!(
+    process.env.ZOOM_ACCOUNT_ID &&
+    process.env.ZOOM_CLIENT_ID  &&
+    process.env.ZOOM_CLIENT_SECRET &&
+    process.env.ZOOM_ACCOUNT_ID    !== "your_zoom_account_id" &&
+    process.env.ZOOM_CLIENT_ID     !== "your_zoom_client_id"
+  );
+};
+
+// ── Test connection ────────────────────────────────────────────────
+exports.testConnection = async () => {
+  const token = await getZoomToken();
+  const user  = await zoomRequest("GET", "/users/me");
+  return { token: token.slice(0, 20) + "...", userId: user.id, email: user.email };
 };

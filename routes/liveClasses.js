@@ -7,9 +7,24 @@ const {
   getMemberHistory, getMemberSpending, getAnalytics,
 } = require("../controllers/liveClassController");
 const { protect, gymOwnerOnly, adminOrSuperAdmin } = require("../middleware/auth");
+const zoomService = require("../services/zoomService");
+const { asyncHandler } = require("../utils/asyncHandler");
 
 // ── Public — members browse upcoming classes ───────────────────────
 router.get("/upcoming", getUpcomingClasses);
+
+// ── Zoom connection test (admin only) ─────────────────────────────
+router.get("/zoom-test", protect, adminOrSuperAdmin, asyncHandler(async (req, res) => {
+  if (!zoomService.isConfigured()) {
+    return res.json({ success: false, message: "Zoom credentials not set in environment variables." });
+  }
+  try {
+    const result = await zoomService.testConnection();
+    res.json({ success: true, message: "Zoom connected!", data: result });
+  } catch (err) {
+    res.json({ success: false, message: err.message });
+  }
+}));
 
 // ── Protected routes ───────────────────────────────────────────────
 router.use(protect);

@@ -28,7 +28,10 @@ const uploadToStorage = async (buffer, mimetype, folder = "fitzone") => {
 
   fs.writeFileSync(filepath, buffer);
 
-  const publicUrl = `/uploads/${folder}/${filename}`;
+  // Return full absolute URL so frontend can display it directly
+  const baseUrl = process.env.CLIENT_BACKEND_URL ||
+                  `https://fitzone-backend-vis3.onrender.com`;
+  const publicUrl = `${baseUrl}/uploads/${folder}/${filename}`;
   return { url: publicUrl, publicId: `${folder}/${filename}` };
 };
 

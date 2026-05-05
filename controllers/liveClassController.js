@@ -8,6 +8,7 @@ const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError         = require("../utils/AppError");
 const zoomService      = require("../services/zoomService");
 const { createNotification } = require("../services/notificationService");
+const logger           = require("../utils/logger");
 
 // ── Helper: resolve gym ID for gym-owner ──────────────────────────
 const resolveGymId = async (user) => {
@@ -91,20 +92,20 @@ exports.createLiveClass = asyncHandler(async (req, res, next) => {
   let zoomData = { meetingId: "", joinUrl: "", startUrl: "", password: "" };
 
   if (zoomService.isConfigured()) {
-    const gym = await Gym.findById(gymId).select("email name");
-    const hostEmail = gym?.email || req.user.email;
     try {
       zoomData = await zoomService.createMeeting({
         topic:     title,
         agenda:    description || title,
         startTime: scheduledAt,
         duration:  duration || 60,
-        hostEmail,
       });
+      logger.info(`Zoom meeting created for class "${title}": ${zoomData.meetingId}`);
     } catch (zoomErr) {
       // Don't block class creation if Zoom fails — log and continue
-      console.warn("Zoom meeting creation failed:", zoomErr.message);
+      logger.warn(`Zoom meeting creation failed for "${title}": ${zoomErr.message}`);
     }
+  } else {
+    logger.warn("Zoom not configured — class created without Zoom meeting");
   }
 
   const liveClass = await LiveClass.create({
@@ -312,9 +313,15 @@ exports.getClassBookings = asyncHandler(async (req, res) => {
 // @GET /api/live-classes/upcoming  (public — members browse)
 exports.getUpcomingClasses = asyncHandler(async (req, res) => {
   const { gymId, category, page, limit } = req.query;
+
+  // Include:
+  // 1. Scheduled classes with future scheduledAt
+  // 2. Live classes (already started — join now)
   const filter = {
-    status:      { $in: ["scheduled", "live"] },
-    scheduledAt: { $gte: new Date() },
+    $or: [
+      { status: "live" },                                          // currently live
+      { status: "scheduled", scheduledAt: { $gte: new Date() } }, // future scheduled
+    ],
   };
 
   if (gymId)    filter.gym      = gymId;
@@ -324,7 +331,7 @@ exports.getUpcomingClasses = asyncHandler(async (req, res) => {
   const { query, pagination } = paginate(
     LiveClass.find(filter)
       .populate("trainer", "name photo specialty")
-      .sort({ scheduledAt: 1 }),
+      .sort({ status: -1, scheduledAt: 1 }), // live classes first, then by date
     { page, limit }
   );
 
