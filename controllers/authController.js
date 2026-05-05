@@ -230,8 +230,10 @@ exports.refreshToken = asyncHandler(async (req, res, next) => {
     if (!user) return next(new AppError("User not found.", 401));
     if (user.status === "banned") return next(new AppError("Account banned.", 403));
 
-    // Issue new access token cookie + return in body
-    const newAccessToken = generateAccessToken(user._id);
+    // Issue new access token + new refresh token
+    const newAccessToken  = generateAccessToken(user._id);
+    const newRefreshToken = require("../utils/generateToken").generateRefreshToken(user._id);
+
     res.cookie("fitzone_access_token", newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -240,7 +242,15 @@ exports.refreshToken = asyncHandler(async (req, res, next) => {
       path: "/",
     });
 
-    res.json({ success: true, accessToken: newAccessToken, message: "Token refreshed." });
+    // Return user identity so frontend can validate session belongs to correct user
+    res.json({
+      success:      true,
+      accessToken:  newAccessToken,
+      refreshToken: newRefreshToken, // rotate refresh token
+      userId:       user._id,
+      userRole:     user.role,
+      message:      "Token refreshed.",
+    });
   } catch {
     clearCookies(res);
     return next(new AppError("Refresh token expired. Please log in again.", 401));
