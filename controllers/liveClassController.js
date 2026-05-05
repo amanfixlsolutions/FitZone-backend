@@ -73,9 +73,19 @@ exports.getLiveClass = asyncHandler(async (req, res, next) => {
   res.json({ success: true, data: lc });
 });
 
-// @POST /api/live-classes  (gym-owner creates)
+// @POST /api/live-classes  (gym-owner OR super-admin creates)
 exports.createLiveClass = asyncHandler(async (req, res, next) => {
-  const gymId = await resolveGymId(req.user);
+  let gymId = await resolveGymId(req.user);
+
+  // Super-admin fallback — use first active gym or body param
+  if (!gymId && req.user.role === "super-admin") {
+    gymId = req.body.gymId || req.body.gym;
+    if (!gymId) {
+      const gym = await Gym.findOne({ status: "active" }).sort({ createdAt: 1 });
+      gymId = gym?._id;
+    }
+  }
+
   if (!gymId) return next(new AppError("Gym not found. Please link your account to a gym.", 404));
 
   const {
