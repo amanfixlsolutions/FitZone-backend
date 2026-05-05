@@ -8,6 +8,7 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const { sendTokenResponse, generateAccessToken, generateRefreshToken, clearCookies } = require("../utils/generateToken");
 const AppError = require("../utils/AppError");
 const { sendOTPEmail, sendWelcomeEmail: sendWelcome, sendPasswordResetEmail } = require("../services/emailService");
+const logger = require("../utils/logger");
 
 // ── Helper: generate 6-digit OTP ──────────────────────────────────
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
@@ -34,17 +35,31 @@ exports.sendOTP = asyncHandler(async (req, res, next) => {
 
   await OTP.create({ email: email.toLowerCase(), otp, type, expiresAt });
 
-  // Send OTP email
+  // Always try to send email — never return 500 for email failure
+  let emailSent = false;
+  let emailError = "";
+
   try {
     await sendOTPEmail(email, otp, type);
+    emailSent = true;
   } catch (err) {
-    await OTP.deleteMany({ email: email.toLowerCase(), type });
-    return next(new AppError("Failed to send OTP email. Please try again.", 500));
+    emailError = err.message || "SMTP error";
+    logger.error(`OTP email failed for ${email}: ${emailError}`);
   }
 
-  res.json({
+  if (emailSent) {
+    return res.json({
+      success: true,
+      message: `OTP sent to ${email}. Valid for ${process.env.OTP_EXPIRE_MINUTES || 10} minutes.`,
+    });
+  }
+
+  // Email failed — return OTP in response so user can still proceed
+  return res.json({
     success: true,
-    message: `OTP sent to ${email}. Valid for ${process.env.OTP_EXPIRE_MINUTES || 10} minutes.`,
+    message: `OTP generated. Email delivery failed — use the code below.`,
+    otp,
+    emailFailed: true,
   });
 });
 

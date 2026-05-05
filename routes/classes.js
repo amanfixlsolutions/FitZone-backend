@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const {
+  getPublicClasses,
   getClasses, getClass, createClass, updateClass, deleteClass,
   enrollMember, unenrollMember, getTodayClasses,
 } = require("../controllers/classController");
 const { protect, adminOrSuperAdmin } = require("../middleware/auth");
 
-// ── Public — website visitors browse classes ───────────────────────
-router.get("/public", getClasses);
+// ── Public — no auth required ──────────────────────────────────────
+router.get("/public", getPublicClasses);
 
 // ── Protected routes ───────────────────────────────────────────────
 router.use(protect, adminOrSuperAdmin);

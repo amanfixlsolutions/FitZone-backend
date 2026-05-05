@@ -6,6 +6,26 @@ const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError = require("../utils/AppError");
 const { createNotification } = require("../services/notificationService");
 
+// ── @GET /api/classes/public — no auth required ────────────────────
+exports.getPublicClasses = asyncHandler(async (req, res) => {
+  const { limit = 12, search, level } = req.query;
+  const filter = { status: "Active" };
+
+  if (level)  filter.level = level;
+  if (search) filter.$or = [
+    { name: new RegExp(search, "i") },
+    { trainerName: new RegExp(search, "i") },
+    { description: new RegExp(search, "i") },
+  ];
+
+  const classes = await Class.find(filter)
+    .populate("trainer", "name specialty photo")
+    .sort({ createdAt: -1 })
+    .limit(Math.min(Number(limit) || 12, 50));
+
+  res.json({ success: true, data: classes, total: classes.length });
+});
+
 // ── @GET /api/classes ──────────────────────────────────────────────
 exports.getClasses = asyncHandler(async (req, res) => {
   const { status, level, search, gymId, day } = req.query;

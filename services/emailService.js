@@ -1,23 +1,35 @@
 const nodemailer = require("nodemailer");
 const logger = require("../utils/logger");
 
-// ── Transporter ────────────────────────────────────────────────────
-const transporter = nodemailer.createTransport({
-  host:   process.env.EMAIL_HOST   || "smtp.gmail.com",
-  port:   parseInt(process.env.EMAIL_PORT) || 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: { rejectUnauthorized: false },
-});
+// ── Lazy transporter — created on first use so env vars are always loaded ──
+let _transporter = null;
+const getTransporter = () => {
+  if (_transporter) return _transporter;
+  _transporter = nodemailer.createTransport({
+    host:   process.env.EMAIL_HOST || "smtp.gmail.com",
+    port:   parseInt(process.env.EMAIL_PORT) || 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+    tls: { rejectUnauthorized: false },
+  });
+  return _transporter;
+};
 
-const FROM = process.env.EMAIL_FROM || "FitZone <noreply@fitzone.in>";
+const getFrom = () =>
+  process.env.EMAIL_FROM || `FitZone <${process.env.EMAIL_USER || "noreply@fitzone.in"}>`;
 
 const sendEmail = async ({ to, subject, html }) => {
+  const transporter = getTransporter();
   try {
-    const info = await transporter.sendMail({ from: FROM, to, subject, html });
+    const info = await transporter.sendMail({
+      from: getFrom(),
+      to,
+      subject,
+      html,
+    });
     logger.info(`✉️  Email sent to ${to}: ${info.messageId}`);
     return info;
   } catch (err) {
