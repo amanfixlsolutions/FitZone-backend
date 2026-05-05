@@ -4,7 +4,7 @@ const {
   getLiveClasses, getLiveClass, createLiveClass, updateLiveClass, deleteLiveClass,
   startLiveClass, completeLiveClass, cancelLiveClass, getClassBookings,
   getUpcomingClasses, bookClass, verifyPayment, joinClass,
-  getMemberHistory, getMemberSpending, getAnalytics,
+  getMemberHistory, getMemberSpending, getAnalytics, regenerateZoom,
 } = require("../controllers/liveClassController");
 const { protect, gymOwnerOnly, adminOrSuperAdmin } = require("../middleware/auth");
 const zoomService = require("../services/zoomService");
@@ -72,9 +72,10 @@ router.get("/:id",             adminOrSuperAdmin, getLiveClass);
 router.post("/",               adminOrSuperAdmin, createLiveClass);  // gym-owner OR super-admin
 router.put("/:id",             adminOrSuperAdmin, updateLiveClass);
 router.delete("/:id",          adminOrSuperAdmin, deleteLiveClass);
-router.post("/:id/start",      adminOrSuperAdmin, startLiveClass);
-router.post("/:id/complete",   adminOrSuperAdmin, completeLiveClass);
-router.post("/:id/cancel",     adminOrSuperAdmin, cancelLiveClass);
-router.get("/:id/bookings",    adminOrSuperAdmin, getClassBookings);
+router.post("/:id/start",           adminOrSuperAdmin, startLiveClass);
+router.post("/:id/complete",        adminOrSuperAdmin, completeLiveClass);
+router.post("/:id/cancel",          adminOrSuperAdmin, cancelLiveClass);
+router.post("/:id/regenerate-zoom", adminOrSuperAdmin, regenerateZoom);
+router.get("/:id/bookings",         adminOrSuperAdmin, getClassBookings);
 
 module.exports = router;

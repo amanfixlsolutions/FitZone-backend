@@ -177,6 +177,25 @@ exports.updateLiveClass = asyncHandler(async (req, res, next) => {
                    "maxParticipants", "isFree", "price", "trainerName", "trainer", "thumbnail", "status"];
   allowed.forEach(k => { if (req.body[k] !== undefined) lc[k] = req.body[k]; });
 
+  // If no Zoom link yet and Zoom is configured — create one now
+  if (!lc.zoomJoinUrl && zoomService.isConfigured()) {
+    try {
+      const zoomData = await zoomService.createMeeting({
+        topic:     lc.title,
+        agenda:    lc.description || lc.title,
+        startTime: lc.scheduledAt,
+        duration:  lc.duration || 60,
+      });
+      lc.zoomMeetingId = zoomData.meetingId;
+      lc.zoomJoinUrl   = zoomData.joinUrl;
+      lc.zoomStartUrl  = zoomData.startUrl;
+      lc.zoomPassword  = zoomData.password;
+      logger.info(`Zoom meeting created on update for "${lc.title}": ${zoomData.meetingId}`);
+    } catch (zoomErr) {
+      logger.warn(`Zoom meeting creation on update failed: ${zoomErr.message}`);
+    }
+  }
+
   await lc.save();
   res.json({ success: true, data: lc });
 });
@@ -206,6 +225,38 @@ exports.deleteLiveClass = asyncHandler(async (req, res, next) => {
 
   await LiveClass.findByIdAndDelete(req.params.id);
   res.json({ success: true, message: "Live class deleted." });
+});
+
+// @POST /api/live-classes/:id/regenerate-zoom  (fix missing Zoom link)
+exports.regenerateZoom = asyncHandler(async (req, res, next) => {
+  const lc = await LiveClass.findById(req.params.id);
+  if (!lc) return next(new AppError("Live class not found.", 404));
+
+  if (!zoomService.isConfigured()) {
+    return next(new AppError("Zoom credentials not configured on server.", 503));
+  }
+
+  if (lc.status === "completed" || lc.status === "cancelled") {
+    return next(new AppError("Cannot regenerate Zoom for a completed or cancelled class.", 400));
+  }
+
+  try {
+    const zoomData = await zoomService.createMeeting({
+      topic:     lc.title,
+      agenda:    lc.description || lc.title,
+      startTime: lc.scheduledAt,
+      duration:  lc.duration || 60,
+    });
+    lc.zoomMeetingId = zoomData.meetingId;
+    lc.zoomJoinUrl   = zoomData.joinUrl;
+    lc.zoomStartUrl  = zoomData.startUrl;
+    lc.zoomPassword  = zoomData.password;
+    await lc.save();
+    logger.info(`Zoom regenerated for "${lc.title}": ${zoomData.meetingId}`);
+    res.json({ success: true, data: lc, message: "Zoom meeting link regenerated!" });
+  } catch (err) {
+    return next(new AppError(`Failed to create Zoom meeting: ${err.message}`, 500));
+  }
 });
 
 // @POST /api/live-classes/:id/start  (gym-owner starts the class)
