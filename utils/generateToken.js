@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 
-// ── Generate access token (short-lived: 15 min) ────────────────────
+// ── Generate access token (7 days) ────────────────────────────────
 exports.generateAccessToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE || "15m",
+    expiresIn: "7d",
   });
 
 // ── Generate refresh token (long-lived: 30 days) ───────────────────
@@ -25,7 +25,7 @@ exports.sendTokenResponse = (user, statusCode, res) => {
   const accessToken  = exports.generateAccessToken(user._id);
   const refreshToken = exports.generateRefreshToken(user._id);
 
-  const accessExpiry  = new Date(Date.now() + 15 * 60 * 1000);
+  const accessExpiry  = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
   const refreshExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
   // Set httpOnly cookies (works in production / same-origin)
