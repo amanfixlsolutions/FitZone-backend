@@ -69,7 +69,7 @@ router.post("/:id/join",           joinClass);
 router.get("/analytics",       adminOrSuperAdmin, getAnalytics);
 router.get("/",                adminOrSuperAdmin, getLiveClasses);
 router.get("/:id",             adminOrSuperAdmin, getLiveClass);
-router.post("/",               gymOwnerOnly,      createLiveClass);
+router.post("/",               adminOrSuperAdmin, createLiveClass);  // gym-owner OR super-admin
 router.put("/:id",             adminOrSuperAdmin, updateLiveClass);
 router.delete("/:id",          adminOrSuperAdmin, deleteLiveClass);
 router.post("/:id/start",      adminOrSuperAdmin, startLiveClass);
