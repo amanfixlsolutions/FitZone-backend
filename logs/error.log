@@ -274,3 +274,6 @@
 [2026-05-04 16:05:07] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
 [2026-05-04 16:05:10] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
 [2026-05-04 16:06:21] ERROR: CORS blocked: https://gym-fit-zone.vercel.app | OPTIONS /api/auth/login | IP: ::1
+[2026-05-06 22:12:07] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.jvzhwvi.mongodb.net
+[2026-05-06 22:12:21] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.jvzhwvi.mongodb.net
+[2026-05-06 22:13:48] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.jvzhwvi.mongodb.net

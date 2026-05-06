@@ -3280,3 +3280,6 @@
 [2026-05-04 16:29:33] INFO: ✅ Socket.io initialized
 [2026-05-04 16:29:33] INFO: 🚀 FitZone Server running on port 5000 [development]
 [2026-05-04 16:29:34] INFO: ✅ MongoDB Connected: ac-jgji0nr-shard-00-00.jvzhwvi.mongodb.net
+[2026-05-06 22:12:07] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.jvzhwvi.mongodb.net
+[2026-05-06 22:12:21] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.jvzhwvi.mongodb.net
+[2026-05-06 22:13:48] ERROR: ❌ MongoDB Connection Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.jvzhwvi.mongodb.net

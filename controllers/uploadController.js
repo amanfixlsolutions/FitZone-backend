@@ -17,10 +17,10 @@ const uploadToStorage = async (buffer, mimetype, folder = "fitzone") => {
     return await uploadImage(buffer, folder);
   }
 
-  // Local fallback — save to /public/uploads/<folder>/
+  // Local fallback — save to /public/uploads/<folder>/ 
   const uploadsDir = path.join(__dirname, "../public/uploads", folder);
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  if (!fs.existsSync(uploadsDir)) {  
+    fs.mkdirSync(uploadsDir, { recursive: true }); 
   }
 
   const ext      = mimetype.split("/")[1]?.replace("jpeg", "jpg") || "jpg";
@@ -32,15 +32,15 @@ const uploadToStorage = async (buffer, mimetype, folder = "fitzone") => {
   // Return full absolute URL so frontend can display it directly
   // Use BACKEND_URL env var if set, otherwise use the Render URL
   const baseUrl = process.env.BACKEND_URL ||
-                  process.env.CLIENT_BACKEND_URL ||
+                  process.env.CLIENT_BACKEND_URL || 
                   "https://fitzone-backend-vis3.onrender.com";
   const publicUrl = `${baseUrl}/uploads/${folder}/${filename}`;
   return { url: publicUrl, publicId: `${folder}/${filename}` };
 };
 
 // ── Delete from storage (Cloudinary or local) ─────────────────────
-const deleteFromStorage = async (publicId) => {
-  if (!publicId) return;
+const deleteFromStorage = async (publicId) => { 
+  if (!publicId) return; 
 
   if (isCloudinaryConfigured()) {
     try {
