@@ -5,6 +5,7 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError = require("../utils/AppError");
 const { createNotification } = require("../services/notificationService");
+const { deleteFromStorage, extractPublicId } = require("./uploadController");
 
 // ── @GET /api/classes/public — no auth required ────────────────────
 exports.getPublicClasses = asyncHandler(async (req, res) => {
@@ -108,8 +109,16 @@ exports.createClass = asyncHandler(async (req, res) => {
 
 // ── @PUT /api/classes/:id ──────────────────────────────────────────
 exports.updateClass = asyncHandler(async (req, res, next) => {
+  const existing = await Class.findById(req.params.id);
+  if (!existing) return next(new AppError("Class not found.", 404));
+
+  // ── Delete old image if a new one is being set ─────────────────
+  if (req.body.image && req.body.image !== existing.image && existing.image) {
+    const oldPublicId = extractPublicId(existing.image);
+    if (oldPublicId) await deleteFromStorage(oldPublicId).catch(() => {});
+  }
+
   const cls = await Class.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-  if (!cls) return next(new AppError("Class not found.", 404));
 
   // ── Notification ──────────────────────────────────────────────
   await createNotification({
@@ -128,6 +137,12 @@ exports.updateClass = asyncHandler(async (req, res, next) => {
 exports.deleteClass = asyncHandler(async (req, res, next) => {
   const cls = await Class.findByIdAndDelete(req.params.id);
   if (!cls) return next(new AppError("Class not found.", 404));
+
+  // ── Delete class image from storage ───────────────────────────
+  if (cls.image) {
+    const publicId = extractPublicId(cls.image);
+    if (publicId) await deleteFromStorage(publicId).catch(() => {});
+  }
 
   // ── Notification ──────────────────────────────────────────────
   await createNotification({

@@ -4,6 +4,7 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError = require("../utils/AppError");
 const { createNotification } = require("../services/notificationService");
+const { deleteFromStorage, extractPublicId } = require("./uploadController");
 
 // ── @GET /api/trainers ─────────────────────────────────────────────
 exports.getTrainers = asyncHandler(async (req, res) => {
@@ -84,8 +85,16 @@ exports.createTrainer = asyncHandler(async (req, res) => {
 
 // ── @PUT /api/trainers/:id ─────────────────────────────────────────
 exports.updateTrainer = asyncHandler(async (req, res, next) => {
+  const existing = await Trainer.findById(req.params.id);
+  if (!existing) return next(new AppError("Trainer not found.", 404));
+
+  // ── Delete old photo if a new one is being set ─────────────────
+  if (req.body.photo && req.body.photo !== existing.photo && existing.photo) {
+    const oldPublicId = extractPublicId(existing.photo);
+    if (oldPublicId) await deleteFromStorage(oldPublicId).catch(() => {});
+  }
+
   const trainer = await Trainer.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-  if (!trainer) return next(new AppError("Trainer not found.", 404));
 
   // ── Notification ──────────────────────────────────────────────
   await createNotification({
@@ -104,6 +113,12 @@ exports.updateTrainer = asyncHandler(async (req, res, next) => {
 exports.deleteTrainer = asyncHandler(async (req, res, next) => {
   const trainer = await Trainer.findByIdAndDelete(req.params.id);
   if (!trainer) return next(new AppError("Trainer not found.", 404));
+
+  // ── Delete trainer photo from storage ─────────────────────────
+  if (trainer.photo) {
+    const publicId = extractPublicId(trainer.photo);
+    if (publicId) await deleteFromStorage(publicId).catch(() => {});
+  }
 
   // ── Notification ──────────────────────────────────────────────
   await createNotification({
