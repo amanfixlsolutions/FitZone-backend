@@ -6,7 +6,7 @@ const {
   getUpcomingClasses, bookClass, verifyPayment, joinClass,
   getMemberHistory, getMemberSpending, getAnalytics, regenerateZoom,
 } = require("../controllers/liveClassController");
-const { protect, adminOrSuperAdmin } = require("../middleware/auth");
+const { protect } = require("../middleware/auth");
 const zoomService = require("../services/zoomService");
 const { asyncHandler } = require("../utils/asyncHandler");
 
@@ -32,20 +32,15 @@ router.get("/zoom-debug", asyncHandler(async (req, res) => {
   }
 }));
 
-// ── All protected routes require login ─────────────────────────────
+// ── All routes below require login only (no role check here) ───────
+// Role/ownership checks are done inside each controller
 router.use(protect);
 
-// ── Who am I — debug current user role ────────────────────────────
+// ── Debug: who am I ────────────────────────────────────────────────
 router.get("/whoami", (req, res) => {
   res.json({
     success: true,
-    user: {
-      id:    req.user._id,
-      name:  req.user.name,
-      email: req.user.email,
-      role:  req.user.role,
-      gym:   req.user.gym,
-    },
+    user: { id: req.user._id, name: req.user.name, email: req.user.email, role: req.user.role, gym: req.user.gym },
   });
 });
 
@@ -56,19 +51,18 @@ router.post("/:id/book",           bookClass);
 router.post("/:id/verify-payment", verifyPayment);
 router.post("/:id/join",           joinClass);
 
-// ── Gym Owner + Super Admin — management ──────────────────────────
-// Using adminOrSuperAdmin (gym-owner OR super-admin) for all management
-router.get("/analytics",                adminOrSuperAdmin, getAnalytics);
-router.get("/",                         adminOrSuperAdmin, getLiveClasses);
-router.post("/",                        adminOrSuperAdmin, createLiveClass);
-router.put("/:id",                      adminOrSuperAdmin, updateLiveClass);
-router.delete("/:id",                   adminOrSuperAdmin, deleteLiveClass);
-router.post("/:id/start",               adminOrSuperAdmin, startLiveClass);
-router.post("/:id/complete",            adminOrSuperAdmin, completeLiveClass);
-router.post("/:id/cancel",              adminOrSuperAdmin, cancelLiveClass);
-router.post("/:id/regenerate-zoom",     adminOrSuperAdmin, regenerateZoom);
-router.get("/:id/bookings",             adminOrSuperAdmin, getClassBookings);
+// ── Management routes — ownership checked inside controller ────────
+router.get("/analytics",                getAnalytics);
+router.get("/",                         getLiveClasses);
+router.post("/",                        createLiveClass);
+router.put("/:id",                      updateLiveClass);
+router.delete("/:id",                   deleteLiveClass);
+router.post("/:id/start",               startLiveClass);
+router.post("/:id/complete",            completeLiveClass);
+router.post("/:id/cancel",              cancelLiveClass);
+router.post("/:id/regenerate-zoom",     regenerateZoom);
+router.get("/:id/bookings",             getClassBookings);
 // /:id GET last — prevents shadowing specific routes above
-router.get("/:id",                      adminOrSuperAdmin, getLiveClass);
+router.get("/:id",                      getLiveClass);
 
 module.exports = router;

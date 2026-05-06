@@ -10,6 +10,16 @@ const zoomService      = require("../services/zoomService");
 const { createNotification } = require("../services/notificationService");
 const logger           = require("../utils/logger");
 
+// ── Helper: check if user can manage live classes ─────────────────
+// Accepts gym-owner, super-admin, OR any user who owns a gym
+const canManage = async (user) => {
+  if (user.role === "super-admin") return true;
+  if (user.role === "gym-owner")   return true;
+  // Check if this user owns a gym (even if role is wrong in DB)
+  const gym = await Gym.findOne({ owner: user._id });
+  return !!gym;
+};
+
 // ── Helper: resolve gym ID for gym-owner ──────────────────────────
 const resolveGymId = async (user) => {
   if (user.gym) return user.gym;
@@ -23,6 +33,9 @@ const resolveGymId = async (user) => {
 
 // @GET /api/live-classes  (gym-owner sees own gym; super-admin sees all)
 exports.getLiveClasses = asyncHandler(async (req, res) => {
+  if (!await canManage(req.user)) {
+    return res.status(403).json({ success: false, message: "Access denied." });
+  }
   const { status, category, page, limit } = req.query;
   const filter = {};
 
@@ -75,6 +88,9 @@ exports.getLiveClass = asyncHandler(async (req, res, next) => {
 
 // @POST /api/live-classes  (gym-owner OR super-admin creates)
 exports.createLiveClass = asyncHandler(async (req, res, next) => {
+  if (!await canManage(req.user)) {
+    return next(new AppError("Access denied. Only gym owners can create live classes.", 403));
+  }
   let gymId = await resolveGymId(req.user);
 
   // Super-admin fallback — use first active gym or body param
@@ -258,6 +274,9 @@ exports.regenerateZoom = asyncHandler(async (req, res, next) => {
 
 // @POST /api/live-classes/:id/start  (gym-owner starts the class)
 exports.startLiveClass = asyncHandler(async (req, res, next) => {
+  if (!await canManage(req.user)) {
+    return next(new AppError("Access denied.", 403));
+  }
   const lc = await LiveClass.findById(req.params.id);
   if (!lc) return next(new AppError("Live class not found.", 404));
 
@@ -285,6 +304,9 @@ exports.startLiveClass = asyncHandler(async (req, res, next) => {
 
 // @POST /api/live-classes/:id/complete  (gym-owner ends the class)
 exports.completeLiveClass = asyncHandler(async (req, res, next) => {
+  if (!await canManage(req.user)) {
+    return next(new AppError("Access denied.", 403));
+  }
   const lc = await LiveClass.findById(req.params.id);
   if (!lc) return next(new AppError("Live class not found.", 404));
 
@@ -313,6 +335,9 @@ exports.completeLiveClass = asyncHandler(async (req, res, next) => {
 
 // @POST /api/live-classes/:id/cancel
 exports.cancelLiveClass = asyncHandler(async (req, res, next) => {
+  if (!await canManage(req.user)) {
+    return next(new AppError("Access denied.", 403));
+  }
   const lc = await LiveClass.findById(req.params.id);
   if (!lc) return next(new AppError("Live class not found.", 404));
 
@@ -685,6 +710,9 @@ exports.getMemberSpending = asyncHandler(async (req, res) => {
 
 // @GET /api/live-classes/analytics  (gym-owner revenue + attendance)
 exports.getAnalytics = asyncHandler(async (req, res) => {
+  if (!await canManage(req.user)) {
+    return res.json({ success: true, data: {} });
+  }
   const gymId = await resolveGymId(req.user);
   if (!gymId) return res.json({ success: true, data: {} });
 
