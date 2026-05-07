@@ -35,31 +35,25 @@ exports.sendOTP = asyncHandler(async (req, res, next) => {
 
   await OTP.create({ email: email.toLowerCase(), otp, type, expiresAt });
 
-  // Always try to send email — never return 500 for email failure
-  let emailSent = false;
-  let emailError = "";
-
+  // Always try to send email — if it fails, return error (no dummy OTP)
   try {
     await sendOTPEmail(email, otp, type);
-    emailSent = true;
   } catch (err) {
-    emailError = err.message || "SMTP error";
+    const emailError = err.message || "SMTP error";
     logger.error(`OTP email failed for ${email}: ${emailError}`);
+
+    // Clean up the OTP we just created since we can't deliver it
+    await OTP.deleteMany({ email: email.toLowerCase(), type }).catch(() => {});
+
+    return next(new AppError(
+      `Failed to send OTP email. Please check your email address and try again. (${emailError})`,
+      500
+    ));
   }
 
-  if (emailSent) {
-    return res.json({
-      success: true,
-      message: `OTP sent to ${email}. Valid for ${process.env.OTP_EXPIRE_MINUTES || 10} minutes.`,
-    });
-  }
-
-  // Email failed — return OTP in response so user can still proceed
   return res.json({
     success: true,
-    message: `OTP generated. Email delivery failed — use the code below.`,
-    otp,
-    emailFailed: true,
+    message: `OTP sent to ${email}. Valid for ${process.env.OTP_EXPIRE_MINUTES || 10} minutes.`,
   });
 });
 
