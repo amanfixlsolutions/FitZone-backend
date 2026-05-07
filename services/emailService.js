@@ -1,6 +1,5 @@
 const nodemailer = require("nodemailer");
 const logger = require("../utils/logger");
-// Email service v3 — Resend primary, Gmail fallback
 
 // ── Gmail SMTP via port 465 (SSL) — works on Render ───────────────
 // Port 587 (STARTTLS) is blocked by Render, but 465 (SSL) works
@@ -45,31 +44,25 @@ const sendViaResend = async ({ to, subject, html }) => {
 const sendEmail = async ({ to, subject, html }) => {
   if (!to) throw new Error("Recipient email is required");
 
-  const resendKey = process.env.RESEND_API_KEY;
-  const resendConfigured = resendKey && resendKey !== "your_resend_api_key" && resendKey.startsWith("re_");
+  const resendConfigured = process.env.RESEND_API_KEY &&
+    process.env.RESEND_API_KEY !== "your_resend_api_key";
 
   const gmailConfigured = process.env.EMAIL_USER &&
     process.env.EMAIL_PASS &&
     process.env.EMAIL_USER !== "your_gmail@gmail.com";
 
-  logger.info(`Email providers — Resend: ${resendConfigured ? "✓" : "✗"}, Gmail: ${gmailConfigured ? "✓" : "✗"}`);
-
-  // Try Resend first — HTTPS API, works on Render, no SMTP port issues
+  // Try Resend first — works on Render, sends to ANY email using onboarding@resend.dev
   if (resendConfigured) {
     try {
       const result = await sendViaResend({ to, subject, html });
       logger.info(`✉️  Email sent via Resend to ${to}`);
       return result;
     } catch (err) {
-      logger.warn(`Resend failed: ${err.message}`);
-      // If Resend key is invalid, don't fall through to Gmail — throw immediately
-      if (err.message.includes("Invalid API key") || err.message.includes("Unauthorized")) {
-        throw new Error(`Resend API key is invalid. Please check RESEND_API_KEY in Render environment variables.`);
-      }
+      logger.warn(`Resend failed (${err.message}) — trying Gmail`);
     }
   }
 
-  // Gmail SMTP fallback
+  // Gmail SMTP fallback (may be blocked on Render but works locally)
   if (gmailConfigured) {
     try {
       const transporter = getTransporter();
@@ -84,11 +77,7 @@ const sendEmail = async ({ to, subject, html }) => {
     }
   }
 
-  throw new Error(
-    "Email not configured. Add RESEND_API_KEY to Render environment variables. " +
-    "Get a free key at resend.com"
-  );
-};
+  throw new Error("No email provider configured. Set RESEND_API_KEY or EMAIL_USER/EMAIL_PASS.");
 };
 
 // ── OTP Email ──────────────────────────────────────────────────────
