@@ -1,83 +1,116 @@
-const nodemailer = require("nodemailer");
 const logger = require("../utils/logger");
 
-// ── Gmail SMTP via port 465 (SSL) — works on Render ───────────────
-// Port 587 (STARTTLS) is blocked by Render, but 465 (SSL) works
-let _transporter = null;
-let _lastUser = null;
+// ─────────────────────────────────────────────────────────────────
+// Email Service — tries providers in order:
+// 1. Brevo (HTTPS API, free, no domain verification, works on Render)
+// 2. Resend (HTTPS API, free but needs domain for other recipients)
+// 3. Gmail SMTP (blocked on Render free tier)
+// ─────────────────────────────────────────────────────────────────
 
-const getTransporter = () => {
-  const user = process.env.EMAIL_USER;
-  const pass = process.env.EMAIL_PASS;
+// ── 1. Brevo (recommended — sends to any email, no domain needed) ──
+const sendViaBrevo = async ({ to, subject, html }) => {
+  const SibApiV3Sdk = require("@getbrevo/brevo");
+  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
-  // Reset cache if credentials changed
-  if (_transporter && _lastUser === user) return _transporter;
+  apiInstance.setApiKey(
+    SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+    process.env.BREVO_API_KEY
+  );
 
-  _lastUser = user;
-  _transporter = nodemailer.createTransport({
-    service: "gmail",   // use Gmail's built-in config (handles host/port/SSL automatically)
-    auth: { user, pass },
-    tls: { rejectUnauthorized: false },
-    connectionTimeout: 15000,
-    greetingTimeout:   10000,
-    socketTimeout:     20000,
-  });
-  return _transporter;
+  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+  sendSmtpEmail.subject = subject;
+  sendSmtpEmail.htmlContent = html;
+  sendSmtpEmail.sender = {
+    name:  "FitZone",
+    email: process.env.EMAIL_USER || "amanjoshi9511@gmail.com",
+  };
+  sendSmtpEmail.to = [{ email: to }];
+
+  const result = await apiInstance.sendTransacEmail(sendSmtpEmail);
+  return result;
 };
 
-// ── Resend fallback (HTTPS API — no SMTP ports needed) ─────────────
+// ── 2. Resend (works only for owner's email on free plan) ──────────
 const sendViaResend = async ({ to, subject, html }) => {
   const { Resend } = require("resend");
   const resend = new Resend(process.env.RESEND_API_KEY);
-
-  // IMPORTANT: Use Resend's pre-verified domain as FROM
-  // This works without domain verification and sends to ANY email
-  // "onboarding@resend.dev" is Resend's shared sender — always works on free plan
-  const from = "FitZone <onboarding@resend.dev>";
-
-  const { data, error } = await resend.emails.send({ from, to, subject, html });
+  const { data, error } = await resend.emails.send({
+    from:    "FitZone <onboarding@resend.dev>",
+    to,
+    subject,
+    html,
+  });
   if (error) throw new Error(error.message || "Resend error");
   return data;
 };
 
-// ── Main sendEmail — Resend first (works on Render), Gmail as fallback ──
+// ── 3. Gmail SMTP (fallback — blocked on Render) ───────────────────
+let _transporter = null;
+let _lastUser    = null;
+
+const sendViaGmail = async ({ to, subject, html }) => {
+  const nodemailer = require("nodemailer");
+  const user = process.env.EMAIL_USER;
+  if (_transporter && _lastUser !== user) { _transporter = null; }
+  if (!_transporter) {
+    _lastUser = user;
+    _transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user, pass: process.env.EMAIL_PASS },
+      tls: { rejectUnauthorized: false },
+      connectionTimeout: 10000,
+      socketTimeout:     15000,
+    });
+  }
+  const from = process.env.EMAIL_FROM || `FitZone <${user}>`;
+  const info = await _transporter.sendMail({ from, to, subject, html });
+  return info;
+};
+
+// ── Main sendEmail ─────────────────────────────────────────────────
 const sendEmail = async ({ to, subject, html }) => {
   if (!to) throw new Error("Recipient email is required");
 
-  const resendConfigured = process.env.RESEND_API_KEY &&
-    process.env.RESEND_API_KEY !== "your_resend_api_key";
+  const errors = [];
 
-  const gmailConfigured = process.env.EMAIL_USER &&
-    process.env.EMAIL_PASS &&
-    process.env.EMAIL_USER !== "your_gmail@gmail.com";
+  // 1. Try Brevo
+  if (process.env.BREVO_API_KEY && process.env.BREVO_API_KEY !== "your_brevo_api_key") {
+    try {
+      const result = await sendViaBrevo({ to, subject, html });
+      logger.info(`✉️  Email sent via Brevo to ${to}`);
+      return result;
+    } catch (err) {
+      errors.push(`Brevo: ${err.message}`);
+      logger.warn(`Brevo failed: ${err.message}`);
+    }
+  }
 
-  // Try Resend first — works on Render, sends to ANY email using onboarding@resend.dev
-  if (resendConfigured) {
+  // 2. Try Resend
+  if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "your_resend_api_key") {
     try {
       const result = await sendViaResend({ to, subject, html });
       logger.info(`✉️  Email sent via Resend to ${to}`);
       return result;
     } catch (err) {
-      logger.warn(`Resend failed (${err.message}) — trying Gmail`);
+      errors.push(`Resend: ${err.message}`);
+      logger.warn(`Resend failed: ${err.message}`);
     }
   }
 
-  // Gmail SMTP fallback (may be blocked on Render but works locally)
-  if (gmailConfigured) {
+  // 3. Try Gmail SMTP
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASS &&
+      process.env.EMAIL_USER !== "your_gmail@gmail.com") {
     try {
-      const transporter = getTransporter();
-      const from = process.env.EMAIL_FROM || `FitZone <${process.env.EMAIL_USER}>`;
-      const info = await transporter.sendMail({ from, to, subject, html });
-      logger.info(`✉️  Email sent via Gmail to ${to}: ${info.messageId}`);
+      const info = await sendViaGmail({ to, subject, html });
+      logger.info(`✉️  Email sent via Gmail to ${to}`);
       return info;
     } catch (err) {
-      logger.error(`Gmail failed: ${err.message}`);
+      errors.push(`Gmail: ${err.message}`);
       _transporter = null;
-      throw new Error(`Email delivery failed: ${err.message}`);
     }
   }
 
-  throw new Error("No email provider configured. Set RESEND_API_KEY or EMAIL_USER/EMAIL_PASS.");
+  throw new Error(`All email providers failed: ${errors.join(" | ")}`);
 };
 
 // ── OTP Email ──────────────────────────────────────────────────────
