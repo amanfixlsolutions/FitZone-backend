@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const logger = require("../utils/logger");
+// Email service v3 — Resend primary, Gmail fallback
 
 // ── Gmail SMTP via port 465 (SSL) — works on Render ───────────────
 // Port 587 (STARTTLS) is blocked by Render, but 465 (SSL) works
