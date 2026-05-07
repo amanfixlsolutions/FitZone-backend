@@ -331,7 +331,7 @@ async function processPayment({ memberId, planId, gateway, gatewayPaymentId = ""
   // Create payment record
   const payment = await Payment.create({
     gym:              member.gym,
-    member:           memberId,
+    member:           member._id,        // use resolved member._id
     plan:             planId,
     memberName:       member.name,
     planName:         plan.name,
@@ -390,7 +390,7 @@ async function processPayment({ memberId, planId, gateway, gatewayPaymentId = ""
   const invoiceNumber = await generateInvoiceNumber();
   const invoice = await Invoice.create({
     gym:          member.gym,
-    member:       memberId,
+    member:       member._id,            // use resolved member._id
     plan:         planId,
     invoiceNumber,
     memberName:   member.name,
