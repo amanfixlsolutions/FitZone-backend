@@ -136,12 +136,47 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// ── Static files (local uploads fallback) ─────────────────────────
-app.use("/uploads", express.static(require("path").join(__dirname, "public/uploads")));
+// ── Static files — serve from public/uploads ──────────────────────
+// Must be BEFORE the 404 handler and API routes
+const uploadsPath = require("path").join(__dirname, "public/uploads");
+app.use("/uploads", express.static(uploadsPath, {
+  fallthrough: false, // return 404 from static middleware itself, not JSON 404
+  setHeaders: (res) => {
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Cache-Control", "public, max-age=86400"); // 1 day cache
+  },
+}));
+
+// Handle static file 404s gracefully (return empty 404, not JSON)
+app.use("/uploads", (err, req, res, next) => {
+  if (err.status === 404) {
+    return res.status(404).end();
+  }
+  next(err);
+});
 
 // ── Health Check ───────────────────────────────────────────────────
 app.get("/api/health", (req, res) => {
   res.json({ success: true, message: "FitZone API is running", timestamp: new Date() });
+});
+
+// ── Image serve endpoint — /api/images/:folder/:filename ───────────
+// Reliable fallback when static middleware fails
+app.get("/api/images/:folder/:filename", (req, res) => {
+  const { folder, filename } = req.params;
+  // Security: only allow alphanumeric, dash, underscore, dot in names
+  if (!/^[a-zA-Z0-9_-]+$/.test(folder) || !/^[a-zA-Z0-9_\-\.]+$/.test(filename)) {
+    return res.status(400).end();
+  }
+  const filePath = require("path").join(__dirname, "public/uploads", folder, filename);
+  if (!require("fs").existsSync(filePath)) {
+    return res.status(404).end();
+  }
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Cache-Control", "public, max-age=86400");
+  res.sendFile(filePath);
 });
 
 // ── API Routes ─────────────────────────────────────────────────────
