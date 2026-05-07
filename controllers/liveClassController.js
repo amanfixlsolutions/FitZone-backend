@@ -436,9 +436,10 @@ exports.bookClass = asyncHandler(async (req, res, next) => {
 
   if (lc.status === "cancelled") return next(new AppError("This class has been cancelled.", 400));
   if (lc.status === "completed") return next(new AppError("This class has already ended.", 400));
-  // Allow booking for live classes even if scheduledAt is in the past
-  if (lc.status === "scheduled" && new Date(lc.scheduledAt) < new Date(Date.now() - 30 * 60000)) {
-    return next(new AppError("Booking window has closed.", 400));
+  // Only block booking if class is scheduled AND started more than 2 hours ago
+  // Live classes can always be booked
+  if (lc.status === "scheduled" && new Date(lc.scheduledAt) < new Date(Date.now() - 2 * 60 * 60 * 1000)) {
+    return next(new AppError("Booking window has closed for this class.", 400));
   }
 
   // Find member record for this user — auto-create if not found
@@ -511,8 +512,9 @@ exports.bookClass = asyncHandler(async (req, res, next) => {
     return res.status(201).json({
       success:  true,
       data:     booking,
-      joinUrl:  lc.zoomJoinUrl,
-      message:  "Class booked successfully!",
+      // Don't return joinUrl here — member must call /join to get it
+      // This ensures only confirmed bookings can access the Zoom link
+      message:  "Class booked successfully! Click 'Join' when the class starts.",
     });
   }
 
@@ -630,7 +632,7 @@ exports.verifyPayment = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @POST /api/live-classes/:id/join  (member joins — marks attendance)
+// @POST /api/live-classes/:id/join  (member joins — marks attendance, returns Zoom link)
 exports.joinClass = asyncHandler(async (req, res, next) => {
   const lc = await LiveClass.findById(req.params.id);
   if (!lc) return next(new AppError("Live class not found.", 404));
@@ -639,8 +641,12 @@ exports.joinClass = asyncHandler(async (req, res, next) => {
     return next(new AppError("Class is not available to join.", 400));
   }
 
-  const member = await Member.findOne({ gym: lc.gym }).where("email").equals(req.user.email);
-  if (!member) return next(new AppError("You are not a member of this gym.", 403));
+  // Find member — check gym first, then any gym
+  let member = await Member.findOne({ gym: lc.gym, email: req.user.email.toLowerCase() });
+  if (!member) {
+    member = await Member.findOne({ email: req.user.email.toLowerCase() });
+  }
+  if (!member) return next(new AppError("You are not a member. Please book the class first.", 403));
 
   const booking = await LiveClassBooking.findOne({
     member:        member._id,
@@ -648,12 +654,22 @@ exports.joinClass = asyncHandler(async (req, res, next) => {
     bookingStatus: "confirmed",
   });
 
-  if (!booking) return next(new AppError("You have not booked this class.", 403));
+  if (!booking) return next(new AppError("You have not booked this class. Please book first.", 403));
 
+  // Mark attendance
   if (booking.attendanceStatus === "not_joined") {
     booking.attendanceStatus = "joined";
     booking.joinedAt         = new Date();
     await booking.save();
+  }
+
+  // Only return Zoom link if class is live OR member has confirmed booking
+  if (!lc.zoomJoinUrl) {
+    return res.json({
+      success: true,
+      joinUrl: null,
+      message: "Booking confirmed! Zoom link will be available when the class goes live.",
+    });
   }
 
   res.json({
