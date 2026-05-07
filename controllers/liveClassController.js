@@ -436,11 +436,7 @@ exports.bookClass = asyncHandler(async (req, res, next) => {
 
   if (lc.status === "cancelled") return next(new AppError("This class has been cancelled.", 400));
   if (lc.status === "completed") return next(new AppError("This class has already ended.", 400));
-  // Only block booking if class is scheduled AND started more than 2 hours ago
-  // Live classes can always be booked
-  if (lc.status === "scheduled" && new Date(lc.scheduledAt) < new Date(Date.now() - 2 * 60 * 60 * 1000)) {
-    return next(new AppError("Booking window has closed for this class.", 400));
-  }
+  // No booking window restriction — allow booking for scheduled and live classes
 
   // Find member record for this user — auto-create if not found
   let member = await Member.findOne({ gym: lc.gym }).where("email").equals(req.user.email);
