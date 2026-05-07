@@ -9,24 +9,20 @@ const logger = require("../utils/logger");
 
 // ── 1. Brevo (recommended — sends to any email, no domain needed) ──
 const sendViaBrevo = async ({ to, subject, html }) => {
-  const SibApiV3Sdk = require("@getbrevo/brevo");
-  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+  const { BrevoClient } = require("@getbrevo/brevo");
 
-  apiInstance.setApiKey(
-    SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
-    process.env.BREVO_API_KEY
-  );
+  const client = new BrevoClient({ apiKey: process.env.BREVO_API_KEY });
 
-  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-  sendSmtpEmail.subject = subject;
-  sendSmtpEmail.htmlContent = html;
-  sendSmtpEmail.sender = {
-    name:  "FitZone",
-    email: process.env.EMAIL_USER || "amanjoshi9511@gmail.com",
-  };
-  sendSmtpEmail.to = [{ email: to }];
+  const result = await client.transactionalEmails.sendTransacEmail({
+    subject,
+    htmlContent: html,
+    sender: {
+      name:  "FitZone",
+      email: process.env.EMAIL_USER || "amanjoshi9511@gmail.com",
+    },
+    to: [{ email: to }],
+  });
 
-  const result = await apiInstance.sendTransacEmail(sendSmtpEmail);
   return result;
 };
 
