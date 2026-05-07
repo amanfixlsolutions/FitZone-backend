@@ -28,23 +28,28 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpires: { type: Date, select: false },
 }, { timestamps: true });
 
-// ── Hash password before save ──────────────────────────────────────
-userSchema.pre("save", async function (next) {
+// ✅ FIXED: No 'next' parameter for async middleware
+userSchema.pre("save", async function () {
   // Only hash if password was explicitly modified AND is a plain string (not already hashed)
-  if (!this.isModified("password")) return next();
-  if (!this.password) return next();
+  if (!this.isModified("password")) return;
+  if (!this.password) return;
   // bcrypt hashes start with $2b$ — skip if already hashed
-  if (this.password.startsWith("$2b$") || this.password.startsWith("$2a$")) return next();
-  this.password = await bcrypt.hash(this.password, 12);
-  next();
+  if (this.password.startsWith("$2b$") || this.password.startsWith("$2a$")) return;
+  
+  try {
+    this.password = await bcrypt.hash(this.password, 12);
+  } catch (error) {
+    throw new Error(`Password hashing failed: ${error.message}`);
+  }
 });
 
-// ── Compare password ───────────────────────────────────────────────
+// Compare password method
 userSchema.methods.matchPassword = async function (entered) {
+  if (!entered || !this.password) return false;
   return await bcrypt.compare(entered, this.password);
 };
 
-// ── Remove sensitive fields from JSON ─────────────────────────────
+// Remove sensitive fields from JSON
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
