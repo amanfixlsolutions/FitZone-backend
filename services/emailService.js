@@ -29,25 +29,40 @@ const getTransporter = () => {
 const sendViaResend = async ({ to, subject, html }) => {
   const { Resend } = require("resend");
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const from = process.env.EMAIL_FROM || "FitZone <onboarding@resend.dev>";
+
+  // IMPORTANT: Use Resend's pre-verified domain as FROM
+  // This works without domain verification and sends to ANY email
+  // "onboarding@resend.dev" is Resend's shared sender — always works on free plan
+  const from = "FitZone <onboarding@resend.dev>";
+
   const { data, error } = await resend.emails.send({ from, to, subject, html });
   if (error) throw new Error(error.message || "Resend error");
   return data;
 };
 
-// ── Main sendEmail — Gmail first, Resend as fallback ──────────────
+// ── Main sendEmail — Resend first (works on Render), Gmail as fallback ──
 const sendEmail = async ({ to, subject, html }) => {
   if (!to) throw new Error("Recipient email is required");
-
-  const gmailConfigured = process.env.EMAIL_USER &&
-    process.env.EMAIL_PASS &&
-    process.env.EMAIL_USER !== "your_gmail@gmail.com" &&
-    process.env.EMAIL_PASS !== "your_gmail_app_password";
 
   const resendConfigured = process.env.RESEND_API_KEY &&
     process.env.RESEND_API_KEY !== "your_resend_api_key";
 
-  // Try Gmail first
+  const gmailConfigured = process.env.EMAIL_USER &&
+    process.env.EMAIL_PASS &&
+    process.env.EMAIL_USER !== "your_gmail@gmail.com";
+
+  // Try Resend first — works on Render, sends to ANY email using onboarding@resend.dev
+  if (resendConfigured) {
+    try {
+      const result = await sendViaResend({ to, subject, html });
+      logger.info(`✉️  Email sent via Resend to ${to}`);
+      return result;
+    } catch (err) {
+      logger.warn(`Resend failed (${err.message}) — trying Gmail`);
+    }
+  }
+
+  // Gmail SMTP fallback (may be blocked on Render but works locally)
   if (gmailConfigured) {
     try {
       const transporter = getTransporter();
@@ -56,25 +71,13 @@ const sendEmail = async ({ to, subject, html }) => {
       logger.info(`✉️  Email sent via Gmail to ${to}: ${info.messageId}`);
       return info;
     } catch (err) {
-      logger.warn(`Gmail failed (${err.message}) — trying Resend`);
-      // Reset transporter cache so next attempt creates fresh connection
+      logger.error(`Gmail failed: ${err.message}`);
       _transporter = null;
-    }
-  }
-
-  // Resend fallback
-  if (resendConfigured) {
-    try {
-      const result = await sendViaResend({ to, subject, html });
-      logger.info(`✉️  Email sent via Resend to ${to}`);
-      return result;
-    } catch (err) {
-      logger.error(`Resend failed: ${err.message}`);
       throw new Error(`Email delivery failed: ${err.message}`);
     }
   }
 
-  throw new Error("No email provider configured. Set EMAIL_USER/EMAIL_PASS or RESEND_API_KEY in environment variables.");
+  throw new Error("No email provider configured. Set RESEND_API_KEY or EMAIL_USER/EMAIL_PASS.");
 };
 
 // ── OTP Email ──────────────────────────────────────────────────────
