@@ -436,11 +436,30 @@ exports.bookClass = asyncHandler(async (req, res, next) => {
 
   if (lc.status === "cancelled") return next(new AppError("This class has been cancelled.", 400));
   if (lc.status === "completed") return next(new AppError("This class has already ended.", 400));
-  if (new Date(lc.scheduledAt) < new Date()) return next(new AppError("Booking window has closed.", 400));
+  // Allow booking for live classes even if scheduledAt is in the past
+  if (lc.status === "scheduled" && new Date(lc.scheduledAt) < new Date(Date.now() - 30 * 60000)) {
+    return next(new AppError("Booking window has closed.", 400));
+  }
 
-  // Find member record for this user
-  const member = await Member.findOne({ gym: lc.gym }).where("email").equals(req.user.email);
-  if (!member) return next(new AppError("You are not a member of this gym.", 403));
+  // Find member record for this user — auto-create if not found
+  let member = await Member.findOne({ gym: lc.gym }).where("email").equals(req.user.email);
+  if (!member) {
+    // Try any gym
+    member = await Member.findOne({ email: req.user.email.toLowerCase() });
+  }
+  if (!member) {
+    // Auto-create member from user account
+    member = await Member.create({
+      user:    req.user._id,
+      gym:     lc.gym,
+      addedBy: req.user._id,
+      name:    req.user.name,
+      email:   req.user.email.toLowerCase(),
+      phone:   req.user.phone || "0000000000",
+      status:  "Active",
+      joinDate: new Date(),
+    });
+  }
   if (member.status !== "Active") return next(new AppError(`Your membership is ${member.status}. Please renew.`, 403));
 
   // Check seat availability
