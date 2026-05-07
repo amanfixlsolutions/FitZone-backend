@@ -26,15 +26,15 @@ router.get("/revenue", adminOrSuperAdmin, getRevenueStats);
 // ── List payments ──────────────────────────────────────────────────
 router.get("/", adminOrSuperAdmin, getPayments);
 
-// ── Razorpay ───────────────────────────────────────────────────────
-router.post("/create-order",    adminOrSuperAdmin, createRazorpayOrder);
-router.post("/verify-razorpay", adminOrSuperAdmin, verifyRazorpay);
+// ── Razorpay — allow any logged-in user (members buy plans) ────────
+router.post("/create-order",    createRazorpayOrder);
+router.post("/verify-razorpay", verifyRazorpay);
 
 // ── Stripe ─────────────────────────────────────────────────────────
-router.post("/create-stripe-intent", adminOrSuperAdmin, createStripeIntent);
-router.post("/confirm-stripe",       adminOrSuperAdmin, confirmStripe);
+router.post("/create-stripe-intent", createStripeIntent);
+router.post("/confirm-stripe",       confirmStripe);
 
-// ── Manual/Cash ────────────────────────────────────────────────────
+// ── Manual/Cash — admin only ───────────────────────────────────────
 router.post("/manual", adminOrSuperAdmin, createManualPayment);
 
 module.exports = router;

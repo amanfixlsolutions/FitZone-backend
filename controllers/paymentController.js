@@ -62,18 +62,25 @@ exports.getPayments = asyncHandler(async (req, res) => {
 exports.createRazorpayOrder = asyncHandler(async (req, res, next) => {
   const { planId, memberId, amount } = req.body;
 
-  if (!razorpay) return next(new AppError("Razorpay not configured.", 503));
+  if (!razorpay) return next(new AppError("Razorpay not configured. Please add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET.", 503));
 
   const plan = await Plan.findById(planId);
   if (!plan) return next(new AppError("Plan not found.", 404));
 
+  // Resolve memberId — for logged-in members, find their member record
+  let resolvedMemberId = memberId;
+  if (!resolvedMemberId && req.user) {
+    const member = await Member.findOne({ email: req.user.email });
+    if (member) resolvedMemberId = member._id;
+  }
+
   const orderAmount = amount || plan.price;
 
   const order = await razorpay.orders.create({
-    amount: orderAmount * 100, // paise
+    amount:   orderAmount * 100, // paise
     currency: "INR",
-    receipt: `receipt_${Date.now()}`,
-    notes: { planId, memberId, planName: plan.name },
+    receipt:  `receipt_${Date.now()}`,
+    notes:    { planId, memberId: resolvedMemberId?.toString() || "", planName: plan.name },
   });
 
   res.json({
@@ -85,6 +92,7 @@ exports.createRazorpayOrder = asyncHandler(async (req, res, next) => {
       keyId:      process.env.RAZORPAY_KEY_ID,
       planName:   plan.name,
       planPrice:  plan.price,
+      memberId:   resolvedMemberId,
     },
   });
 });

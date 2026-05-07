@@ -130,8 +130,7 @@ exports.createMeeting = async ({ topic, agenda, startTime, duration }) => {
       type:        2, // scheduled meeting
       start_time:  new Date(startTime).toISOString(),
       duration:    duration || 60,
-      timezone:    "Asia/Kolkata",
-      settings: {
+      timezone:    "Asia/Kolkata",      settings: {
         host_video:        true,
         participant_video: true,
         join_before_host:  true,   // allow joining before host
