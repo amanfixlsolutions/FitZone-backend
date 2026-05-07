@@ -31,6 +31,7 @@
     "otp-generator": "^4.0.1",
     "qrcode": "^1.5.4",
     "razorpay": "^2.9.6",
+    "resend": "^6.12.3",
     "socket.io": "^4.8.3",
     "stripe": "^17.7.0",
     "uuid": "^11.1.1",

@@ -1,51 +1,80 @@
-const nodemailer = require("nodemailer");
 const logger = require("../utils/logger");
 
-// ── Lazy transporter — created on first use so env vars are always loaded ──
-// Reset cache if credentials change (e.g. after env var update)
+// ── Email provider selection ───────────────────────────────────────
+// Priority: Resend (HTTPS API, works on Render) → Gmail SMTP (may be blocked)
+
+// ── Resend (recommended for Render) ───────────────────────────────
+const sendViaResend = async ({ to, subject, html }) => {
+  const { Resend } = require("resend");
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
+  const from = process.env.EMAIL_FROM || "FitZone <onboarding@resend.dev>";
+
+  const { data, error } = await resend.emails.send({ from, to, subject, html });
+  if (error) throw new Error(error.message || "Resend error");
+  return data;
+};
+
+// ── Gmail SMTP (nodemailer fallback) ───────────────────────────────
 let _transporter = null;
 let _transporterUser = null;
 
 const getTransporter = () => {
+  const nodemailer = require("nodemailer");
   const currentUser = process.env.EMAIL_USER;
-  // Reset if user changed (new credentials deployed)
-  if (_transporter && _transporterUser !== currentUser) {
-    _transporter = null;
-  }
-  if (_transporter) return _transporter;
+  if (_transporter && _transporterUser === currentUser) return _transporter;
 
   _transporterUser = currentUser;
   _transporter = nodemailer.createTransport({
     host:   process.env.EMAIL_HOST || "smtp.gmail.com",
-    port:   parseInt(process.env.EMAIL_PORT) || 587,
-    secure: false,
+    port:   parseInt(process.env.EMAIL_PORT) || 465,
+    secure: true, // port 465 requires SSL
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
     tls: { rejectUnauthorized: false },
+    connectionTimeout: 10000,
+    greetingTimeout:   10000,
+    socketTimeout:     15000,
   });
   return _transporter;
 };
 
-const getFrom = () =>
-  process.env.EMAIL_FROM || `FitZone <${process.env.EMAIL_USER || "noreply@fitzone.in"}>`;
-
-const sendEmail = async ({ to, subject, html }) => {
+const sendViaGmail = async ({ to, subject, html }) => {
   const transporter = getTransporter();
-  try {
-    const info = await transporter.sendMail({
-      from: getFrom(),
-      to,
-      subject,
-      html,
-    });
-    logger.info(`✉️  Email sent to ${to}: ${info.messageId}`);
-    return info;
-  } catch (err) {
-    logger.error(`❌ Email failed to ${to}: ${err.message}`);
-    throw err;
+  const from = process.env.EMAIL_FROM || `FitZone <${process.env.EMAIL_USER}>`;
+  const info = await transporter.sendMail({ from, to, subject, html });
+  return info;
+};
+
+// ── Main sendEmail — tries Resend first, then Gmail ────────────────
+const sendEmail = async ({ to, subject, html }) => {
+  // Try Resend if API key is configured
+  if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "your_resend_api_key") {
+    try {
+      const result = await sendViaResend({ to, subject, html });
+      logger.info(`✉️  Email sent via Resend to ${to}`);
+      return result;
+    } catch (err) {
+      logger.warn(`Resend failed: ${err.message} — trying Gmail SMTP`);
+    }
   }
+
+  // Try Gmail SMTP
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASS &&
+      process.env.EMAIL_USER !== "your_gmail@gmail.com") {
+    try {
+      const info = await sendViaGmail({ to, subject, html });
+      logger.info(`✉️  Email sent via Gmail to ${to}: ${info.messageId}`);
+      return info;
+    } catch (err) {
+      logger.error(`Gmail SMTP failed: ${err.message}`);
+      throw new Error(`Email delivery failed: ${err.message}`);
+    }
+  }
+
+  throw new Error("No email provider configured. Set RESEND_API_KEY or EMAIL_USER/EMAIL_PASS.");
 };
 
 // ── OTP Email ──────────────────────────────────────────────────────
@@ -109,7 +138,7 @@ exports.sendWelcomeEmail = (user) =>
         </div>
       </div>
     `,
-  });
+  }).catch(() => {}); // welcome email failure is non-critical
 
 // ── Payment Confirmation ───────────────────────────────────────────
 exports.sendPaymentConfirmation = (member, payment) =>
@@ -128,7 +157,7 @@ exports.sendPaymentConfirmation = (member, payment) =>
         </div>
       </div>
     `,
-  });
+  }).catch(() => {});
 
 // ── Membership Expiry Reminder ─────────────────────────────────────
 exports.sendExpiryReminder = (member, daysLeft) =>
@@ -144,7 +173,7 @@ exports.sendExpiryReminder = (member, daysLeft) =>
         </a>
       </div>
     `,
-  });
+  }).catch(() => {});
 
 // ── Gym Approval Email ─────────────────────────────────────────────
 exports.sendGymApprovalEmail = (gymOwner, gymName, approved) =>
@@ -155,11 +184,11 @@ exports.sendGymApprovalEmail = (gymOwner, gymName, approved) =>
       <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:32px">
         <h2 style="color:#1f2937">Hi ${gymOwner.name},</h2>
         ${approved
-          ? `<p style="color:#6b7280">Congratulations! <strong>${gymName}</strong> has been approved on FitZone. You can now start managing your gym.</p>`
-          : `<p style="color:#6b7280">Your application for <strong>${gymName}</strong> was not approved. Please contact support for details.</p>`
+          ? `<p style="color:#6b7280">Congratulations! <strong>${gymName}</strong> has been approved on FitZone.</p>`
+          : `<p style="color:#6b7280">Your application for <strong>${gymName}</strong> was not approved. Please contact support.</p>`
         }
       </div>
     `,
-  });
+  }).catch(() => {});
 
 exports.sendEmail = sendEmail;
