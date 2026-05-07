@@ -114,12 +114,13 @@ exports.verifyRazorpay = asyncHandler(async (req, res, next) => {
     return next(new AppError("Payment verification failed. Invalid signature.", 400));
   }
 
-  // Process the payment
+  // Process the payment — pass req.user so we can auto-create member if needed
   await processPayment({
     memberId, planId,
     gateway: "Razorpay",
     gatewayPaymentId: razorpay_payment_id,
     gatewayOrderId: razorpay_order_id,
+    user: req.user,
     req, res, next,
   });
 });
@@ -185,6 +186,7 @@ exports.createManualPayment = asyncHandler(async (req, res, next) => {
 
   await processPayment({
     memberId, planId, gateway, description,
+    user: req.user,
     req, res, next,
   });
 });
@@ -269,16 +271,54 @@ exports.getRevenueStats = asyncHandler(async (req, res) => {
 // ─────────────────────────────────────────────────────────────────
 // Internal: process payment, update member, create invoice
 // ─────────────────────────────────────────────────────────────────
-async function processPayment({ memberId, planId, gateway, gatewayPaymentId = "", gatewayOrderId = "", description = "", fromWebhook = false, req, res, next }) {
-  const member = await Member.findById(memberId);
-  if (!member) {
-    if (!fromWebhook && typeof next === "function") return next(new AppError("Member not found.", 404));
-    return;
-  }
-
+async function processPayment({ memberId, planId, gateway, gatewayPaymentId = "", gatewayOrderId = "", description = "", fromWebhook = false, user, req, res, next }) {
   const plan = await Plan.findById(planId);
   if (!plan) {
     if (!fromWebhook && typeof next === "function") return next(new AppError("Plan not found.", 404));
+    return;
+  }
+
+  // ── Resolve member — find existing or auto-create ──────────────
+  let member = null;
+
+  // 1. Try by memberId
+  if (memberId) {
+    member = await Member.findById(memberId).catch(() => null);
+  }
+
+  // 2. Try by logged-in user's email
+  if (!member && user?.email) {
+    member = await Member.findOne({ email: user.email.toLowerCase() });
+  }
+
+  // 3. Auto-create member from User account
+  if (!member && user) {
+    // Find the first active gym to attach this member to
+    const gym = await Gym.findOne({ status: "active" }).sort({ createdAt: 1 });
+    if (!gym) {
+      if (!fromWebhook && typeof next === "function") {
+        return next(new AppError("No active gym found. Please contact support.", 404));
+      }
+      return;
+    }
+
+    // Create member record from user data
+    member = await Member.create({
+      user:    user._id,
+      gym:     gym._id,
+      addedBy: user._id,
+      name:    user.name,
+      email:   user.email.toLowerCase(),
+      phone:   user.phone || "0000000000",
+      status:  "Active",
+      joinDate: new Date(),
+    });
+  }
+
+  if (!member) {
+    if (!fromWebhook && typeof next === "function") {
+      return next(new AppError("Member not found. Please contact support.", 404));
+    }
     return;
   }
 
@@ -313,13 +353,30 @@ async function processPayment({ memberId, planId, gateway, gatewayPaymentId = ""
   const expiryDate = new Date(Date.now() + durationMs);
 
   // Update member plan & status
-  await Member.findByIdAndUpdate(memberId, {
+  await Member.findByIdAndUpdate(member._id, {
     plan:       planId,
     planName:   plan.name,
     planPrice:  plan.price,
     expiryDate,
     status:     "Active",
   });
+
+  // Also update the User record so navbar shows correct plan
+  if (member.user) {
+    const User = require("../models/User");
+    await User.findByIdAndUpdate(member.user, {
+      plan:       plan.name,
+      planExpiry: expiryDate,
+      planId:     planId,
+    });
+  } else if (user) {
+    const User = require("../models/User");
+    await User.findByIdAndUpdate(user._id, {
+      plan:       plan.name,
+      planExpiry: expiryDate,
+      planId:     planId,
+    });
+  }
 
   // Update plan subscriber count
   await Plan.findByIdAndUpdate(planId, { $inc: { totalSubscribers: 1, activeSubscribers: 1 } });
