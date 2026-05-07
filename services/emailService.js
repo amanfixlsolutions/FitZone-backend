@@ -2,9 +2,19 @@ const nodemailer = require("nodemailer");
 const logger = require("../utils/logger");
 
 // ── Lazy transporter — created on first use so env vars are always loaded ──
+// Reset cache if credentials change (e.g. after env var update)
 let _transporter = null;
+let _transporterUser = null;
+
 const getTransporter = () => {
+  const currentUser = process.env.EMAIL_USER;
+  // Reset if user changed (new credentials deployed)
+  if (_transporter && _transporterUser !== currentUser) {
+    _transporter = null;
+  }
   if (_transporter) return _transporter;
+
+  _transporterUser = currentUser;
   _transporter = nodemailer.createTransport({
     host:   process.env.EMAIL_HOST || "smtp.gmail.com",
     port:   parseInt(process.env.EMAIL_PORT) || 587,
