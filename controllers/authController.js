@@ -18,29 +18,13 @@ const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString()
 // Send OTP to email before registration
 // ─────────────────────────────────────────────────────────────────
 exports.sendOTP = asyncHandler(async (req, res, next) => {
-  const { email, type = "signup", gymId } = req.body;
+  const { email, type = "signup" } = req.body;
   if (!email) return next(new AppError("Email is required.", 400));
 
-  // For signup: check if email already exists in this specific gym
+  // For signup: check email not already registered
   if (type === "signup") {
-    if (!gymId) {
-      return next(new AppError("Please select a gym to continue.", 400));
-    }
-
-    // Validate gym exists and is active
-    const gym = await Gym.findById(gymId);
-    if (!gym) return next(new AppError("Selected gym not found.", 404));
-    if (gym.status !== "active") return next(new AppError("Selected gym is not active.", 400));
-
-    // Check only in Member collection for this specific gym
-    const Member = require("../models/Member");
-    const gymMember = await Member.findOne({
-      email: email.toLowerCase(),
-      gym: gymId,
-    });
-    if (gymMember) {
-      return next(new AppError("An account with this email already exists in this gym. Please sign in instead.", 400));
-    }
+    const existing = await User.findOne({ email: email.toLowerCase() });
+    if (existing) return next(new AppError("Email is already registered.", 400));
   }
 
   // Delete any existing OTP for this email+type
@@ -78,7 +62,7 @@ exports.sendOTP = asyncHandler(async (req, res, next) => {
 // Verify OTP (returns a short-lived verification token)
 // ─────────────────────────────────────────────────────────────────
 exports.verifyOTP = asyncHandler(async (req, res, next) => {
-  const { email, otp, type = "signup", gymId } = req.body;
+  const { email, otp, type = "signup" } = req.body;
   if (!email || !otp) return next(new AppError("Email and OTP are required.", 400));
 
   const record = await OTP.findOne({
@@ -95,12 +79,9 @@ exports.verifyOTP = asyncHandler(async (req, res, next) => {
   record.verified = true;
   await record.save();
 
-  // Issue a short-lived verification token (5 min), embed gymId if provided
-  const tokenPayload = { email: email.toLowerCase(), type, verified: true };
-  if (gymId) tokenPayload.gymId = gymId;
-
+  // Issue a short-lived verification token (5 min)
   const verifyToken = jwt.sign(
-    tokenPayload,
+    { email: email.toLowerCase(), type, verified: true },
     process.env.JWT_SECRET,
     { expiresIn: "5m" }
   );
@@ -133,42 +114,20 @@ exports.register = asyncHandler(async (req, res, next) => {
     return next(new AppError("Email verification mismatch.", 400));
   }
 
-  // Resolve gymId from token (set during OTP verification)
-  const gymId = decoded.gymId || null;
-  let gymDoc = null;
-  if (gymId) {
-    gymDoc = await Gym.findById(gymId);
-    if (!gymDoc) return next(new AppError("Selected gym not found.", 404));
-    if (gymDoc.status !== "active") return next(new AppError("Selected gym is not active.", 400));
+  // Check email not already taken
+  const existing = await User.findOne({ email: email.toLowerCase() });
+  if (existing) return next(new AppError("Email already registered.", 400));
 
-    // Double-check: make sure this email isn't already a member of this gym
-    const Member = require("../models/Member");
-    const alreadyMember = await Member.findOne({ email: email.toLowerCase(), gym: gymId });
-    if (alreadyMember) return next(new AppError("An account with this email already exists in this gym.", 400));
-  }
-
-  // Find or create the User account
-  // A user may already exist globally (member of another gym) — reuse that account
-  let user = await User.findOne({ email: email.toLowerCase() });
-  if (user) {
-    // User exists — just link this gym if not already linked
-    if (gymId && !user.gym) {
-      await User.findByIdAndUpdate(user._id, { gym: gymId });
-      user = await User.findById(user._id);
-    }
-  } else {
-    // Brand new user — create account
-    user = await User.create({
-      name,
-      email,
-      password,
-      phone: phone || "",
-      role,
-      gym: gymId || undefined,
-      isEmailVerified: true,
-      avatar: name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2),
-    });
-  }
+  // Create user
+  const user = await User.create({
+    name,
+    email,
+    password,
+    phone: phone || "",
+    role,
+    isEmailVerified: true,
+    avatar: name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2),
+  });
 
   // Send welcome email
   try { await sendWelcome(user); } catch (_) {}
@@ -177,7 +136,7 @@ exports.register = asyncHandler(async (req, res, next) => {
   await ActivityLog.create({
     user: user._id, userName: user.name, role: user.role,
     action: "REGISTER", module: "Auth",
-    details: `New ${role} registered: ${name}${gymDoc ? ` at ${gymDoc.name}` : ""}`,
+    details: `New ${role} registered: ${name}`,
     ip: req.ip,
   });
 

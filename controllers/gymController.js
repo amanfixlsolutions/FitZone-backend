@@ -8,16 +8,6 @@ const AppError = require("../utils/AppError");
 const { sendGymApprovalEmail } = require("../services/emailService");
 const { notifyGym } = require("../services/notificationService");
 
-// ── @GET /api/gyms/public ──────────────────────────────────────────
-// Public endpoint — returns active gyms for signup gym selection
-exports.getPublicGyms = asyncHandler(async (req, res) => {
-  const gyms = await Gym.find({ status: "active" })
-    .select("name city logo address")
-    .sort({ name: 1 });
-
-  res.json({ success: true, data: gyms });
-});
-
 // ── @GET /api/gyms ─────────────────────────────────────────────────
 exports.getGyms = asyncHandler(async (req, res) => {
   const { status, city, search, page, limit } = req.query;

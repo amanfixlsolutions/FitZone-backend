@@ -9,10 +9,9 @@ const { deleteFromStorage, extractPublicId } = require("./uploadController");
 
 // ── @GET /api/classes/public — no auth required ────────────────────
 exports.getPublicClasses = asyncHandler(async (req, res) => {
-  const { limit = 12, search, level, gymId } = req.query;
+  const { limit = 12, search, level } = req.query;
   const filter = { status: "Active" };
 
-  if (gymId)  filter.gym   = gymId;
   if (level)  filter.level = level;
   if (search) filter.$or = [
     { name: new RegExp(search, "i") },

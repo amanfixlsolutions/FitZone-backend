@@ -3,12 +3,9 @@ const router = express.Router();
 const {
   getGyms, getGym, createGym, updateGym, deleteGym,
   approveGym, rejectGym, suspendGym, getGymStats,
-  createGymWithOwner, getPublicGyms,
+  createGymWithOwner,
 } = require("../controllers/gymController");
 const { protect, superAdminOnly, adminOrSuperAdmin } = require("../middleware/auth");
-
-// ── Public route (no auth) ─────────────────────────────────────────
-router.get("/public", getPublicGyms);
 
 router.use(protect);
 
