@@ -422,9 +422,19 @@ exports.getUpcomingClasses = asyncHandler(async (req, res) => {
   );
 
   const classes = await query;
+
+  // Strip Zoom join URL from public response — members must book first
+  const safeClasses = classes.map(c => {
+    const obj = c.toObject ? c.toObject() : { ...c };
+    delete obj.zoomJoinUrl;
+    delete obj.zoomStartUrl;
+    delete obj.zoomPassword;
+    return obj;
+  });
+
   res.json({
     success: true,
-    data: classes,
+    data: safeClasses,
     pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
   });
 });
@@ -525,22 +535,36 @@ exports.bookClass = asyncHandler(async (req, res, next) => {
   }
 
   // ── Paid class — create Razorpay order ────────────────────────
-  const Razorpay = require("razorpay");
-  if (!process.env.RAZORPAY_KEY_ID) {
-    return next(new AppError("Payment gateway not configured.", 503));
+  if (!process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID === "rzp_test_your_key_id") {
+    return next(new AppError("Payment gateway not configured on server. Please contact support.", 503));
+  }
+  if (!process.env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_KEY_SECRET === "your_razorpay_secret") {
+    return next(new AppError("Payment gateway secret not configured. Please contact support.", 503));
   }
 
-  const razorpay = new Razorpay({
-    key_id:     process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-  });
+  // Validate price
+  const price = Number(lc.price);
+  if (!price || price <= 0) {
+    return next(new AppError("Invalid class price.", 400));
+  }
 
-  const order = await razorpay.orders.create({
-    amount:   lc.price * 100,
-    currency: "INR",
-    receipt:  `lc_${lc._id}_${member._id}_${Date.now()}`,
-    notes:    { liveClassId: lc._id.toString(), memberId: member._id.toString() },
-  });
+  let order;
+  try {
+    const Razorpay = require("razorpay");
+    const razorpay = new Razorpay({
+      key_id:     process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+
+    order = await razorpay.orders.create({
+      amount:   Math.round(price * 100), // paise, must be integer
+      currency: "INR",
+      receipt:  `lc_${lc._id}_${member._id}_${Date.now()}`.slice(0, 40),
+      notes:    { liveClassId: lc._id.toString(), memberId: member._id.toString() },
+    });
+  } catch (rzpErr) {
+    return next(new AppError(`Payment gateway error: ${rzpErr.message || "Failed to create order"}`, 500));
+  }
 
   // Create pending booking
   await LiveClassBooking.findOneAndUpdate(
