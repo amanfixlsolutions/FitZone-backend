@@ -464,10 +464,20 @@ exports.bookClass = asyncHandler(async (req, res, next) => {
     return next(new AppError("This class is fully booked.", 400));
   }
 
-  // Check duplicate booking
+  // Check duplicate booking — if already confirmed, return existing booking info
   const existing = await LiveClassBooking.findOne({ member: member._id, liveClass: lc._id });
-  if (existing && existing.bookingStatus !== "cancelled") {
-    return next(new AppError("You have already booked this class.", 400));
+  if (existing && existing.bookingStatus === "confirmed") {
+    // Already booked — return success with current state
+    return res.json({
+      success:  true,
+      data:     existing,
+      alreadyBooked: true,
+      message:  "You have already booked this class.",
+    });
+  }
+  if (existing && existing.bookingStatus === "pending") {
+    // Pending payment — re-create Razorpay order
+    // Fall through to paid class handling below
   }
 
   const gym = await Gym.findById(lc.gym).select("name");
