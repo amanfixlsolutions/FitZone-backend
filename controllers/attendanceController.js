@@ -90,31 +90,64 @@ exports.checkIn = asyncHandler(async (req, res, next) => {
 });
 
 // ── @POST /api/attendance/qr-checkin (PUBLIC — no auth) ───────────
-// Called when a member scans the gym QR and submits their phone number.
-// Verifies they are a registered Active member of that gym.
+// Accepts the raw QR code data scanned from a member's QR code.
+// The QR code contains the member's qrId or _id.
 exports.qrCheckin = asyncHandler(async (req, res, next) => {
-  const { gymId, phone } = req.body;
+  const { qrData, memberId } = req.body;
 
-  if (!gymId || !phone) {
-    return next(new AppError("Gym ID and phone number are required.", 400));
+  if (!qrData && !memberId) {
+    return next(new AppError("QR code data is required.", 400));
   }
 
-  // Verify gym exists
-  const gym = await Gym.findById(gymId).select("name status");
-  if (!gym)                    return next(new AppError("Gym not found.", 404));
-  if (gym.status !== "active") return next(new AppError("This gym is not active.", 403));
+  // Try to find member by qrId, _id, or phone from the scanned data
+  let member = null;
+  const data = (qrData || memberId || "").trim();
 
-  // Find member by phone in this gym
-  const member = await Member.findOne({
-    gym:   gymId,
-    phone: { $regex: phone.replace(/\s+/g, "").replace(/^\+91/, ""), $options: "i" },
-  });
+  // 1. Try as qrId (custom QR field)
+  member = await Member.findOne({ qrId: data });
 
-  if (!member)                          return next(new AppError("No member found with this phone number in this gym.", 404));
-  if (member.status === "Banned")       return next(new AppError("Your membership has been banned.", 403));
-  if (member.status === "Expired")      return next(new AppError("Your membership has expired. Please renew.", 403));
-  if (member.status === "Paused")       return next(new AppError("Your membership is currently paused.", 403));
-  if (member.status !== "Active")       return next(new AppError("Your membership is not active.", 403));
+  // 2. Try as MongoDB ObjectId
+  if (!member && data.match(/^[a-f\d]{24}$/i)) {
+    member = await Member.findById(data).catch(() => null);
+  }
+
+  // 3. Try parsing JSON (QR might contain JSON with memberId)
+  if (!member) {
+    try {
+      const parsed = JSON.parse(data);
+      const id = parsed.memberId || parsed.id || parsed._id;
+      if (id) {
+        member = await Member.findById(id).catch(() => null);
+        if (!member && parsed.qrId) {
+          member = await Member.findOne({ qrId: parsed.qrId });
+        }
+      }
+    } catch { /* not JSON */ }
+  }
+
+  // 4. Try as phone number
+  if (!member) {
+    const phone = data.replace(/\s+/g, "").replace(/^\+91/, "");
+    if (phone.length >= 10) {
+      member = await Member.findOne({ phone: { $regex: phone, $options: "i" } });
+    }
+  }
+
+  if (!member) {
+    return next(new AppError("Member not found. Invalid QR code.", 404));
+  }
+
+  // Verify gym is active
+  const gym = await Gym.findById(member.gym).select("name status");
+  if (!gym || gym.status !== "active") {
+    return next(new AppError("This gym is not active.", 403));
+  }
+
+  // Check membership status
+  if (member.status === "Banned")  return next(new AppError("Your membership has been banned.", 403));
+  if (member.status === "Expired") return next(new AppError("Your membership has expired. Please renew.", 403));
+  if (member.status === "Paused")  return next(new AppError("Your membership is currently paused.", 403));
+  if (member.status !== "Active")  return next(new AppError("Your membership is not active.", 403));
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -127,10 +160,10 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
   });
   if (existing) {
     return res.json({
-      success:  true,
+      success:   true,
       alreadyIn: true,
-      message:  `${member.name}, you are already checked in today!`,
-      member:   { name: member.name, planName: member.planName },
+      message:   `${member.name}, you are already checked in today!`,
+      member:    { name: member.name, planName: member.planName },
     });
   }
 
@@ -163,11 +196,11 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
   }
 
   res.status(201).json({
-    success:  true,
+    success:   true,
     alreadyIn: false,
-    message:  `Welcome, ${member.name}! Attendance marked successfully.`,
-    member:   { name: member.name, planName: member.planName },
-    data:     attendance,
+    message:   `Welcome, ${member.name}! Attendance marked successfully.`,
+    member:    { name: member.name, planName: member.planName },
+    data:      attendance,
   });
 });
 
