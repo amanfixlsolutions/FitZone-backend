@@ -437,3 +437,157 @@ function getDurationMs(duration, unit) {
   };
   return (map[unit] || 2592000000) * duration;
 }
+
+// ─────────────────────────────────────────────────────────────────
+// PLATFORM SUBSCRIPTION — Gym pays FitZone to activate/renew
+// ─────────────────────────────────────────────────────────────────
+
+// Platform plan config
+const PLATFORM_PLANS = {
+  Basic:        { monthly: 999,  yearly: 9590  },
+  Professional: { monthly: 2499, yearly: 23990 },
+  Enterprise:   { monthly: 4999, yearly: 47990 },
+};
+
+// @POST /api/payments/gym-subscription/create-order
+exports.createGymSubscriptionOrder = asyncHandler(async (req, res, next) => {
+  if (!razorpay) return next(new AppError("Razorpay not configured.", 503));
+
+  const { plan = "Basic", billingCycle = "monthly" } = req.body;
+
+  if (!PLATFORM_PLANS[plan]) return next(new AppError("Invalid plan selected.", 400));
+
+  const gymId = req.user.gym;
+  if (!gymId) return next(new AppError("No gym linked to your account.", 400));
+
+  const gym = await Gym.findById(gymId);
+  if (!gym) return next(new AppError("Gym not found.", 404));
+
+  const amount = PLATFORM_PLANS[plan][billingCycle] || PLATFORM_PLANS[plan].monthly;
+
+  const order = await razorpay.orders.create({
+    amount:   amount * 100,
+    currency: "INR",
+    receipt:  `gym_sub_${Date.now()}`,
+    notes:    {
+      gymId:        gymId.toString(),
+      plan,
+      billingCycle,
+      type:         "gym_subscription",
+    },
+  });
+
+  res.json({
+    success: true,
+    data: {
+      orderId:      order.id,
+      amount:       order.amount,
+      currency:     order.currency,
+      keyId:        process.env.RAZORPAY_KEY_ID,
+      plan,
+      billingCycle,
+      gymName:      gym.name,
+    },
+  });
+});
+
+// @POST /api/payments/gym-subscription/verify
+exports.verifyGymSubscription = asyncHandler(async (req, res, next) => {
+  const {
+    razorpay_order_id, razorpay_payment_id, razorpay_signature,
+    plan = "Basic", billingCycle = "monthly",
+  } = req.body;
+
+  // Verify signature
+  const expectedSig = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+    .digest("hex");
+
+  if (expectedSig !== razorpay_signature) {
+    return next(new AppError("Payment verification failed. Invalid signature.", 400));
+  }
+
+  const gymId = req.user.gym;
+  if (!gymId) return next(new AppError("No gym linked to your account.", 400));
+
+  const gym = await Gym.findById(gymId);
+  if (!gym) return next(new AppError("Gym not found.", 404));
+
+  const amount = PLATFORM_PLANS[plan]?.[billingCycle] || 999;
+
+  // Calculate expiry
+  const now = new Date();
+  const startDate = now;
+  const expiryDate = billingCycle === "yearly"
+    ? new Date(now.getFullYear() + 1, now.getMonth(), now.getDate())
+    : new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+
+  // Update gym subscription + activate gym
+  gym.subscription = {
+    plan,
+    status:       "active",
+    billingCycle,
+    startDate,
+    expiryDate,
+    autoRenew:    true,
+    lastPaymentId:     razorpay_payment_id,
+    lastPaymentAmount: amount,
+    lastPaidAt:        now,
+  };
+  gym.status = "active";
+  if (!gym.approvedAt) {
+    gym.approvedAt = now;
+    gym.approvedBy = req.user._id;
+  }
+  await gym.save();
+
+  // Log activity
+  const ActivityLog = require("../models/ActivityLog");
+  await ActivityLog.create({
+    user:     req.user._id,
+    userName: req.user.name,
+    role:     req.user.role,
+    action:   "GYM_SUBSCRIPTION_PAYMENT",
+    module:   "Payments",
+    details:  `Gym "${gym.name}" subscribed to ${plan} (${billingCycle}) — ₹${amount}`,
+  }).catch(() => {});
+
+  // Notify super-admin
+  const { createNotification: cn } = require("../services/notificationService");
+  await cn({
+    sender:   req.user._id,
+    title:    "Gym Subscription Payment",
+    message:  `${gym.name} subscribed to ${plan} plan (${billingCycle}) — ₹${amount}`,
+    type:     "payment",
+    audience: "super-admin",
+  }).catch(() => {});
+
+  res.json({
+    success: true,
+    message: `Subscription activated! Your gym is now live on ${plan} plan.`,
+    data: {
+      plan,
+      billingCycle,
+      expiryDate,
+      gymStatus: gym.status,
+    },
+  });
+});
+
+// @GET /api/payments/gym-subscription/status
+exports.getGymSubscriptionStatus = asyncHandler(async (req, res, next) => {
+  const gymId = req.user.gym;
+  if (!gymId) return next(new AppError("No gym linked to your account.", 400));
+
+  const gym = await Gym.findById(gymId).select("name status subscription");
+  if (!gym) return next(new AppError("Gym not found.", 404));
+
+  res.json({
+    success: true,
+    data: {
+      gymStatus:    gym.status,
+      subscription: gym.subscription || {},
+    },
+  });
+});

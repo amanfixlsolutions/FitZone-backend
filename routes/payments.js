@@ -9,6 +9,9 @@ const {
   createManualPayment,
   stripeWebhook,
   getRevenueStats,
+  createGymSubscriptionOrder,
+  verifyGymSubscription,
+  getGymSubscriptionStatus,
 } = require("../controllers/paymentController");
 const { protect, adminOrSuperAdmin } = require("../middleware/auth");
 
@@ -36,5 +39,10 @@ router.post("/confirm-stripe",       confirmStripe);
 
 // ── Manual/Cash — admin only ───────────────────────────────────────
 router.post("/manual", adminOrSuperAdmin, createManualPayment);
+
+// ── Gym Platform Subscription (gym-owner pays FitZone) ────────────
+router.get("/gym-subscription/status",       getGymSubscriptionStatus);
+router.post("/gym-subscription/create-order",createGymSubscriptionOrder);
+router.post("/gym-subscription/verify",      verifyGymSubscription);
 
 module.exports = router;

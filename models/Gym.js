@@ -48,6 +48,19 @@ const gymSchema = new mongoose.Schema({
   rejectedAt:  { type: Date, default: null },
   rejectedBy:  { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
   rejectReason:{ type: String, default: "" },
+
+  // ── Platform subscription (gym pays FitZone to stay active) ───
+  subscription: {
+    plan:       { type: String, enum: ["Basic", "Professional", "Enterprise"], default: "Basic" },
+    status:     { type: String, enum: ["trial", "active", "expired", "cancelled"], default: "trial" },
+    billingCycle: { type: String, enum: ["monthly", "yearly"], default: "monthly" },
+    startDate:  { type: Date, default: null },
+    expiryDate: { type: Date, default: null },
+    autoRenew:  { type: Boolean, default: true },
+    lastPaymentId:    { type: String, default: "" },
+    lastPaymentAmount:{ type: Number, default: 0 },
+    lastPaidAt:       { type: Date, default: null },
+  },
 }, { timestamps: true });
 
 gymSchema.index({ status: 1 });
