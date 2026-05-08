@@ -715,7 +715,14 @@ exports.joinClass = asyncHandler(async (req, res, next) => {
 
 // @GET /api/live-classes/member/history  (last 30 days attendance)
 exports.getMemberHistory = asyncHandler(async (req, res) => {
-  const member = await Member.findOne({ gym: req.query.gymId }).where("email").equals(req.user.email);
+  // Find member by email — no gymId required
+  let member = null;
+  if (req.query.gymId) {
+    member = await Member.findOne({ gym: req.query.gymId, email: req.user.email.toLowerCase() });
+  }
+  if (!member) {
+    member = await Member.findOne({ email: req.user.email.toLowerCase() });
+  }
   if (!member) return res.json({ success: true, data: { bookings: [], stats: {} } });
 
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
