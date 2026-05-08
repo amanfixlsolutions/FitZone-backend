@@ -200,10 +200,30 @@ exports.getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
     .populate("gym", "name city status logo");
 
-  // Add gymName as a convenience string field
   const userData = user.toJSON();
   if (userData.gym && typeof userData.gym === "object") {
     userData.gymName = userData.gym.name;
+  }
+
+  // ── Also fetch Member record to get latest plan info ──────────
+  // This ensures plan shows even if User.plan wasn't updated
+  if (user.role === "member" && !userData.plan) {
+    try {
+      const Member = require("../models/Member");
+      const member = await Member.findOne({ email: user.email.toLowerCase() })
+        .populate("plan", "name");
+      if (member?.planName) {
+        userData.plan       = member.planName;
+        userData.planExpiry = member.expiryDate;
+        userData.planId     = member.plan?._id || member.plan;
+        // Also update User record so next getMe is faster
+        await User.findByIdAndUpdate(user._id, {
+          plan:       member.planName,
+          planExpiry: member.expiryDate,
+          planId:     member.plan?._id || member.plan,
+        });
+      }
+    } catch { /* silent */ }
   }
 
   res.json({ success: true, user: userData });
