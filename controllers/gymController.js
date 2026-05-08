@@ -214,6 +214,87 @@ exports.deleteGym = asyncHandler(async (req, res, next) => {
   res.json({ success: true, message: "Gym deleted." });
 });
 
+// ── @POST /api/gyms/create-with-owner ─────────────────────────────
+// Super-admin creates a gym + gym-owner account in one shot
+exports.createGymWithOwner = asyncHandler(async (req, res, next) => {
+  const {
+    // Owner fields
+    ownerName, ownerEmail, ownerPassword, ownerPhone,
+    // Gym fields
+    gymName, city, address, phone, description,
+  } = req.body;
+
+  // ── Validate required fields ───────────────────────────────────
+  if (!ownerName || !ownerEmail || !ownerPassword || !gymName || !city) {
+    return next(new AppError("ownerName, ownerEmail, ownerPassword, gymName and city are required.", 400));
+  }
+
+  // ── Check email uniqueness ─────────────────────────────────────
+  const existing = await User.findOne({ email: ownerEmail.toLowerCase().trim() });
+  if (existing) return next(new AppError("A user with this email already exists.", 409));
+
+  // ── Create User (gym-owner) ────────────────────────────────────
+  const owner = await User.create({
+    name:            ownerName.trim(),
+    email:           ownerEmail.toLowerCase().trim(),
+    password:        ownerPassword,          // pre-save hook hashes it
+    role:            "gym-owner",
+    phone:           ownerPhone || "",
+    isEmailVerified: true,                   // super-admin created = verified
+    status:          "active",
+  });
+
+  // ── Create Gym (auto-approved) ─────────────────────────────────
+  const gym = await Gym.create({
+    name:        gymName.trim(),
+    owner:       owner._id,
+    ownerName:   owner.name,
+    email:       owner.email,
+    phone:       phone || ownerPhone || "",
+    city:        city.trim(),
+    address:     address || "",
+    description: description || "",
+    status:      "active",                   // super-admin created = immediately active
+    approvedAt:  new Date(),
+    approvedBy:  req.user._id,
+    docs:        { submitted: true, verified: true },
+  });
+
+  // ── Link gym back to owner ─────────────────────────────────────
+  owner.gym = gym._id;
+  await owner.save({ validateBeforeSave: false });
+
+  // ── Activity log ───────────────────────────────────────────────
+  await ActivityLog.create({
+    user:     req.user._id,
+    userName: req.user.name,
+    role:     req.user.role,
+    action:   "CREATE_GYM_WITH_OWNER",
+    module:   "Gyms",
+    details:  `Super-admin created gym "${gym.name}" with owner "${owner.name}" (${owner.email})`,
+  });
+
+  // ── Send welcome email (non-blocking) ─────────────────────────
+  try {
+    const { sendGymApprovalEmail } = require("../services/emailService");
+    await sendGymApprovalEmail(owner, gym.name, true);
+  } catch (_) {}
+
+  res.status(201).json({
+    success: true,
+    message: `Gym "${gym.name}" and owner account created successfully.`,
+    data: {
+      gym,
+      owner: {
+        _id:   owner._id,
+        name:  owner.name,
+        email: owner.email,
+        role:  owner.role,
+      },
+    },
+  });
+});
+
 // ── @GET /api/gyms/stats ───────────────────────────────────────────
 exports.getGymStats = asyncHandler(async (req, res) => {
   const [total, active, pending, suspended] = await Promise.all([
