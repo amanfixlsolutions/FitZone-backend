@@ -90,60 +90,72 @@ exports.checkIn = asyncHandler(async (req, res, next) => {
 });
 
 // ── @POST /api/attendance/qr-checkin (PUBLIC — no auth) ───────────
-// Accepts the raw QR code data scanned from a member's QR code.
-// The QR code contains the member's qrId or _id.
+// Accepts either:
+//   { qrData }         — raw QR code data (from navbar scanner)
+//   { gymId, phone }   — from /checkin page (member enters phone after scanning gym QR)
 exports.qrCheckin = asyncHandler(async (req, res, next) => {
-  const { qrData, memberId } = req.body;
+  const { qrData, memberId, gymId, phone } = req.body;
 
-  if (!qrData && !memberId) {
-    return next(new AppError("QR code data is required.", 400));
-  }
-
-  // Try to find member by qrId, _id, or phone from the scanned data
   let member = null;
-  const data = (qrData || memberId || "").trim();
 
-  // 1. Try as qrId (custom QR field)
-  member = await Member.findOne({ qrId: data });
+  // ── Path A: gymId + phone (from /checkin page) ─────────────────
+  if (gymId && phone) {
+    const gym = await Gym.findById(gymId).select("name status");
+    if (!gym)                    return next(new AppError("Gym not found.", 404));
+    if (gym.status !== "active") return next(new AppError("This gym is not active.", 403));
 
-  // 2. Try as MongoDB ObjectId
-  if (!member && data.match(/^[a-f\d]{24}$/i)) {
-    member = await Member.findById(data).catch(() => null);
+    const cleanPhone = phone.replace(/\s+/g, "").replace(/^\+91/, "");
+    member = await Member.findOne({
+      gym:   gymId,
+      phone: { $regex: cleanPhone, $options: "i" },
+    });
+
+    if (!member) return next(new AppError("No member found with this phone number in this gym.", 404));
   }
 
-  // 3. Try parsing JSON (QR might contain JSON with memberId)
-  if (!member) {
-    try {
-      const parsed = JSON.parse(data);
-      const id = parsed.memberId || parsed.id || parsed._id;
-      if (id) {
-        member = await Member.findById(id).catch(() => null);
-        if (!member && parsed.qrId) {
-          member = await Member.findOne({ qrId: parsed.qrId });
-        }
-      }
-    } catch { /* not JSON */ }
-  }
+  // ── Path B: raw QR data (from navbar scanner) ──────────────────
+  else if (qrData || memberId) {
+    const data = (qrData || memberId || "").trim();
 
-  // 4. Try as phone number
-  if (!member) {
-    const phone = data.replace(/\s+/g, "").replace(/^\+91/, "");
-    if (phone.length >= 10) {
-      member = await Member.findOne({ phone: { $regex: phone, $options: "i" } });
+    // 1. Try as qrId
+    member = await Member.findOne({ qrId: data });
+
+    // 2. Try as MongoDB ObjectId
+    if (!member && data.match(/^[a-f\d]{24}$/i)) {
+      member = await Member.findById(data).catch(() => null);
     }
+
+    // 3. Try parsing JSON
+    if (!member) {
+      try {
+        const parsed = JSON.parse(data);
+        const id = parsed.memberId || parsed.id || parsed._id;
+        if (id) member = await Member.findById(id).catch(() => null);
+        if (!member && parsed.qrId) member = await Member.findOne({ qrId: parsed.qrId });
+      } catch { /* not JSON */ }
+    }
+
+    // 4. Try as phone number
+    if (!member) {
+      const cleanPhone = data.replace(/\s+/g, "").replace(/^\+91/, "");
+      if (cleanPhone.length >= 10) {
+        member = await Member.findOne({ phone: { $regex: cleanPhone, $options: "i" } });
+      }
+    }
+
+    if (!member) return next(new AppError("Member not found. Invalid QR code.", 404));
   }
 
-  if (!member) {
-    return next(new AppError("Member not found. Invalid QR code.", 404));
+  else {
+    return next(new AppError("QR code data or phone number is required.", 400));
   }
 
-  // Verify gym is active
+  // ── Verify membership ──────────────────────────────────────────
   const gym = await Gym.findById(member.gym).select("name status");
   if (!gym || gym.status !== "active") {
     return next(new AppError("This gym is not active.", 403));
   }
 
-  // Check membership status
   if (member.status === "Banned")  return next(new AppError("Your membership has been banned.", 403));
   if (member.status === "Expired") return next(new AppError("Your membership has expired. Please renew.", 403));
   if (member.status === "Paused")  return next(new AppError("Your membership is currently paused.", 403));
@@ -184,7 +196,7 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
     lastCheckin: new Date(),
   });
 
-  // Emit real-time event to gym dashboard
+  // Emit real-time event
   const io = getIO();
   if (io) {
     io.to(`gym:${member.gym}`).emit("checkin", {
