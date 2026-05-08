@@ -127,21 +127,74 @@ exports.updateMember = asyncHandler(async (req, res, next) => {
 
 // ── @DELETE /api/members/:id ───────────────────────────────────────
 exports.deleteMember = asyncHandler(async (req, res, next) => {
-  const member = await Member.findByIdAndDelete(req.params.id);
+  const member = await Member.findById(req.params.id);
   if (!member) return next(new AppError("Member not found.", 404));
 
-  await Gym.findByIdAndUpdate(member.gym, { $inc: { totalMembers: -1, activeMembers: -1 } });
+  const Attendance      = require("../models/Attendance");
+  const Payment         = require("../models/Payment");
+  const Invoice         = require("../models/Invoice");
+  const User            = require("../models/User");
+  const LiveClassBooking = require("../models/LiveClassBooking");
+
+  // ── Cascade delete all related data ───────────────────────────
+  await Promise.all([
+    // Delete attendance records
+    Attendance.deleteMany({ member: member._id }),
+    // Delete payment records
+    Payment.deleteMany({ member: member._id }),
+    // Delete invoices
+    Invoice.deleteMany({ member: member._id }),
+    // Delete live class bookings
+    LiveClassBooking.deleteMany({ member: member._id }),
+    // Delete activity logs for this member
+    ActivityLog.deleteMany({ "data.memberId": member._id }),
+  ]);
+
+  // Delete the User account if linked
+  if (member.user) {
+    await User.findByIdAndDelete(member.user);
+  } else {
+    // Try to find user by email
+    const user = await User.findOne({ email: member.email?.toLowerCase() });
+    if (user && user.role === "member") {
+      await User.findByIdAndDelete(user._id);
+    }
+  }
+
+  // Delete the Member record
+  await Member.findByIdAndDelete(req.params.id);
+
+  // Update gym member count
+  await Gym.findByIdAndUpdate(member.gym, {
+    $inc: {
+      totalMembers: -1,
+      activeMembers: member.status === "Active" ? -1 : 0,
+    },
+  });
+
+  // Update plan subscriber count
+  if (member.plan) {
+    await Plan.findByIdAndUpdate(member.plan, {
+      $inc: { totalSubscribers: -1, activeSubscribers: member.status === "Active" ? -1 : 0 },
+    }).catch(() => {});
+  }
+
+  await ActivityLog.create({
+    user: req.user._id, userName: req.user.name, role: req.user.role,
+    action: "DELETE_MEMBER", module: "Members",
+    details: `Deleted member: ${member.name} (${member.email})`,
+  }).catch(() => {});
 
   await createNotification({
     gym:      member.gym,
     sender:   req.user._id,
     title:    "Member Removed",
-    message:  `${member.name}'s membership has been removed.`,
+    message:  `${member.name}'s account and all data have been permanently deleted.`,
     type:     "member",
     audience: "specific-gym",
   }).catch(() => {});
 
-  res.json({ success: true, message: "Member deleted." });
+  res.json({ success: true, message: `${member.name}'s account and all associated data deleted.` });
 });
 
 // ── @POST /api/members/:id/ban ─────────────────────────────────────
