@@ -7,11 +7,101 @@ const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError   = require("../utils/AppError");
 const { getIO }  = require("../sockets");
 
-// ── Helper: extract last 10 digits from any phone format ──────────
-// Handles: +919876543210 / 09876543210 / 9876543210 / +91 98765 43210
-const normalizePhone = (raw) => {
-  if (!raw) return "";
-  return raw.replace(/\D/g, "").slice(-10); // digits only → last 10
+// ─────────────────────────────────────────────────────────────────
+// Helper: parse raw QR scan data → extract memberId / qrId
+//
+// qrService.generateMemberQR encodes:
+//   JSON.stringify({ memberId, qrId, type: "member-checkin" })
+//
+// So the scanned string will be that JSON.
+// We also handle edge cases: plain qrId string, plain ObjectId string.
+// ─────────────────────────────────────────────────────────────────
+const parseQRScan = (raw) => {
+  if (!raw || typeof raw !== "string") return {};
+  const trimmed = raw.trim();
+
+  // 1. Try JSON  { memberId, qrId, type }
+  try {
+    const parsed = JSON.parse(trimmed);
+    return {
+      memberId: parsed.memberId || parsed.id   || parsed._id  || null,
+      qrId:     parsed.qrId    || parsed.qrid  || null,
+    };
+  } catch { /* not JSON */ }
+
+  // 2. Plain 24-char hex → treat as memberId (ObjectId)
+  if (/^[a-f\d]{24}$/i.test(trimmed)) {
+    return { memberId: trimmed, qrId: null };
+  }
+
+  // 3. Anything else → treat as qrId (UUID)
+  return { memberId: null, qrId: trimmed };
+};
+
+// ─────────────────────────────────────────────────────────────────
+// Helper: find member from parsed QR data
+// Priority: qrId first (most specific), then memberId
+// ─────────────────────────────────────────────────────────────────
+const findMemberFromQR = async ({ memberId, qrId }) => {
+  let member = null;
+
+  if (qrId) {
+    member = await Member.findOne({ qrId: qrId.trim() });
+  }
+
+  if (!member && memberId && mongoose.Types.ObjectId.isValid(memberId)) {
+    member = await Member.findById(memberId).catch(() => null);
+  }
+
+  return member;
+};
+
+// ─────────────────────────────────────────────────────────────────
+// Helper: mark attendance for a verified member
+// ─────────────────────────────────────────────────────────────────
+const markAttendance = async ({ member, method = "QR", type = "Gym Access", classId = null }) => {
+  const today = new Date().toISOString().split("T")[0];
+
+  // Already checked in today?
+  const existing = await Attendance.findOne({
+    member: member._id,
+    date:   today,
+    status: "In",
+    type,
+  });
+
+  if (existing) {
+    return { alreadyIn: true, attendance: existing };
+  }
+
+  const attendance = await Attendance.create({
+    gym:        member.gym,
+    member:     member._id,
+    memberName: member.name,
+    memberPlan: member.planName,
+    type,
+    class:      classId || null,
+    method,
+    date:       today,
+  });
+
+  await Member.findByIdAndUpdate(member._id, {
+    $inc:        { totalCheckins: 1 },
+    lastCheckin: new Date(),
+  });
+
+  // Real-time event
+  const io = getIO();
+  if (io) {
+    io.to(`gym:${member.gym}`).emit("checkin", {
+      memberName: member.name,
+      plan:       member.planName,
+      time:       new Date().toLocaleTimeString(),
+      type,
+    });
+  }
+
+  return { alreadyIn: false, attendance };
 };
 
 // ─────────────────────────────────────────────────────────────────
@@ -24,9 +114,9 @@ exports.getAttendance = asyncHandler(async (req, res) => {
   if (req.user.role === "gym-owner") filter.gym = req.user.gym;
   else if (gymId) filter.gym = gymId;
 
-  if (date)     filter.date     = date;
-  if (memberId) filter.member   = memberId;
-  if (type)     filter.type     = type;
+  if (date)     filter.date   = date;
+  if (memberId) filter.member = memberId;
+  if (type)     filter.type   = type;
 
   const total = await Attendance.countDocuments(filter);
   const { query, pagination } = paginate(
@@ -52,43 +142,16 @@ exports.checkIn = asyncHandler(async (req, res, next) => {
   const { memberId, qrId, type = "Gym Access", classId, method = "Manual" } = req.body;
 
   let member;
-  if (qrId)      member = await Member.findOne({ qrId });
+  if (qrId)          member = await Member.findOne({ qrId });
   else if (memberId) member = await Member.findById(memberId);
 
-  if (!member)                    return next(new AppError("Member not found.", 404));
-  if (member.status === "Banned") return next(new AppError("Member is banned.", 403));
+  if (!member)                     return next(new AppError("Member not found.", 404));
+  if (member.status === "Banned")  return next(new AppError("Member is banned.", 403));
   if (member.status === "Expired") return next(new AppError("Member's plan has expired.", 403));
 
-  const today = new Date().toISOString().split("T")[0];
+  const { alreadyIn, attendance } = await markAttendance({ member, method, type, classId });
 
-  const existing = await Attendance.findOne({ member: member._id, date: today, status: "In", type });
-  if (existing) return next(new AppError("Member already checked in.", 400));
-
-  const attendance = await Attendance.create({
-    gym:        member.gym,
-    member:     member._id,
-    memberName: member.name,
-    memberPlan: member.planName,
-    type,
-    class:      classId || null,
-    method,
-    date:       today,
-  });
-
-  await Member.findByIdAndUpdate(member._id, {
-    $inc: { totalCheckins: 1 },
-    lastCheckin: new Date(),
-  });
-
-  const io = getIO();
-  if (io) {
-    io.to(`gym:${member.gym}`).emit("checkin", {
-      memberName: member.name,
-      plan:       member.planName,
-      time:       new Date().toLocaleTimeString(),
-      type,
-    });
-  }
+  if (alreadyIn) return next(new AppError("Member already checked in today.", 400));
 
   res.status(201).json({
     success: true,
@@ -100,79 +163,55 @@ exports.checkIn = asyncHandler(async (req, res, next) => {
 // ─────────────────────────────────────────────────────────────────
 // @POST /api/attendance/qr-checkin  (PUBLIC — no auth required)
 //
-// WORKFLOW:
-//   1. Gym Owner generates a QR on the Attendance page.
-//      QR encodes the URL:  /checkin?gym=<gymId>&name=<gymName>
+// ── WORKFLOW ──────────────────────────────────────────────────────
 //
-//   2. Member scans QR with phone camera → browser opens /checkin page.
+//  Member's personal QR (generated by qrService.generateMemberQR):
+//    Encodes: JSON { memberId, qrId, type: "member-checkin" }
 //
-//   3. Member enters their registered phone number and submits.
-//      Frontend sends:  POST /api/attendance/qr-checkin
-//                       Body: { gymId, phone }
+//  Member scans QR with phone camera
+//    → /checkin page opens (no phone entry needed)
+//    → Page auto-submits: POST /api/attendance/qr-checkin
+//       Body: { qrData: "<raw scanned string>" }
 //
-//   4. Backend:
-//      a. Validate gymId is a valid ObjectId
-//      b. Find the gym — must be active
-//      c. Normalize phone → last 10 digits
-//      d. Find member in that gym whose phone (normalized) matches
-//      e. Verify member status is Active
-//      f. Check not already checked in today
-//      g. Create Attendance record  (method: "QR")
-//      h. Update member stats
-//      i. Emit Socket.io event to gym room
-//      j. Return success response
+//  Backend:
+//    1. Parse qrData → extract qrId and/or memberId
+//    2. Find member by qrId first, then memberId
+//    3. Verify member status is Active
+//    4. Check not already checked in today
+//    5. Create Attendance record (method: "QR")
+//    6. Update member stats + emit Socket.io event
+//    7. Return success
 // ─────────────────────────────────────────────────────────────────
 exports.qrCheckin = asyncHandler(async (req, res, next) => {
-  const { gymId, phone } = req.body;
+  const { qrData, qrId: directQrId, memberId: directMemberId } = req.body;
 
-  // ── Validate inputs ────────────────────────────────────────────
-  if (!gymId || !phone) {
-    return next(new AppError("gymId and phone are required.", 400));
+  // ── Step 1: Parse QR data ──────────────────────────────────────
+  let parsed = {};
+
+  if (qrData) {
+    parsed = parseQRScan(qrData);
+  } else if (directQrId || directMemberId) {
+    // Direct fields (fallback for older clients)
+    parsed = { qrId: directQrId || null, memberId: directMemberId || null };
+  } else {
+    return next(new AppError("QR code data is required.", 400));
   }
 
-  if (!mongoose.Types.ObjectId.isValid(gymId.trim())) {
-    return next(new AppError(
-      "Invalid QR code — gym ID is malformed. Please ask your gym to regenerate the attendance QR.",
-      400
-    ));
+  if (!parsed.qrId && !parsed.memberId) {
+    return next(new AppError("Invalid QR code — could not extract member identity.", 400));
   }
 
-  // ── Step b: Find & verify gym ──────────────────────────────────
-  const gym = await Gym.findById(gymId.trim()).select("name status");
-  if (!gym) {
-    return next(new AppError("Gym not found. The QR code may be outdated.", 404));
-  }
-  if (gym.status !== "active") {
-    return next(new AppError("This gym is currently not active.", 403));
-  }
-
-  // ── Step c: Normalize phone ────────────────────────────────────
-  const inputLast10 = normalizePhone(phone);
-  if (inputLast10.length < 10) {
-    return next(new AppError("Please enter a valid 10-digit mobile number.", 400));
-  }
-
-  // ── Step d: Find member by phone in this gym ───────────────────
-  // Fetch all members of this gym and compare normalized phone.
-  // This is safe because a gym typically has < 1000 members,
-  // and avoids regex index issues with different phone formats.
-  const gymMembers = await Member.find({
-    gym: new mongoose.Types.ObjectId(gymId.trim()),
-  }).select("_id name phone planName status gym");
-
-  const member = gymMembers.find(
-    (m) => normalizePhone(m.phone) === inputLast10
-  ) || null;
+  // ── Step 2: Find member ────────────────────────────────────────
+  const member = await findMemberFromQR(parsed);
 
   if (!member) {
     return next(new AppError(
-      `No member found with this phone number in ${gym.name}. ` +
-      "Please make sure you are using the phone number registered with your gym.",
+      "Member not found. This QR code is not linked to any registered member.",
       404
     ));
   }
 
-  // ── Step e: Verify member status ──────────────────────────────
+  // ── Step 3: Verify member status ──────────────────────────────
   if (member.status === "Banned") {
     return next(new AppError("Your membership has been suspended. Please contact the gym.", 403));
   }
@@ -186,17 +225,10 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
     return next(new AppError("Your membership is not active. Please contact the gym.", 403));
   }
 
-  // ── Step f: Check already checked in today ─────────────────────
-  const today = new Date().toISOString().split("T")[0];
+  // ── Steps 4-6: Mark attendance ─────────────────────────────────
+  const { alreadyIn, attendance } = await markAttendance({ member, method: "QR" });
 
-  const existing = await Attendance.findOne({
-    member: member._id,
-    date:   today,
-    status: "In",
-    type:   "Gym Access",
-  });
-
-  if (existing) {
+  if (alreadyIn) {
     return res.json({
       success:   true,
       alreadyIn: true,
@@ -205,35 +237,7 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
     });
   }
 
-  // ── Step g: Create attendance record ──────────────────────────
-  const attendance = await Attendance.create({
-    gym:        member.gym,
-    member:     member._id,
-    memberName: member.name,
-    memberPlan: member.planName,
-    type:       "Gym Access",
-    method:     "QR",
-    date:       today,
-  });
-
-  // ── Step h: Update member stats ────────────────────────────────
-  await Member.findByIdAndUpdate(member._id, {
-    $inc:        { totalCheckins: 1 },
-    lastCheckin: new Date(),
-  });
-
-  // ── Step i: Emit real-time event ───────────────────────────────
-  const io = getIO();
-  if (io) {
-    io.to(`gym:${member.gym}`).emit("checkin", {
-      memberName: member.name,
-      plan:       member.planName,
-      time:       new Date().toLocaleTimeString(),
-      type:       "Gym Access",
-    });
-  }
-
-  // ── Step j: Respond ────────────────────────────────────────────
+  // ── Step 7: Respond ────────────────────────────────────────────
   res.status(201).json({
     success:   true,
     alreadyIn: false,
@@ -282,7 +286,6 @@ exports.getAttendanceStats = asyncHandler(async (req, res) => {
     }),
   ]);
 
-  // Daily breakdown for last 7 days
   const daily = [];
   for (let i = 6; i >= 0; i--) {
     const d     = new Date(Date.now() - i * 86400000).toISOString().split("T")[0];
