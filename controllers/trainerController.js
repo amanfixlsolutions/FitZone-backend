@@ -101,7 +101,14 @@ exports.updateTrainer = asyncHandler(async (req, res, next) => {
   const existing = await Trainer.findById(req.params.id);
   if (!existing) return next(new AppError("Trainer not found.", 404));
 
-  // ── Delete old photo if a new one is being set ─────────────────
+  // ── Protect photo field ────────────────────────────────────────
+  // If photo is empty string or not provided, keep existing photo
+  // Only update photo if a valid URL is provided
+  if (!req.body.photo || req.body.photo === "") {
+    delete req.body.photo; // don't overwrite existing photo
+  }
+
+  // ── Delete old photo if a new valid one is being set ──────────
   if (req.body.photo && req.body.photo !== existing.photo && existing.photo) {
     const oldPublicId = extractPublicId(existing.photo);
     if (oldPublicId) await deleteFromStorage(oldPublicId).catch(() => {});
