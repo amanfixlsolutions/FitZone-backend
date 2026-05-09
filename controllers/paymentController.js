@@ -74,6 +74,31 @@ exports.createRazorpayOrder = asyncHandler(async (req, res, next) => {
     if (member) resolvedMemberId = member._id;
   }
 
+  // ── Downgrade prevention ───────────────────────────────────────
+  // If member already has an active plan, new plan price must be >= current plan price
+  if (resolvedMemberId) {
+    const existingMember = await Member.findById(resolvedMemberId).populate("plan", "price name");
+    if (existingMember?.plan && existingMember.planPrice > 0) {
+      const currentPrice = existingMember.planPrice;
+      if (plan.price < currentPrice) {
+        return next(new AppError(
+          `You cannot downgrade from your current plan (₹${currentPrice}) to a lower plan (₹${plan.price}). You can only upgrade to a higher plan.`,
+          400
+        ));
+      }
+    }
+  } else if (req.user) {
+    // Check via User model planId
+    const User = require("../models/User");
+    const userRecord = await User.findById(req.user._id).populate("planId", "price name");
+    if (userRecord?.planId?.price && plan.price < userRecord.planId.price) {
+      return next(new AppError(
+        `You cannot downgrade from your current plan (₹${userRecord.planId.price}) to a lower plan (₹${plan.price}). You can only upgrade to a higher plan.`,
+        400
+      ));
+    }
+  }
+
   const orderAmount = amount || plan.price;
 
   const order = await razorpay.orders.create({
