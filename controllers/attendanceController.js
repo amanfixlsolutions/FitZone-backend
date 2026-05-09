@@ -1,10 +1,19 @@
 const Attendance = require("../models/Attendance");
 const Member = require("../models/Member");
 const Gym = require("../models/Gym");
+const mongoose = require("mongoose");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError = require("../utils/AppError");
 const { getIO } = require("../sockets");
+
+// ── Helper: extract last 10 digits from any phone format ──────────
+// Handles: +919876543210, 09876543210, 9876543210, +91 98765 43210
+const normalizePhone = (phone) => {
+  if (!phone) return "";
+  const digits = phone.replace(/\D/g, ""); // keep only digits
+  return digits.slice(-10); // always last 10 digits
+};
 
 // ── @GET /api/attendance ───────────────────────────────────────────
 exports.getAttendance = asyncHandler(async (req, res) => {
@@ -101,27 +110,33 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
   // ── Path A: gymId + phone (from /checkin page) ─────────────────
   if (gymId && phone) {
     // Validate gymId is a valid ObjectId before querying
-    if (!gymId.match(/^[a-f\d]{24}$/i)) {
+    if (!mongoose.Types.ObjectId.isValid(gymId)) {
       return next(new AppError("Invalid gym ID in QR code. Please ask your gym to regenerate the QR.", 400));
     }
 
-    const gym = await Gym.findById(gymId).select("name status");
+    const gymObjId = new mongoose.Types.ObjectId(gymId);
+
+    const gym = await Gym.findById(gymObjId).select("name status");
     if (!gym)                    return next(new AppError("Gym not found.", 404));
     if (gym.status !== "active") return next(new AppError("This gym is not active.", 403));
 
-    // Clean phone — strip spaces, dashes, and leading +91 / 0
-    const cleanPhone = phone.replace(/[\s\-\(\)]/g, "").replace(/^\+91/, "").replace(/^0/, "");
-
-    // Try exact match first, then regex for flexibility
-    member = await Member.findOne({ gym: gymId, phone: cleanPhone });
-    if (!member) {
-      member = await Member.findOne({
-        gym:   gymId,
-        phone: { $regex: cleanPhone.slice(-10), $options: "i" },
-      });
+    // Normalize: extract last 10 digits from whatever user typed
+    const last10 = normalizePhone(phone);
+    if (last10.length < 10) {
+      return next(new AppError("Please enter a valid 10-digit phone number.", 400));
     }
 
-    if (!member) return next(new AppError("No member found with this phone number in this gym.", 404));
+    // Search all members of this gym, then match phone by last 10 digits
+    // This handles any storage format: 9876543210, +919876543210, 09876543210
+    const gymMembers = await Member.find({ gym: gymObjId }).select("phone name planName status _id gym");
+    member = gymMembers.find(m => normalizePhone(m.phone) === last10) || null;
+
+    if (!member) {
+      return next(new AppError(
+        `No member found with phone number ending in ${last10}. Please check your registered phone number.`,
+        404
+      ));
+    }
   }
 
   // ── Path B: raw QR data (from navbar scanner) ──────────────────
