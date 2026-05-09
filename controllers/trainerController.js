@@ -35,9 +35,22 @@ exports.getTrainers = asyncHandler(async (req, res) => {
   );
 
   const trainers = await query;
+
+  // ── Fix photo URLs — local /uploads/ paths don't persist on Render ──
+  // If photo is a local path, clear it so frontend uses fallback image
+  const BACKEND_URL = process.env.BACKEND_URL || "https://fitzone-backend-vis3.onrender.com";
+  const fixedTrainers = trainers.map(t => {
+    const obj = t.toObject();
+    if (obj.photo && !obj.photo.includes("cloudinary.com")) {
+      // Local path — not reliable on Render free tier
+      obj.photo = "";
+    }
+    return obj;
+  });
+
   res.json({
     success: true,
-    data: trainers,
+    data: fixedTrainers,
     pagination: buildPaginationMeta(total, pagination.page, pagination.limit),
   });
 });
