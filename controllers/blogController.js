@@ -23,8 +23,20 @@ exports.getBlogs = asyncHandler(async (req, res) => {
 });
 
 exports.getBlog = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.findOne({ $or: [{ _id: req.params.id }, { slug: req.params.id }] }).populate("author", "name");
+  const { id } = req.params;
+
+  // Build query — only use _id match if it looks like a valid ObjectId
+  // Otherwise just search by slug to avoid Mongoose CastError
+  const mongoose = require("mongoose");
+  const isObjectId = mongoose.Types.ObjectId.isValid(id) && id.length === 24;
+
+  const query = isObjectId
+    ? { $or: [{ _id: id }, { slug: id }] }
+    : { slug: id };
+
+  const blog = await Blog.findOne(query).populate("author", "name");
   if (!blog) return next(new AppError("Blog post not found.", 404));
+
   blog.views += 1;
   await blog.save();
   res.json({ success: true, data: blog });
