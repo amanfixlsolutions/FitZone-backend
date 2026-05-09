@@ -100,15 +100,26 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
 
   // ── Path A: gymId + phone (from /checkin page) ─────────────────
   if (gymId && phone) {
+    // Validate gymId is a valid ObjectId before querying
+    if (!gymId.match(/^[a-f\d]{24}$/i)) {
+      return next(new AppError("Invalid gym ID in QR code. Please ask your gym to regenerate the QR.", 400));
+    }
+
     const gym = await Gym.findById(gymId).select("name status");
     if (!gym)                    return next(new AppError("Gym not found.", 404));
     if (gym.status !== "active") return next(new AppError("This gym is not active.", 403));
 
-    const cleanPhone = phone.replace(/\s+/g, "").replace(/^\+91/, "");
-    member = await Member.findOne({
-      gym:   gymId,
-      phone: { $regex: cleanPhone, $options: "i" },
-    });
+    // Clean phone — strip spaces, dashes, and leading +91 / 0
+    const cleanPhone = phone.replace(/[\s\-\(\)]/g, "").replace(/^\+91/, "").replace(/^0/, "");
+
+    // Try exact match first, then regex for flexibility
+    member = await Member.findOne({ gym: gymId, phone: cleanPhone });
+    if (!member) {
+      member = await Member.findOne({
+        gym:   gymId,
+        phone: { $regex: cleanPhone.slice(-10), $options: "i" },
+      });
+    }
 
     if (!member) return next(new AppError("No member found with this phone number in this gym.", 404));
   }
