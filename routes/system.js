@@ -196,6 +196,44 @@ router.get("/logs", protect, superAdminOnly, asyncHandler(async (req, res) => {
   });
 }));
 
+// ── @POST /api/system/fix-member-qr ───────────────────────────────
+// Regenerates QR codes for all members that have null/missing gymId in QR
+// or were created with email as memberId (old bug)
+router.post("/fix-member-qr", protect, superAdminOnly, asyncHandler(async (req, res) => {
+  const Member = require("../models/Member");
+  const { generateMemberQR } = require("../services/qrService");
+
+  // Find all members
+  const members = await Member.find({}).select("_id gym qrId qrCode name");
+  let fixed = 0;
+  let skipped = 0;
+  const errors = [];
+
+  for (const member of members) {
+    try {
+      if (!member.gym) {
+        errors.push(`${member.name} (${member._id}): gym is null — skipped`);
+        skipped++;
+        continue;
+      }
+      // Regenerate QR with correct memberId + gymId
+      const { qrId, qrCode } = await generateMemberQR(member._id, member.gym, "");
+      await Member.findByIdAndUpdate(member._id, { qrId, qrCode });
+      fixed++;
+    } catch (err) {
+      errors.push(`${member.name}: ${err.message}`);
+    }
+  }
+
+  res.json({
+    success: true,
+    message: `QR codes regenerated: ${fixed} fixed, ${skipped} skipped (null gym)`,
+    fixed,
+    skipped,
+    errors: errors.slice(0, 20),
+  });
+}));
+
 // ── Helper ─────────────────────────────────────────────────────────
 function formatUptime(sec) {
   const d = Math.floor(sec / 86400);
