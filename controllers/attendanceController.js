@@ -8,7 +8,13 @@ const AppError   = require("../utils/AppError");
 const { getIO }  = require("../sockets");
 
 // ─────────────────────────────────────────────────────────────────
-// Helper: parse raw QR scan data → extract memberId / qrId
+// Helper: extract last 10 digits from any phone format
+// Handles: +919876543210 / 09876543210 / 9876543210 / +91 98765 43210
+// ─────────────────────────────────────────────────────────────────
+const normalizePhone = (raw) => {
+  if (!raw) return "";
+  return raw.replace(/\D/g, "").slice(-10);
+};
 //
 // qrService.generateMemberQR encodes:
 //   JSON.stringify({ memberId, qrId, type: "member-checkin" })
@@ -183,35 +189,69 @@ exports.checkIn = asyncHandler(async (req, res, next) => {
 //    7. Return success
 // ─────────────────────────────────────────────────────────────────
 exports.qrCheckin = asyncHandler(async (req, res, next) => {
-  const { qrData, qrId: directQrId, memberId: directMemberId } = req.body;
+  const { qrData, qrId: directQrId, memberId: directMemberId, gymId, phone } = req.body;
 
-  // ── Step 1: Parse QR data ──────────────────────────────────────
-  let parsed = {};
+  let member = null;
 
-  if (qrData) {
-    parsed = parseQRScan(qrData);
-  } else if (directQrId || directMemberId) {
-    // Direct fields (fallback for older clients)
-    parsed = { qrId: directQrId || null, memberId: directMemberId || null };
-  } else {
-    return next(new AppError("QR code data is required.", 400));
+  // ── FLOW A: gymId + phone (Gym QR → member enters phone) ──────
+  if (gymId && phone) {
+    if (!mongoose.Types.ObjectId.isValid(gymId.trim())) {
+      return next(new AppError("Invalid QR code. Please ask your gym to regenerate it.", 400));
+    }
+
+    const gym = await Gym.findById(gymId.trim()).select("name status");
+    if (!gym)                    return next(new AppError("Gym not found.", 404));
+    if (gym.status !== "active") return next(new AppError("This gym is not active.", 403));
+
+    const last10 = normalizePhone(phone);
+    if (last10.length < 10) {
+      return next(new AppError("Please enter a valid 10-digit mobile number.", 400));
+    }
+
+    // Fetch all members of this gym and match by normalized phone
+    const gymMembers = await Member.find({
+      gym: new mongoose.Types.ObjectId(gymId.trim()),
+    }).select("_id name phone planName status gym");
+
+    member = gymMembers.find(m => normalizePhone(m.phone) === last10) || null;
+
+    if (!member) {
+      return next(new AppError(
+        `No member found with this phone number in ${gym.name}. ` +
+        "Please use the phone number registered with your gym membership.",
+        404
+      ));
+    }
   }
 
-  if (!parsed.qrId && !parsed.memberId) {
-    return next(new AppError("Invalid QR code — could not extract member identity.", 400));
+  // ── FLOW B: qrData / qrId / memberId (Member personal QR) ─────
+  else if (qrData || directQrId || directMemberId) {
+    let parsed = {};
+    if (qrData) {
+      parsed = parseQRScan(qrData);
+    } else {
+      parsed = { qrId: directQrId || null, memberId: directMemberId || null };
+    }
+
+    if (!parsed.qrId && !parsed.memberId) {
+      return next(new AppError("Invalid QR code — could not extract member identity.", 400));
+    }
+
+    member = await findMemberFromQR(parsed);
+
+    if (!member) {
+      return next(new AppError(
+        "Member not found. This QR code is not linked to any registered member.",
+        404
+      ));
+    }
   }
 
-  // ── Step 2: Find member ────────────────────────────────────────
-  const member = await findMemberFromQR(parsed);
-
-  if (!member) {
-    return next(new AppError(
-      "Member not found. This QR code is not linked to any registered member.",
-      404
-    ));
+  else {
+    return next(new AppError("QR code data or phone number is required.", 400));
   }
 
-  // ── Step 3: Verify member status ──────────────────────────────
+  // ── Verify member status ───────────────────────────────────────
   if (member.status === "Banned") {
     return next(new AppError("Your membership has been suspended. Please contact the gym.", 403));
   }
@@ -225,7 +265,7 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
     return next(new AppError("Your membership is not active. Please contact the gym.", 403));
   }
 
-  // ── Steps 4-6: Mark attendance ─────────────────────────────────
+  // ── Mark attendance ────────────────────────────────────────────
   const { alreadyIn, attendance } = await markAttendance({ member, method: "QR" });
 
   if (alreadyIn) {
@@ -237,7 +277,6 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
     });
   }
 
-  // ── Step 7: Respond ────────────────────────────────────────────
   res.status(201).json({
     success:   true,
     alreadyIn: false,
