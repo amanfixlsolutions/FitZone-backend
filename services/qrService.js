@@ -5,37 +5,41 @@ const { v4: uuidv4 } = require("uuid");
 // generateMemberQR
 //
 // Generates a personal QR code for a member.
-// QR encodes a URL → phone camera opens /checkin page directly.
 //
-// URL: /checkin?qrData=<encoded-json>
-// qrData = JSON { memberId, gymId, qrId, type: "member-checkin" }
+//The sothat when a member scans it with their
+// ,the brwser othe  and
+// attendance is marked automatically — no phone entry needed
+// The QR encodes a URL so that when a member scans it with their
+// pho formatn
+//e  https: /<FRONTEND_URL>/camera, the browser opens the&name=<gymName> /checkin page directly and
 //
-// Attendance flow:
-//   1. Member scans QR → /checkin page opens
-//   2. Page auto-submits qrData to backend
-//   3. Backend: find member by qrId → verify gymId matches → mark attendance
+// attendais:ce is.stringify(marked automy — no phone entry needed.)
+//   → URL- faodtd:s it survives asta qusry para:
 //
-// Parameters:
-//   memberId  — Member._id  (ObjectId string)
-//   gymId     — Member.gym  (ObjectId string) — stored in QR for verification
-//   gymName   — optional display name
+// Th/FbNckeTdN>api/attendan/e/qr-ccheckinDndaoi<t:ncoded-json>&name=<gymName>
+//1Rdfrmoy
+// qr2atP rs:sOJSONrId xtq"eterqcI /mbId
+// Th3. Finds e backday qtIanemoshkipeceficp or  ta fr
+//4.Ves Ave status →  arksSat eeaqdc memberId
+//   3. Finds member by qrId (most specific) or memberId
+//   4. Verifies Active status → marks ace
 // ─────────────────────────────────────────────────────────────────
-exports.generateMemberQR = async (memberId, gymId = "", gymName = "") => {
+exports.generateMemberQR = async (memberId, gymName = "") => {
   const qrId = uuidv4();
 
   const FRONTEND_URL =
     process.env.FRONTEND_URL ||
     process.env.CLIENT_URL   ||
-    "https://gym-fit-zone.vercel.app";
+     JSON"pttps://thatyth- iacktn;wipar
 
-  // Payload — memberId + gymId + qrId all stored in QR
-  const payload = JSON.stringify({
-    memberId: String(memberId),
-    gymId:    String(gymId),
+ //lt the=trngify({
+    memberId,
     qrId,
-    type:     "member-checkin",
-  });
+    t
+ype: "member-checkin",
+  // Encode as URL so phone camera opens /checkin page directly  });
 
+  // Encode as URL so phone camera opens /checkin page directly
   const checkinUrl =
     `${FRONTEND_URL}/checkin` +
     `?qrData=${encodeURIComponent(payload)}` +
@@ -47,9 +51,23 @@ exports.generateMemberQR = async (memberId, gymId = "", gymName = "") => {
     errorCorrectionLevel: "M",
   });
 
-  return { qrId, qrCode };
+
+// ─────────────────────────────────────────────────────────────────
+// parseQRData — utility used by controller
+// ─────────────────────────────────────────────────────────────────  return { qrId, qrCode };
 };
 
+   
+ 
+   
+ 
+// ─────────────────────────────────────────────────────────────────
+// parseQRData — utility used by controller
+// ─────────────────────────────────────────────────────────────────
 exports.parseQRData = (qrString) => {
-  try { return JSON.parse(qrString); } catch { return null; }
+  try {
+    return JSON.parse(qrString);
+  } catch {
+    return null;
+  }
 };

@@ -79,12 +79,8 @@ exports.createMember = asyncHandler(async (req, res, next) => {
     }
   }
 
-  // Generate QR — pass memberId (ObjectId) and gymId
-  const { qrId, qrCode } = await generateMemberQR(
-    null,    // memberId not known yet — will be set after create
-    gymId,
-    ""
-  );
+  // Generate QR
+  const { qrId, qrCode } = await generateMemberQR(req.body.email);
 
   const member = await Member.create({
     ...req.body,
@@ -96,16 +92,6 @@ exports.createMember = asyncHandler(async (req, res, next) => {
     qrId,
     qrCode,
   });
-
-  // Regenerate QR now that we have the real memberId
-  const { qrId: finalQrId, qrCode: finalQrCode } = await generateMemberQR(
-    member._id,
-    gymId,
-    ""
-  );
-  await Member.findByIdAndUpdate(member._id, { qrId: finalQrId, qrCode: finalQrCode });
-  member.qrId   = finalQrId;
-  member.qrCode = finalQrCode;
 
   // Update gym member count
   await Gym.findByIdAndUpdate(gymId, { $inc: { totalMembers: 1, activeMembers: 1 } });
@@ -260,15 +246,12 @@ exports.getMemberQR = asyncHandler(async (req, res, next) => {
   const member = await Member.findById(req.params.id);
   if (!member) return next(new AppError("Member not found.", 404));
 
-  // Always regenerate QR with correct memberId + gymId
-  const { qrId, qrCode } = await generateMemberQR(
-    member._id,
-    member.gym,
-    ""
-  );
-  member.qrId   = qrId;
-  member.qrCode = qrCode;
-  await member.save();
+  if (!member.qrCode) {
+    const { qrId, qrCode } = await generateMemberQR(member._id);
+    member.qrId = qrId;
+    member.qrCode = qrCode;
+    await member.save();
+  }
 
   res.json({ success: true, data: { qrCode: member.qrCode, qrId: member.qrId } });
 });
