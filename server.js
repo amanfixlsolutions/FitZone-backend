@@ -38,6 +38,7 @@ const inventoryRoutes    = require("./routes/inventory");
 const campaignRoutes     = require("./routes/campaigns");
 const systemRoutes       = require("./routes/system");
 const liveClassRoutes    = require("./routes/liveClasses");
+const superAdminRoutes   = require("./routes/superAdmin");
 
 // ── Connect DB ─────────────────────────────────────────────────────
 connectDB();
@@ -206,6 +207,7 @@ app.use("/api/inventory",     inventoryRoutes);
 app.use("/api/campaigns",     campaignRoutes);
 app.use("/api/system",        systemRoutes);
 app.use("/api/live-classes",  liveClassRoutes);
+app.use("/api/super-admin",  superAdminRoutes);
 
 // ── 404 Handler ────────────────────────────────────────────────────
 app.use((req, res) => {
