@@ -13,6 +13,7 @@ const connectDB = require("./config/db");
 const { initSocket } = require("./sockets");
 const logger = require("./utils/logger");
 const errorHandler = require("./middleware/errorHandler");
+const { tenantRateLimiter } = require("./middleware/rateLimiter");
 
 // ── Route imports ──────────────────────────────────────────────────
 const authRoutes         = require("./routes/auth");
@@ -130,6 +131,9 @@ const limiter = rateLimit({
   message: { success: false, message: "Too many requests, please try again later." },
 });
 app.use("/api/", limiter);
+
+// ── Per-tenant rate limiter — 500 req/15min per gymId (after global limiter) ─
+app.use("/api/", tenantRateLimiter);
 
 // ── Logger ─────────────────────────────────────────────────────────
 if (process.env.NODE_ENV === "development") {

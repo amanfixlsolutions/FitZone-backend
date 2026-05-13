@@ -5,8 +5,10 @@ const {
   banMember, unbanMember, getMemberQR, getMemberStats,
 } = require("../controllers/memberController");
 const { protect, adminOrSuperAdmin } = require("../middleware/auth");
+const { tenantScope } = require("../middleware/tenantScope");
+const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 
-router.use(protect, adminOrSuperAdmin);
+router.use(protect, adminOrSuperAdmin, tenantScope, subscriptionGuard);
 
 router.get("/stats",       getMemberStats);
 router.get("/",            getMembers);

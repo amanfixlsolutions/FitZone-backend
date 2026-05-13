@@ -7,6 +7,8 @@ const {
   getMemberHistory, getMemberSpending, getAnalytics, regenerateZoom,
 } = require("../controllers/liveClassController");
 const { protect } = require("../middleware/auth");
+const { tenantScope } = require("../middleware/tenantScope");
+const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 const zoomService = require("../services/zoomService");
 const { asyncHandler } = require("../utils/asyncHandler");
 
@@ -52,16 +54,16 @@ router.post("/:id/verify-payment", verifyPayment);
 router.post("/:id/join",           joinClass);
 
 // ── Management routes — ownership checked inside controller ────────
-router.get("/analytics",                getAnalytics);
-router.get("/",                         getLiveClasses);
-router.post("/",                        createLiveClass);
-router.put("/:id",                      updateLiveClass);
-router.delete("/:id",                   deleteLiveClass);
-router.post("/:id/start",               startLiveClass);
-router.post("/:id/complete",            completeLiveClass);
-router.post("/:id/cancel",              cancelLiveClass);
-router.post("/:id/regenerate-zoom",     regenerateZoom);
-router.get("/:id/bookings",             getClassBookings);
+router.get("/analytics",                tenantScope, subscriptionGuard, getAnalytics);
+router.get("/",                         tenantScope, subscriptionGuard, getLiveClasses);
+router.post("/",                        tenantScope, subscriptionGuard, createLiveClass);
+router.put("/:id",                      tenantScope, subscriptionGuard, updateLiveClass);
+router.delete("/:id",                   tenantScope, subscriptionGuard, deleteLiveClass);
+router.post("/:id/start",               tenantScope, subscriptionGuard, startLiveClass);
+router.post("/:id/complete",            tenantScope, subscriptionGuard, completeLiveClass);
+router.post("/:id/cancel",              tenantScope, subscriptionGuard, cancelLiveClass);
+router.post("/:id/regenerate-zoom",     tenantScope, subscriptionGuard, regenerateZoom);
+router.get("/:id/bookings",             tenantScope, subscriptionGuard, getClassBookings);
 // /:id GET last — prevents shadowing specific routes above
 router.get("/:id",                      getLiveClass);
 

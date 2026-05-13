@@ -6,12 +6,14 @@ const {
   enrollMember, unenrollMember, getTodayClasses,
 } = require("../controllers/classController");
 const { protect, adminOrSuperAdmin } = require("../middleware/auth");
+const { tenantScope } = require("../middleware/tenantScope");
+const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 
 // ── Public — no auth required ──────────────────────────────────────
 router.get("/public", getPublicClasses);
 
 // ── Protected routes ───────────────────────────────────────────────
-router.use(protect, adminOrSuperAdmin);
+router.use(protect, adminOrSuperAdmin, tenantScope, subscriptionGuard);
 
 router.get("/today",           getTodayClasses);
 router.get("/",                getClasses);

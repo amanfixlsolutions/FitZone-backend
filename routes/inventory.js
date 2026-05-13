@@ -5,8 +5,10 @@ const {
   updateItem, updateStock, deleteItem,
 } = require("../controllers/inventoryController");
 const { protect, adminOrSuperAdmin } = require("../middleware/auth");
+const { tenantScope } = require("../middleware/tenantScope");
+const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 
-router.use(protect, adminOrSuperAdmin);
+router.use(protect, adminOrSuperAdmin, tenantScope, subscriptionGuard);
 
 router.get("/",              getInventory);
 router.get("/:id",           getItem);

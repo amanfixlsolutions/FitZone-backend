@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Gym = require("../models/Gym");
 const { asyncHandler } = require("../utils/asyncHandler");
 const AppError = require("../utils/AppError");
+const ActivityLog = require("../models/ActivityLog");
 
 // ── Protect route — reads token from cookie OR Authorization header ─
 exports.protect = asyncHandler(async (req, res, next) => {
@@ -32,6 +34,18 @@ exports.protect = asyncHandler(async (req, res, next) => {
     if (user.status === "banned") return next(new AppError("Your account has been banned.", 403));
 
     req.user = user;
+
+    // Inject tenantId for all authenticated users
+    req.tenantId = user.gym || null;
+
+    // Lightweight suspended-gym check for gym-owner role only
+    if (user.role === "gym-owner" && user.gym) {
+      const gym = await Gym.findById(user.gym).select("status").lean();
+      if (!gym || gym.status === "suspended") {
+        return next(new AppError("Tenant suspended or not found.", 403));
+      }
+    }
+
     next();
   } catch (err) {
     if (err.name === "TokenExpiredError") {
@@ -44,6 +58,19 @@ exports.protect = asyncHandler(async (req, res, next) => {
 // ── Authorize roles ────────────────────────────────────────────────
 exports.authorize = (...roles) => (req, res, next) => {
   if (!roles.includes(req.user.role)) {
+    // Non-blocking log of authorization failure
+    ActivityLog.create({
+      user:     req.user._id,
+      userName: req.user.name,
+      role:     req.user.role,
+      action:   "AUTHORIZATION_FAILURE",
+      module:   "Security",
+      details:  `Role '${req.user.role}' attempted to access resource requiring: ${roles.join(" or ")}`,
+      ip:       req.ip,
+      status:   "failed",
+      data:     { attemptedResource: req.originalUrl, requiredRoles: roles },
+    }).catch(() => {});
+
     return next(new AppError(`Access denied. Required role: ${roles.join(" or ")}.`, 403));
   }
   next();

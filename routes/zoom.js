@@ -4,8 +4,10 @@ const {
   createMeeting, getMeetings, getMeeting, deleteMeeting, registerForMeeting,
 } = require("../controllers/zoomController");
 const { protect, adminOrSuperAdmin } = require("../middleware/auth");
+const { tenantScope } = require("../middleware/tenantScope");
+const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 
-router.use(protect, adminOrSuperAdmin);
+router.use(protect, adminOrSuperAdmin, tenantScope, subscriptionGuard);
 
 router.get("/",                    getMeetings);
 router.get("/:id",                 getMeeting);
