@@ -34,6 +34,9 @@ const notificationSchema = new mongoose.Schema({
   // Action link
   link:    { type: String, default: "" },
   data:    { type: mongoose.Schema.Types.Mixed, default: {} },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 notificationSchema.index({ recipient: 1, read: 1 });

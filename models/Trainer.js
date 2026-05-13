@@ -30,6 +30,9 @@ const trainerSchema = new mongoose.Schema({
     instagram: { type: String, default: "" },
     twitter:   { type: String, default: "" },
   },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 trainerSchema.index({ gym: 1, status: 1 });

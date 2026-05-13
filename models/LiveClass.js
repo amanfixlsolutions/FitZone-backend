@@ -51,6 +51,9 @@ const liveClassSchema = new mongoose.Schema({
   completedAt: { type: Date, default: null },
   cancelledAt: { type: Date, default: null },
   cancelReason:{ type: String, default: "" },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 // ── Indexes for performance ────────────────────────────────────────

@@ -60,7 +60,29 @@ const gymSchema = new mongoose.Schema({
     lastPaymentId:    { type: String, default: "" },
     lastPaymentAmount:{ type: Number, default: 0 },
     lastPaidAt:       { type: Date, default: null },
+    // ── SaaS lifecycle additions ─────────────────────────────────
+    trialStartedAt:    { type: Date, default: null },
+    gracePeriodEndsAt: { type: Date, default: null },
+    dunningStep:       { type: Number, default: 0 },
   },
+
+  // ── SaaS Tier & Limits ─────────────────────────────────────────
+  slug: {
+    type: String,
+    unique: true,
+    sparse: true,
+    lowercase: true,
+    trim: true,
+  },
+  subscriptionTier: {
+    type: String,
+    enum: ["starter", "growth", "enterprise"],
+    default: "starter",
+  },
+  trialEndsAt: { type: Date, default: null },
+  featureFlags: { type: mongoose.Schema.Types.Mixed, default: {} },
+  maxMembers:  { type: Number, default: 100 },
+  maxTrainers: { type: Number, default: 10 },
 }, { timestamps: true });
 
 gymSchema.index({ status: 1 });

@@ -44,6 +44,9 @@ const classSchema = new mongoose.Schema({
   zoomJoinUrl:    { type: String, default: "" },
   zoomStartUrl:   { type: String, default: "" },
   isOnline:       { type: Boolean, default: false },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 classSchema.index({ gym: 1, status: 1 });

@@ -29,6 +29,9 @@ const zoomMeetingSchema = new mongoose.Schema({
   attendedCount:     { type: Number, default: 0 },
 
   recordingUrl: { type: String, default: "" },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 zoomMeetingSchema.index({ gym: 1, startTime: -1 });

@@ -71,6 +71,9 @@ const settingsSchema = new mongoose.Schema({
     cardLast4:      { type: String, default: "" },
     autoRenew:      { type: Boolean, default: true },
   },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Settings", settingsSchema);

@@ -20,6 +20,9 @@ const userSchema = new mongoose.Schema({
   planExpiry: { type: Date, default: null },
   planId:     { type: mongoose.Schema.Types.ObjectId, ref: "Plan", default: null },
 
+  // Tenant alias — mirrors the gym field for gym-owner and member roles
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
+
   status:    { type: String, enum: ["active", "inactive", "banned"], default: "active" },
   lastLogin: { type: Date, default: null },
 

@@ -25,6 +25,9 @@ const campaignSchema = new mongoose.Schema({
 
   scheduledAt: { type: Date, default: null },
   sentAt:      { type: Date, default: null },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 campaignSchema.index({ gym: 1, status: 1 });

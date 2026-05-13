@@ -21,6 +21,9 @@ const reviewSchema = new mongoose.Schema({
   flagReason:  { type: String, default: "" },
 
   helpful: { type: Number, default: 0 },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 reviewSchema.index({ gym: 1, status: 1 });

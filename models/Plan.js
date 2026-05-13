@@ -21,6 +21,9 @@ const planSchema = new mongoose.Schema({
 
   // Discount
   yearlyDiscount: { type: Number, default: 20 },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 planSchema.index({ gym: 1, active: 1 });

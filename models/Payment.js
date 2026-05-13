@@ -29,6 +29,9 @@ const paymentSchema = new mongoose.Schema({
   invoiceId:   { type: mongoose.Schema.Types.ObjectId, ref: "Invoice", default: null },
 
   paidAt: { type: Date, default: null },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 paymentSchema.index({ gym: 1, status: 1 });

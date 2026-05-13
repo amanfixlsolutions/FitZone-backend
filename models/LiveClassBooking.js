@@ -48,6 +48,9 @@ const liveClassBookingSchema = new mongoose.Schema({
   bookedAt:    { type: Date, default: Date.now },
   joinedAt:    { type: Date, default: null },
   completedAt: { type: Date, default: null },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 // ── Prevent duplicate bookings ─────────────────────────────────────

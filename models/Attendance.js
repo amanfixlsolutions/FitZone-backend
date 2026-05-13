@@ -34,6 +34,9 @@ const attendanceSchema = new mongoose.Schema({
   duration: { type: Number, default: null },
 
   date: { type: String, default: () => new Date().toISOString().split("T")[0] },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 attendanceSchema.index({ gym: 1, date: 1 });

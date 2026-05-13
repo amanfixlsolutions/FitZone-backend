@@ -14,6 +14,9 @@ const activityLogSchema = new mongoose.Schema({
   ip:         { type: String, default: "" },
   userAgent:  { type: String, default: "" },
   status:     { type: String, enum: ["success", "failed", "warning"], default: "success" },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 activityLogSchema.index({ user: 1, createdAt: -1 });

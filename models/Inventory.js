@@ -21,6 +21,9 @@ const inventorySchema = new mongoose.Schema({
     enum: ["In Stock", "Low Stock", "Out of Stock"],
     default: "In Stock",
   },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym", default: null },
 }, { timestamps: true });
 
 // Auto-update status before save

@@ -31,6 +31,14 @@ const memberSchema = new mongoose.Schema({
   // QR Code
   qrCode: { type: String, default: "" },
   qrId:   { type: String, unique: true, sparse: true },
+
+  // ── SaaS additions ─────────────────────────────────────────────
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Gym" },
+  achievements: [{
+    badge:     { type: String },
+    awardedAt: { type: Date },
+  }],
+  selfRegistered: { type: Boolean, default: false },
 }, { timestamps: true });
 
 memberSchema.index({ gym: 1, status: 1 });

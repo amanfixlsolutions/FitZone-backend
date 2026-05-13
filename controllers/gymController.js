@@ -7,6 +7,7 @@ const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError = require("../utils/AppError");
 const { sendGymApprovalEmail } = require("../services/emailService");
 const { notifyGym } = require("../services/notificationService");
+const { generateUniqueSlug } = require("../utils/slugify");
 
 // ── @GET /api/gyms ─────────────────────────────────────────────────
 exports.getGyms = asyncHandler(async (req, res) => {
@@ -82,7 +83,16 @@ exports.getGym = asyncHandler(async (req, res, next) => {
 
 // ── @POST /api/gyms ────────────────────────────────────────────────
 exports.createGym = asyncHandler(async (req, res) => {
-  const gym = await Gym.create({ ...req.body, owner: req.user._id, ownerName: req.user.name });
+  // Generate a unique URL-safe slug from the gym name
+  const gymName = req.body.name || "";
+  const slug    = gymName ? await generateUniqueSlug(gymName) : undefined;
+
+  const gym = await Gym.create({
+    ...req.body,
+    owner:     req.user._id,
+    ownerName: req.user.name,
+    ...(slug ? { slug } : {}),
+  });
 
   await ActivityLog.create({
     user: req.user._id, userName: req.user.name, role: req.user.role,
@@ -245,6 +255,7 @@ exports.createGymWithOwner = asyncHandler(async (req, res, next) => {
   });
 
   // ── Create Gym (auto-approved) ─────────────────────────────────
+  const gymSlug = await generateUniqueSlug(gymName.trim());
   const gym = await Gym.create({
     name:        gymName.trim(),
     owner:       owner._id,
@@ -258,6 +269,7 @@ exports.createGymWithOwner = asyncHandler(async (req, res, next) => {
     approvedAt:  new Date(),
     approvedBy:  req.user._id,
     docs:        { submitted: true, verified: true },
+    slug:        gymSlug,
   });
 
   // ── Link gym back to owner ─────────────────────────────────────
