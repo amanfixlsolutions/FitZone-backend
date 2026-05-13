@@ -208,6 +208,9 @@ exports.getGymOwnerDashboard = asyncHandler(async (req, res) => {
     .populate("trainer", "name")
     .sort({ startTime: 1 });
 
+  // Usage meters — fetch gym plan limits
+  const gym = await Gym.findById(gymId).select("maxMembers maxTrainers subscriptionTier subscription trialEndsAt");
+
   res.json({
     success: true,
     data: {
@@ -220,6 +223,15 @@ exports.getGymOwnerDashboard = asyncHandler(async (req, res) => {
         todayClasses,
         todayCheckins,
         monthlyRevenue: revenueData[0]?.total || 0,
+        // ── SaaS usage meters ──────────────────────────────────
+        maxMembers:          gym?.maxMembers || 100,
+        maxTrainers:         gym?.maxTrainers || 10,
+        subscriptionTier:    gym?.subscriptionTier || "starter",
+        subscriptionStatus:  gym?.subscription?.status || "trial",
+        subscriptionExpiry:  gym?.subscription?.expiryDate || null,
+        trialEndsAt:         gym?.trialEndsAt || null,
+        memberUsagePercent:  Math.round((totalMembers / (gym?.maxMembers || 100)) * 100),
+        trainerUsagePercent: Math.round((totalTrainers / (gym?.maxTrainers || 10)) * 100),
       },
       revenueChart,
       attendanceChart,

@@ -96,6 +96,43 @@ exports.createMember = asyncHandler(async (req, res, next) => {
   // Update gym member count
   await Gym.findByIdAndUpdate(gymId, { $inc: { totalMembers: 1, activeMembers: 1 } });
 
+  // ── 90% member limit notification ─────────────────────────────
+  try {
+    const gymForLimit = await Gym.findById(gymId).select("maxMembers name email");
+    const currentCount = await Member.countDocuments({ gym: gymId });
+    const limit = gymForLimit?.maxMembers || 100;
+    const usagePercent = (currentCount / limit) * 100;
+
+    if (usagePercent >= 90) {
+      // Send email notification to gym owner
+      try {
+        const { sendEmail } = require("../services/emailService");
+        const gymOwner = await require("../models/User").findOne({ gym: gymId, role: "gym-owner" });
+        if (gymOwner?.email) {
+          await sendEmail({
+            to: gymOwner.email,
+            subject: `⚠️ Member limit warning — ${gymForLimit.name}`,
+            html: `<div style="font-family:Arial,sans-serif;padding:24px">
+              <h2>Member Limit Warning</h2>
+              <p>Your gym <strong>${gymForLimit.name}</strong> has reached ${Math.round(usagePercent)}% of its member limit (${currentCount}/${limit} members).</p>
+              <p>Consider upgrading your plan to accommodate more members.</p>
+              <a href="${process.env.CLIENT_URL}/gym-owner/subscription" style="background:#7c3aed;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;margin-top:16px">Upgrade Plan →</a>
+            </div>`,
+          });
+        }
+      } catch (_) { /* non-blocking */ }
+
+      // Also create in-app notification
+      await createNotification({
+        gym: gymId,
+        title: "⚠️ Member Limit Warning",
+        message: `You have reached ${Math.round(usagePercent)}% of your member limit (${currentCount}/${limit}). Consider upgrading your plan.`,
+        type: "alert",
+        audience: "specific-gym",
+      }).catch(() => {});
+    }
+  } catch (_) { /* non-blocking — never fail member creation */ }
+
   // Send welcome email
   try { await sendWelcomeEmail(member); } catch (_) {}
 
