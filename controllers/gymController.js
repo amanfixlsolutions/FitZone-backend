@@ -130,6 +130,12 @@ exports.approveGym = asyncHandler(async (req, res, next) => {
   gym.approvedBy = req.user._id;
   await gym.save();
 
+  // Auto-start 14-day trial (non-blocking)
+  try {
+    const { startTrial } = require("../services/billingService");
+    await startTrial(gym._id, parseInt(process.env.TRIAL_DAYS) || 14);
+  } catch (_) { /* non-blocking — trial failure should not block approval */ }
+
   // Update owner's gym reference
   await User.findByIdAndUpdate(gym.owner._id, { gym: gym._id });
 

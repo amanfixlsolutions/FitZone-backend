@@ -21,6 +21,13 @@ const promoSchema = new mongoose.Schema({
 
   active:     { type: Boolean, default: true },
   applicablePlans: [{ type: mongoose.Schema.Types.ObjectId, ref: "Plan" }],
+
+  // ── SaaS scope — controls whether promo applies to member payments or subscriptions ──
+  scope: {
+    type: String,
+    enum: ["member_payment", "subscription", "all"],
+    default: "member_payment",
+  },
 }, { timestamps: true });
 
 // code already has unique:true on field — no separate index needed

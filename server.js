@@ -39,6 +39,7 @@ const campaignRoutes     = require("./routes/campaigns");
 const systemRoutes       = require("./routes/system");
 const liveClassRoutes    = require("./routes/liveClasses");
 const superAdminRoutes   = require("./routes/superAdmin");
+const billingRoutes      = require("./routes/billing");
 
 // ── Connect DB ─────────────────────────────────────────────────────
 connectDB();
@@ -208,6 +209,7 @@ app.use("/api/campaigns",     campaignRoutes);
 app.use("/api/system",        systemRoutes);
 app.use("/api/live-classes",  liveClassRoutes);
 app.use("/api/super-admin",  superAdminRoutes);
+app.use("/api/billing",      billingRoutes);
 
 // ── 404 Handler ────────────────────────────────────────────────────
 app.use((req, res) => {
@@ -221,6 +223,10 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   logger.info(`🚀 FitZone Server running on port ${PORT} [${process.env.NODE_ENV}]`);
+
+  // Start billing cron job (daily at 2 AM — skipped in test env)
+  const { startDailyCronJob } = require("./services/billingService");
+  startDailyCronJob();
 });
 
 module.exports = { app, server };

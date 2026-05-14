@@ -223,4 +223,149 @@ exports.sendGymApprovalEmail = (gymOwner, gymName, approved) =>
     `,
   }).catch(() => {});
 
+// ── Trial Expiry Warning ───────────────────────────────────────────
+exports.sendTrialExpiryWarning = (gymOwner, gymName, daysLeft) =>
+  sendEmail({
+    to: gymOwner.email,
+    subject: `⏳ Your FitZone trial expires in ${daysLeft} day${daysLeft === 1 ? "" : "s"} — Upgrade now`,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08)">
+        <div style="background:linear-gradient(135deg,#f59e0b,#ea580c);padding:32px;text-align:center">
+          <h1 style="color:#fff;margin:0;font-size:28px;font-weight:900">FitZone</h1>
+          <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:14px">Gym Management Platform</p>
+        </div>
+        <div style="padding:32px">
+          <h2 style="color:#1f2937;margin:0 0 8px">Trial Ending Soon ⏳</h2>
+          <p style="color:#6b7280;font-size:15px">Hi ${gymOwner.name},</p>
+          <p style="color:#6b7280;font-size:15px">
+            Your free trial for <strong>${gymName}</strong> expires in
+            <strong style="color:#ea580c">${daysLeft} day${daysLeft === 1 ? "" : "s"}</strong>.
+            Upgrade now to keep your gym running without interruption.
+          </p>
+          <div style="background:#fef3c7;border-radius:12px;padding:20px;margin:20px 0;text-align:center">
+            <p style="color:#92400e;font-size:13px;margin:0 0 4px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Days Remaining</p>
+            <p style="color:#1f2937;font-size:48px;font-weight:900;margin:0">${daysLeft}</p>
+          </div>
+          <a href="${process.env.CLIENT_URL}/gym-owner/subscription" style="display:inline-block;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px">
+            Upgrade My Plan →
+          </a>
+          <p style="color:#9ca3af;font-size:12px;margin-top:24px">
+            After your trial ends, your gym will enter a 7-day grace period before being suspended.
+          </p>
+        </div>
+        <div style="background:#f9fafb;padding:16px;text-align:center;border-top:1px solid #e5e7eb">
+          <p style="color:#9ca3af;font-size:11px;margin:0">© ${new Date().getFullYear()} FitZone. All rights reserved.</p>
+        </div>
+      </div>
+    `,
+  }).catch(() => {});
+
+// ── Dunning Day 0 — Payment Failed ────────────────────────────────
+exports.sendDunningDay0 = (gymOwner, gymName) =>
+  sendEmail({
+    to: gymOwner.email,
+    subject: `❌ Payment failed for ${gymName} — Action required`,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08)">
+        <div style="background:linear-gradient(135deg,#ef4444,#dc2626);padding:32px;text-align:center">
+          <h1 style="color:#fff;margin:0;font-size:28px;font-weight:900">FitZone</h1>
+          <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:14px">Gym Management Platform</p>
+        </div>
+        <div style="padding:32px">
+          <h2 style="color:#1f2937;margin:0 0 8px">Payment Failed ❌</h2>
+          <p style="color:#6b7280;font-size:15px">Hi ${gymOwner.name},</p>
+          <p style="color:#6b7280;font-size:15px">
+            We were unable to process the subscription payment for <strong>${gymName}</strong>.
+            Please update your payment method to avoid service interruption.
+          </p>
+          <div style="background:#fee2e2;border-radius:12px;padding:20px;margin:20px 0">
+            <p style="color:#991b1b;font-size:14px;margin:0;font-weight:600">
+              ⚠️ Your gym will be suspended in 7 days if payment is not received.
+            </p>
+          </div>
+          <a href="${process.env.CLIENT_URL}/gym-owner/subscription/renew" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px">
+            Retry Payment →
+          </a>
+        </div>
+        <div style="background:#f9fafb;padding:16px;text-align:center;border-top:1px solid #e5e7eb">
+          <p style="color:#9ca3af;font-size:11px;margin:0">© ${new Date().getFullYear()} FitZone. All rights reserved.</p>
+        </div>
+      </div>
+    `,
+  }).catch(() => {});
+
+// ── Dunning Day 3 — Reminder ───────────────────────────────────────
+exports.sendDunningDay3 = (gymOwner, gymName) =>
+  sendEmail({
+    to: gymOwner.email,
+    subject: `⚠️ Reminder: Payment still pending for ${gymName} — 4 days left`,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08)">
+        <div style="background:linear-gradient(135deg,#f59e0b,#d97706);padding:32px;text-align:center">
+          <h1 style="color:#fff;margin:0;font-size:28px;font-weight:900">FitZone</h1>
+          <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:14px">Gym Management Platform</p>
+        </div>
+        <div style="padding:32px">
+          <h2 style="color:#1f2937;margin:0 0 8px">Payment Reminder ⚠️</h2>
+          <p style="color:#6b7280;font-size:15px">Hi ${gymOwner.name},</p>
+          <p style="color:#6b7280;font-size:15px">
+            This is a reminder that the subscription payment for <strong>${gymName}</strong> is still pending.
+            You have <strong style="color:#d97706">4 days</strong> before your gym is suspended.
+          </p>
+          <div style="background:#fef3c7;border-radius:12px;padding:20px;margin:20px 0">
+            <p style="color:#92400e;font-size:14px;margin:0;font-weight:600">
+              🕐 4 days remaining before suspension
+            </p>
+          </div>
+          <a href="${process.env.CLIENT_URL}/gym-owner/subscription/renew" style="display:inline-block;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px">
+            Pay Now →
+          </a>
+          <p style="color:#9ca3af;font-size:12px;margin-top:24px">
+            If you believe this is an error, please contact our support team immediately.
+          </p>
+        </div>
+        <div style="background:#f9fafb;padding:16px;text-align:center;border-top:1px solid #e5e7eb">
+          <p style="color:#9ca3af;font-size:11px;margin:0">© ${new Date().getFullYear()} FitZone. All rights reserved.</p>
+        </div>
+      </div>
+    `,
+  }).catch(() => {});
+
+// ── Dunning Day 7 — Final Warning ─────────────────────────────────
+exports.sendDunningDay7 = (gymOwner, gymName) =>
+  sendEmail({
+    to: gymOwner.email,
+    subject: `🚨 FINAL WARNING: ${gymName} will be suspended today`,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08)">
+        <div style="background:linear-gradient(135deg,#7f1d1d,#991b1b);padding:32px;text-align:center">
+          <h1 style="color:#fff;margin:0;font-size:28px;font-weight:900">FitZone</h1>
+          <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:14px">Gym Management Platform</p>
+        </div>
+        <div style="padding:32px">
+          <h2 style="color:#991b1b;margin:0 0 8px">Final Warning 🚨</h2>
+          <p style="color:#6b7280;font-size:15px">Hi ${gymOwner.name},</p>
+          <p style="color:#6b7280;font-size:15px">
+            <strong>${gymName}</strong> has been <strong style="color:#991b1b">suspended</strong> due to non-payment.
+            Your members can no longer access the platform.
+          </p>
+          <div style="background:#fee2e2;border:2px solid #fca5a5;border-radius:12px;padding:20px;margin:20px 0">
+            <p style="color:#991b1b;font-size:14px;margin:0;font-weight:700">
+              🔴 Gym suspended — immediate payment required to restore access
+            </p>
+          </div>
+          <a href="${process.env.CLIENT_URL}/gym-owner/subscription/renew" style="display:inline-block;background:linear-gradient(135deg,#991b1b,#7f1d1d);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px">
+            Restore My Gym →
+          </a>
+          <p style="color:#9ca3af;font-size:12px;margin-top:24px">
+            Contact support at ${process.env.EMAIL_USER || "support@fitzone.com"} if you need assistance.
+          </p>
+        </div>
+        <div style="background:#f9fafb;padding:16px;text-align:center;border-top:1px solid #e5e7eb">
+          <p style="color:#9ca3af;font-size:11px;margin:0">© ${new Date().getFullYear()} FitZone. All rights reserved.</p>
+        </div>
+      </div>
+    `,
+  }).catch(() => {});
+
 exports.sendEmail = sendEmail;
