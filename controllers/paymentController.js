@@ -440,6 +440,12 @@ async function processPayment({ memberId, planId, gateway, gatewayPaymentId = ""
   // Send confirmation email
   try { await sendPaymentConfirmation(member, payment); } catch (_) {}
 
+  // Award 'Loyal Member' badge on plan renewal (non-blocking)
+  try {
+    const { awardBadge } = require("../services/achievementService");
+    await awardBadge(member._id, "Loyal Member");
+  } catch (_) { /* non-blocking */ }
+
   // Notify gym
   await createNotification({
     gym:      member.gym,

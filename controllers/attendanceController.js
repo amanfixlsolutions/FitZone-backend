@@ -159,6 +159,12 @@ exports.checkIn = asyncHandler(async (req, res, next) => {
 
   if (alreadyIn) return next(new AppError("Member already checked in today.", 400));
 
+  // Award badges (non-blocking)
+  try {
+    const { checkAndAwardBadges } = require("../services/achievementService");
+    await checkAndAwardBadges(member._id);
+  } catch (_) { /* non-blocking */ }
+
   res.status(201).json({
     success: true,
     data:    attendance,
@@ -276,6 +282,12 @@ exports.qrCheckin = asyncHandler(async (req, res, next) => {
       member:    { name: member.name, planName: member.planName },
     });
   }
+
+  // Award badges (non-blocking)
+  try {
+    const { checkAndAwardBadges } = require("../services/achievementService");
+    await checkAndAwardBadges(member._id);
+  } catch (_) { /* non-blocking */ }
 
   res.status(201).json({
     success:   true,

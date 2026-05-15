@@ -317,3 +317,12 @@ function getDurationMs(unit) {
   };
   return map[unit] || 2592000000;
 }
+
+// ── @GET /api/members/self ─────────────────────────────────────────
+exports.getSelfMember = asyncHandler(async (req, res, next) => {
+  const member = await Member.findOne({ email: req.user.email.toLowerCase() })
+    .populate("plan", "name price duration unit")
+    .populate("gym", "name city");
+  if (!member) return next(new AppError("Member record not found.", 404));
+  res.json({ success: true, data: member });
+});

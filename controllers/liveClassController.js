@@ -413,6 +413,14 @@ exports.getUpcomingClasses = asyncHandler(async (req, res) => {
   if (gymId)    filter.gym      = gymId;
   if (category) filter.category = category;
 
+  // Tenant-scope for member role — only show classes from their own gym
+  if (req.user && req.user.role === "member") {
+    const member = await Member.findOne({ email: req.user.email.toLowerCase() });
+    if (member?.gym) {
+      filter.gym = member.gym;
+    }
+  }
+
   const total = await LiveClass.countDocuments(filter);
   const { query, pagination } = paginate(
     LiveClass.find(filter)
