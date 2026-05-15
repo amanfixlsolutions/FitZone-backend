@@ -8,6 +8,7 @@ const {
   confirmStripe,
   createManualPayment,
   stripeWebhook,
+  razorpayWebhook,
   getRevenueStats,
   createGymSubscriptionOrder,
   verifyGymSubscription,
@@ -21,6 +22,12 @@ const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 router.post("/stripe-webhook",
   express.raw({ type: "application/json" }),
   stripeWebhook
+);
+
+// ── Razorpay webhook (raw body needed for HMAC verification) ──────
+router.post("/razorpay-webhook",
+  express.raw({ type: "application/json" }),
+  razorpayWebhook
 );
 
 router.use(protect);

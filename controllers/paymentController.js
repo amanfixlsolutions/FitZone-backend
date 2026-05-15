@@ -250,6 +250,45 @@ exports.stripeWebhook = asyncHandler(async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────────────────────────
+// @POST /api/payments/razorpay-webhook
+// Razorpay webhook handler with HMAC-SHA256 signature verification
+// ─────────────────────────────────────────────────────────────────
+exports.razorpayWebhook = asyncHandler(async (req, res, next) => {
+  const sig = req.headers["x-razorpay-signature"];
+  if (!sig) return next(new AppError("Missing Razorpay signature.", 400));
+
+  const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+  if (!secret) return res.json({ received: true }); // not configured — skip
+
+  // HMAC-SHA256 verification
+  const expectedSig = crypto
+    .createHmac("sha256", secret)
+    .update(JSON.stringify(req.body))
+    .digest("hex");
+
+  if (expectedSig !== sig) {
+    return next(new AppError("Invalid Razorpay webhook signature.", 400));
+  }
+
+  const event = req.body;
+  if (event.event === "payment.captured") {
+    const payment = event.payload?.payment?.entity;
+    if (payment?.notes?.planId && payment?.notes?.memberId) {
+      await processPayment({
+        memberId: payment.notes.memberId,
+        planId:   payment.notes.planId,
+        gateway:  "Razorpay",
+        gatewayPaymentId: payment.id,
+        gatewayOrderId:   payment.order_id || "",
+        fromWebhook: true,
+      }).catch(() => {});
+    }
+  }
+
+  res.json({ received: true });
+});
+
+// ─────────────────────────────────────────────────────────────────
 // @GET /api/payments/revenue
 // Revenue stats for dashboard
 // ─────────────────────────────────────────────────────────────────

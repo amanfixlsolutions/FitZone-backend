@@ -6,6 +6,8 @@ const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const { asyncHandler } = require("./utils/asyncHandler");
 
 dotenv.config();
 
@@ -162,10 +164,67 @@ app.use("/uploads", (err, req, res, next) => {
   next(err);
 });
 
-// ── Health Check ───────────────────────────────────────────────────
-app.get("/api/health", (req, res) => {
-  res.json({ success: true, message: "FitZone API is running", timestamp: new Date() });
+// ── High-load protection ───────────────────────────────────────────
+app.use((req, res, next) => {
+  // Skip health check
+  if (req.path === "/api/health") return next();
+
+  const totalMem = require("os").totalmem();
+  const freeMem  = require("os").freemem();
+  const memPct   = ((totalMem - freeMem) / totalMem) * 100;
+
+  if (memPct > 85) {
+    res.setHeader("Retry-After", "30");
+    return res.status(503).json({
+      success: false,
+      message: "Server is under high load. Please retry in 30 seconds.",
+      retryAfter: 30,
+    });
+  }
+  next();
 });
+
+// ── Health Check ───────────────────────────────────────────────────
+app.get("/api/health", asyncHandler(async (req, res) => {
+  const start = Date.now();
+
+  // DB ping
+  let dbStatus = "ok";
+  let dbLatency = 0;
+  try {
+    const t0 = Date.now();
+    await mongoose.connection.db.admin().ping();
+    dbLatency = Date.now() - t0;
+  } catch {
+    dbStatus = "error";
+  }
+
+  const memUsage = process.memoryUsage();
+  const totalMem = require("os").totalmem();
+  const freeMem  = require("os").freemem();
+  const memPct   = Math.round(((totalMem - freeMem) / totalMem) * 100);
+
+  const responseTime = Date.now() - start;
+
+  res.json({
+    success:      true,
+    status:       dbStatus === "ok" ? "healthy" : "degraded",
+    version:      process.env.npm_package_version || "1.0.0",
+    uptime:       Math.round(process.uptime()),
+    responseTime: `${responseTime}ms`,
+    database: {
+      status:  dbStatus,
+      latency: `${dbLatency}ms`,
+    },
+    memory: {
+      usedMB:  Math.round(memUsage.rss / 1024 / 1024),
+      heapMB:  Math.round(memUsage.heapUsed / 1024 / 1024),
+      totalMB: Math.round(totalMem / 1024 / 1024),
+      usedPct: memPct,
+    },
+    timestamp: new Date().toISOString(),
+  });
+}));
 
 // ── Image serve endpoint — /api/images/:folder/:filename ───────────
 // Reliable fallback when static middleware fails

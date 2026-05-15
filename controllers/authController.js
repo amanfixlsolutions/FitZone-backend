@@ -10,6 +10,12 @@ const AppError = require("../utils/AppError");
 const { sendOTPEmail, sendWelcomeEmail: sendWelcome, sendPasswordResetEmail } = require("../services/emailService");
 const logger = require("../utils/logger");
 
+// ── Brute-force protection ─────────────────────────────────────────
+const loginAttempts = new Map(); // ip → { count, firstAttempt, blockedUntil }
+const MAX_ATTEMPTS  = 10;
+const WINDOW_MS     = 15 * 60 * 1000; // 15 minutes
+const BLOCK_MS      = 30 * 60 * 1000; // 30 minutes
+
 // ── Helper: generate 6-digit OTP ──────────────────────────────────
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -150,14 +156,51 @@ exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) return next(new AppError("Email and password are required.", 400));
 
+  // ── Brute-force check ──────────────────────────────────────────
+  const ip = req.ip || req.connection?.remoteAddress || "unknown";
+  const now = Date.now();
+  const record = loginAttempts.get(ip);
+
+  if (record) {
+    // Check if currently blocked
+    if (record.blockedUntil && now < record.blockedUntil) {
+      return next(new AppError("Too many failed login attempts. Try again in 30 minutes.", 429));
+    }
+    // Reset window if it has expired
+    if (now - record.firstAttempt > WINDOW_MS) {
+      loginAttempts.delete(ip);
+    }
+  }
+
   const user = await User.findOne({ email: email.toLowerCase() }).select("+password");
   if (!user || !(await user.matchPassword(password))) {
+    // Track failed attempt
+    const existing = loginAttempts.get(ip);
+    if (existing && now - existing.firstAttempt <= WINDOW_MS) {
+      existing.count += 1;
+      if (existing.count >= MAX_ATTEMPTS) {
+        existing.blockedUntil = now + BLOCK_MS;
+        // Alert super-admin (non-blocking)
+        const { createNotification } = require("../services/notificationService");
+        createNotification({
+          title:    "Brute-Force Alert",
+          message:  `IP ${ip} has been blocked after ${MAX_ATTEMPTS} failed login attempts.`,
+          type:     "security",
+          audience: "super-admin",
+        }).catch(() => {});
+      }
+    } else {
+      loginAttempts.set(ip, { count: 1, firstAttempt: now, blockedUntil: null });
+    }
     return next(new AppError("Invalid email or password.", 401));
   }
 
   if (user.status === "banned") {
     return next(new AppError("Your account has been banned. Contact support.", 403));
   }
+
+  // Successful login — clear failed attempt record
+  loginAttempts.delete(ip);
 
   // Update last login — use updateOne to avoid triggering pre-save hook
   await User.updateOne({ _id: user._id }, { lastLogin: new Date() });
