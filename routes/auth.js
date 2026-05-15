@@ -3,11 +3,12 @@ const router = express.Router();
 const {
   sendOTP, verifyOTP, register, login, logout,
   getMe, refreshToken, changePassword,
-  forgotPassword, resetPassword,
+  forgotPassword, resetPassword, getPublicGyms,
 } = require("../controllers/authController");
 const { protect } = require("../middleware/auth");
 
 // ── Public routes ──────────────────────────────────────────────────
+router.get("/gyms-public",      getPublicGyms);
 router.post("/send-otp",        sendOTP);
 router.post("/verify-otp",      verifyOTP);
 router.post("/register",        register);

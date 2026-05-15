@@ -96,11 +96,24 @@ exports.verifyOTP = asyncHandler(async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────────────────────────
+// @GET /api/auth/gyms-public
+// Public list of active gyms for signup gym selection
+// ─────────────────────────────────────────────────────────────────
+exports.getPublicGyms = asyncHandler(async (req, res) => {
+  const gyms = await Gym.find({ status: "active" })
+    .select("name city address logo totalMembers rating description")
+    .sort({ name: 1 })
+    .limit(100);
+
+  res.json({ success: true, data: gyms });
+});
+
+// ─────────────────────────────────────────────────────────────────
 // @POST /api/auth/register
 // Register after OTP verification
 // ─────────────────────────────────────────────────────────────────
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, phone, verifyToken, role = "member" } = req.body;
+  const { name, email, password, phone, verifyToken, role = "member", gymId } = req.body;
 
   if (!name || !email || !password) {
     return next(new AppError("Name, email and password are required.", 400));
@@ -124,16 +137,67 @@ exports.register = asyncHandler(async (req, res, next) => {
   const existing = await User.findOne({ email: email.toLowerCase() });
   if (existing) return next(new AppError("Email already registered.", 400));
 
-  // Create user
+  // Validate gymId if provided (member role)
+  let linkedGym = null;
+  if (gymId && role === "member") {
+    linkedGym = await Gym.findOne({ _id: gymId, status: "active" });
+    if (!linkedGym) return next(new AppError("Selected gym not found or not active.", 400));
+  }
+
+  // Create user — link to gym if provided
   const user = await User.create({
     name,
     email,
     password,
     phone: phone || "",
     role,
+    gym:  linkedGym?._id || undefined,
     isEmailVerified: true,
     avatar: name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2),
   });
+
+  // ── Auto-create Member record in the selected gym ──────────────
+  if (linkedGym && role === "member") {
+    try {
+      const Member = require("../models/Member");
+      const { generateMemberQR } = require("../services/qrService");
+
+      // Generate QR for the new member
+      const { qrId, qrCode } = await generateMemberQR(email.toLowerCase());
+
+      await Member.create({
+        user:     user._id,
+        gym:      linkedGym._id,
+        addedBy:  user._id,
+        name:     name.trim(),
+        email:    email.toLowerCase(),
+        phone:    phone || "",
+        status:   "Active",
+        joinDate: new Date(),
+        selfRegistered: true,
+        qrId,
+        qrCode,
+      });
+
+      // Increment gym member count
+      await Gym.findByIdAndUpdate(linkedGym._id, {
+        $inc: { totalMembers: 1, activeMembers: 1 },
+      });
+
+      // Notify gym owner
+      const { createNotification } = require("../services/notificationService");
+      await createNotification({
+        gym:     linkedGym._id,
+        title:   "New Member Self-Registered",
+        message: `${name} joined ${linkedGym.name} via self-registration.`,
+        type:    "member",
+        audience: "specific-gym",
+      }).catch(() => {});
+    } catch (memberErr) {
+      // Non-blocking — user account is created, member record failure is logged
+      logger.error(`Auto-create member failed for ${email}: ${memberErr.message}`);
+    }
+  }
 
   // Send welcome email
   try { await sendWelcome(user); } catch (_) {}
@@ -142,7 +206,7 @@ exports.register = asyncHandler(async (req, res, next) => {
   await ActivityLog.create({
     user: user._id, userName: user.name, role: user.role,
     action: "REGISTER", module: "Auth",
-    details: `New ${role} registered: ${name}`,
+    details: `New ${role} registered: ${name}${linkedGym ? ` → ${linkedGym.name}` : ""}`,
     ip: req.ip,
   });
 
