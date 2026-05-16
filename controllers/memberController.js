@@ -8,15 +8,12 @@ const AppError = require("../utils/AppError");
 const { generateMemberQR } = require("../services/qrService");
 const { sendWelcomeEmail } = require("../services/emailService");
 const { createNotification } = require("../services/notificationService");
+const { applyGymScope, findMemberForUser, assertSameTenant } = require("../utils/tenantFilter");
 
 // ── @GET /api/members ──────────────────────────────────────────────
 exports.getMembers = asyncHandler(async (req, res) => {
-  const { status, plan, search, gymId } = req.query;
-  const filter = {};
-
-  // Gym owner sees only their gym's members
-  if (req.user.role === "gym-owner") filter.gym = req.user.gym;
-  else if (gymId) filter.gym = gymId;
+  const { status, plan, search } = req.query;
+  const filter = applyGymScope({}, req);
 
   if (status) filter.status = status;
   if (plan)   filter.planName = new RegExp(plan, "i");
@@ -44,6 +41,7 @@ exports.getMembers = asyncHandler(async (req, res) => {
 exports.getMember = asyncHandler(async (req, res, next) => {
   const member = await Member.findById(req.params.id).populate("plan gym");
   if (!member) return next(new AppError("Member not found.", 404));
+  assertSameTenant(req.user, member);
   res.json({ success: true, data: member });
 });
 
@@ -157,8 +155,10 @@ exports.createMember = asyncHandler(async (req, res, next) => {
 
 // ── @PUT /api/members/:id ──────────────────────────────────────────
 exports.updateMember = asyncHandler(async (req, res, next) => {
+  const existing = await Member.findById(req.params.id);
+  if (!existing) return next(new AppError("Member not found.", 404));
+  assertSameTenant(req.user, existing);
   const member = await Member.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-  if (!member) return next(new AppError("Member not found.", 404));
   res.json({ success: true, data: member });
 });
 
@@ -166,6 +166,7 @@ exports.updateMember = asyncHandler(async (req, res, next) => {
 exports.deleteMember = asyncHandler(async (req, res, next) => {
   const member = await Member.findById(req.params.id);
   if (!member) return next(new AppError("Member not found.", 404));
+  assertSameTenant(req.user, member);
 
   const Attendance      = require("../models/Attendance");
   const Payment         = require("../models/Payment");
@@ -295,7 +296,7 @@ exports.getMemberQR = asyncHandler(async (req, res, next) => {
 
 // ── @GET /api/members/stats ────────────────────────────────────────
 exports.getMemberStats = asyncHandler(async (req, res) => {
-  const gymFilter = req.user.role === "gym-owner" ? { gym: req.user.gym } : {};
+  const gymFilter = applyGymScope({}, req);
 
   const [total, active, paused, expired, banned] = await Promise.all([
     Member.countDocuments(gymFilter),
@@ -320,9 +321,10 @@ function getDurationMs(unit) {
 
 // ── @GET /api/members/self ─────────────────────────────────────────
 exports.getSelfMember = asyncHandler(async (req, res, next) => {
-  const member = await Member.findOne({ email: req.user.email.toLowerCase() })
+  const member = await findMemberForUser(req.user, Member);
+  if (!member) return next(new AppError("Member record not found.", 404));
+  const data = await Member.findById(member._id)
     .populate("plan", "name price duration unit")
     .populate("gym", "name city");
-  if (!member) return next(new AppError("Member record not found.", 404));
-  res.json({ success: true, data: member });
+  res.json({ success: true, data });
 });

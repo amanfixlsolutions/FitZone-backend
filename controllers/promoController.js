@@ -1,9 +1,13 @@
 const Promo = require("../models/Promo");
 const { asyncHandler } = require("../utils/asyncHandler");
 const AppError = require("../utils/AppError");
+const { getTenantGymId } = require("../utils/tenantFilter");
 
 exports.getPromos = asyncHandler(async (req, res) => {
-  const filter = req.user.role === "gym-owner" ? { $or: [{ gym: req.user.gym }, { gym: null }] } : {};
+  const tenantGym = getTenantGymId(req.user);
+  const filter = tenantGym
+    ? { $or: [{ gym: tenantGym }, { gym: null }] }
+    : (req.user.role === "gym-owner" ? { $or: [{ gym: req.user.gym }, { gym: null }] } : {});
   const promos = await Promo.find(filter).sort({ createdAt: -1 });
   res.json({ success: true, data: promos });
 });

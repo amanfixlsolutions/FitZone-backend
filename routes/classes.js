@@ -5,12 +5,12 @@ const {
   getClasses, getClass, createClass, updateClass, deleteClass,
   enrollMember, unenrollMember, getTodayClasses,
 } = require("../controllers/classController");
-const { protect, adminOrSuperAdmin } = require("../middleware/auth");
+const { protect, adminOrSuperAdmin, optionalProtect } = require("../middleware/auth");
 const { tenantScope } = require("../middleware/tenantScope");
 const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 
 // ── Public — no auth required ──────────────────────────────────────
-router.get("/public", getPublicClasses);
+router.get("/public", optionalProtect, getPublicClasses);
 
 // ── Protected routes ───────────────────────────────────────────────
 router.use(protect, adminOrSuperAdmin, tenantScope, subscriptionGuard);

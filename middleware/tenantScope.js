@@ -2,20 +2,24 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const AppError = require("../utils/AppError");
 const ActivityLog = require("../models/ActivityLog");
 
-// ── tenantScope — injects req.tenantId for gym-owner requests ─────
+const { getTenantGymId } = require("../utils/tenantFilter");
+
+// ── tenantScope — injects req.tenantId for tenant-scoped roles ────
 exports.tenantScope = (req, res, next) => {
-  if (req.user?.role === "gym-owner") {
-    req.tenantId = req.user.gym;
-  }
+  const tenantId = getTenantGymId(req.user);
+  if (tenantId) req.tenantId = tenantId;
   next();
 };
 
 // ── tenantGuard — hard-blocks cross-tenant resource access ────────
-// Checks if gymId in params/body/query matches req.user.gym for gym-owner role
+// Checks if gymId in params/body/query matches the user's gym (owner + member)
 // Logs violations to ActivityLog
 // Super-admin bypasses
 exports.tenantGuard = asyncHandler(async (req, res, next) => {
-  if (!req.user || req.user.role !== "gym-owner") return next();
+  if (!req.user || req.user.role === "super-admin") return next();
+
+  const tenantGym = getTenantGymId(req.user);
+  if (!tenantGym) return next();
 
   const gymId =
     req.params.gymId ||
@@ -23,7 +27,7 @@ exports.tenantGuard = asyncHandler(async (req, res, next) => {
     req.query.gymId ||
     req.query.gym;
 
-  if (gymId && req.user.gym?.toString() !== gymId.toString()) {
+  if (gymId && String(tenantGym) !== gymId.toString()) {
     // Log the violation (non-blocking)
     await ActivityLog.create({
       user:     req.user._id,
@@ -31,7 +35,7 @@ exports.tenantGuard = asyncHandler(async (req, res, next) => {
       role:     req.user.role,
       action:   "CROSS_TENANT_ATTEMPT",
       module:   "Security",
-      details:  `Cross-tenant access attempt: user gym=${req.user.gym}, requested gym=${gymId}`,
+      details:  `Cross-tenant access attempt: user gym=${tenantGym}, requested gym=${gymId}`,
       ip:       req.ip,
       status:   "failed",
     }).catch(() => {});

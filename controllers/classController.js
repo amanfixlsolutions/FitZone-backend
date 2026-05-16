@@ -6,11 +6,16 @@ const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError = require("../utils/AppError");
 const { createNotification } = require("../services/notificationService");
 const { deleteFromStorage, extractPublicId } = require("./uploadController");
+const { applyGymScope, getTenantGymId, assertSameTenant } = require("../utils/tenantFilter");
 
 // ── @GET /api/classes/public — no auth required ────────────────────
 exports.getPublicClasses = asyncHandler(async (req, res) => {
   const { limit = 12, search, level } = req.query;
   const filter = { status: "Active" };
+
+  if (req.user?.role === "member") {
+    applyGymScope(filter, req);
+  }
 
   if (level)  filter.level = level;
   if (search) filter.$or = [
@@ -29,16 +34,14 @@ exports.getPublicClasses = asyncHandler(async (req, res) => {
 
 // ── @GET /api/classes ──────────────────────────────────────────────
 exports.getClasses = asyncHandler(async (req, res) => {
-  const { status, level, search, gymId, day } = req.query;
+  const { status, level, search, day } = req.query;
   const filter = {};
 
   // Public access (no auth) — show only Active classes
   if (!req.user) {
     filter.status = "Active";
-  } else if (req.user.role === "gym-owner") {
-    filter.gym = req.user.gym;
-  } else if (gymId) {
-    filter.gym = gymId;
+  } else {
+    applyGymScope(filter, req);
   }
 
   if (status && req.user) filter.status = status; // only override if authenticated
@@ -69,6 +72,7 @@ exports.getClass = asyncHandler(async (req, res, next) => {
     .populate("trainer", "name specialty photo rating")
     .populate("enrolledMembers", "name email");
   if (!cls) return next(new AppError("Class not found.", 404));
+  if (req.user) assertSameTenant(req.user, cls);
   res.json({ success: true, data: cls });
 });
 

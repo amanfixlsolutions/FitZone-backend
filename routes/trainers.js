@@ -3,12 +3,12 @@ const router = express.Router();
 const {
   getTrainers, getTrainer, createTrainer, updateTrainer, deleteTrainer, verifyTrainer,
 } = require("../controllers/trainerController");
-const { protect, adminOrSuperAdmin, superAdminOnly } = require("../middleware/auth");
+const { protect, adminOrSuperAdmin, superAdminOnly, optionalProtect } = require("../middleware/auth");
 const { tenantScope } = require("../middleware/tenantScope");
 const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 
 // ── Public — website visitors browse trainers ──────────────────────
-router.get("/public", getTrainers);
+router.get("/public", optionalProtect, getTrainers);
 
 // ── Protected routes ───────────────────────────────────────────────
 router.use(protect);

@@ -3,6 +3,7 @@ const ActivityLog = require("../models/ActivityLog");
 const { asyncHandler } = require("../utils/asyncHandler");
 const AppError = require("../utils/AppError");
 const { createNotification } = require("../services/notificationService");
+const { getTenantGymId } = require("../utils/tenantFilter");
 
 // ── @GET /api/plans ────────────────────────────────────────────────
 exports.getPlans = asyncHandler(async (req, res) => {
@@ -16,6 +17,14 @@ exports.getPlans = asyncHandler(async (req, res) => {
   } else if (req.user.role === "gym-owner") {
     filter.$or    = [{ gym: req.user.gym }, { gym: null }];
     filter.active = true;
+  } else if (req.user.role === "member") {
+    const tenantGym = getTenantGymId(req.user);
+    if (tenantGym) {
+      filter.$or = [{ gym: tenantGym }, { gym: null }];
+    } else {
+      filter.gym = null;
+    }
+    if (!includeInactive) filter.active = true;
   } else if (gymId) {
     filter.$or = [{ gym: gymId }, { gym: null }];
     if (!includeInactive) filter.active = true;

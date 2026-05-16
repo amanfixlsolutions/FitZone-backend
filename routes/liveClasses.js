@@ -6,14 +6,14 @@ const {
   getUpcomingClasses, bookClass, verifyPayment, joinClass,
   getMemberHistory, getMemberSpending, getAnalytics, regenerateZoom,
 } = require("../controllers/liveClassController");
-const { protect } = require("../middleware/auth");
+const { protect, optionalProtect } = require("../middleware/auth");
 const { tenantScope } = require("../middleware/tenantScope");
 const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 const zoomService = require("../services/zoomService");
 const { asyncHandler } = require("../utils/asyncHandler");
 
 // ── Public — no auth ───────────────────────────────────────────────
-router.get("/upcoming",    getUpcomingClasses);
+router.get("/upcoming",    optionalProtect, getUpcomingClasses);
 
 // ── Public debug — check Zoom config ──────────────────────────────
 router.get("/zoom-debug", asyncHandler(async (req, res) => {

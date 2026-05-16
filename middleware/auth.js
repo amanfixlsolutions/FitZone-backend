@@ -38,8 +38,8 @@ exports.protect = asyncHandler(async (req, res, next) => {
     // Inject tenantId for all authenticated users
     req.tenantId = user.gym || null;
 
-    // Lightweight suspended-gym check for gym-owner role only
-    if (user.role === "gym-owner" && user.gym) {
+    // Lightweight suspended-gym check for gym-owner AND member roles
+    if (user.gym && (user.role === "gym-owner" || user.role === "member")) {
       const gym = await Gym.findById(user.gym).select("status").lean();
       if (!gym || gym.status === "suspended") {
         return next(new AppError("Tenant suspended or not found.", 403));
@@ -53,6 +53,34 @@ exports.protect = asyncHandler(async (req, res, next) => {
     }
     return next(new AppError("Invalid token. Please log in again.", 401));
   }
+});
+
+// ── Optional auth — sets req.user when token present, never blocks ─
+exports.optionalProtect = asyncHandler(async (req, res, next) => {
+  let token;
+
+  if (req.cookies?.fitzone_access_token) {
+    token = req.cookies.fitzone_access_token;
+  } else if (req.headers.authorization?.startsWith("Bearer ")) {
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.headers["x-access-token"]) {
+    token = req.headers["x-access-token"];
+  }
+
+  if (!token) return next();
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password -resetPasswordToken -resetPasswordExpires");
+    if (user && user.status !== "banned") {
+      req.user = user;
+      req.tenantId = user.gym || null;
+    }
+  } catch {
+    // Invalid/expired token on public routes — continue without user
+  }
+
+  next();
 });
 
 // ── Authorize roles ────────────────────────────────────────────────
@@ -80,12 +108,13 @@ exports.superAdminOnly   = exports.authorize("super-admin");
 exports.gymOwnerOnly     = exports.authorize("gym-owner");
 exports.adminOrSuperAdmin = exports.authorize("super-admin", "gym-owner");
 
-// ── Gym owner can only access their own gym ────────────────────────
+// ── Gym owner / member can only access their own gym ───────────────
 exports.ownGymOnly = asyncHandler(async (req, res, next) => {
   if (req.user.role === "super-admin") return next();
-  const gymId = req.params.gymId || req.body.gym || req.query.gym;
-  if (gymId && req.user.gym?.toString() !== gymId.toString()) {
-    return next(new AppError("Access denied. You can only manage your own gym.", 403));
+  const tenantGym = req.user.gym || req.user.tenantId;
+  const gymId = req.params.gymId || req.body.gym || req.query.gymId || req.query.gym;
+  if (gymId && tenantGym && String(tenantGym) !== String(gymId)) {
+    return next(new AppError("Access denied. You can only access your own gym.", 403));
   }
   next();
 });

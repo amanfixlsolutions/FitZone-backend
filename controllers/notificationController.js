@@ -88,12 +88,38 @@ exports.broadcast = asyncHandler(async (req, res) => {
 
 // ── @PATCH /api/notifications/:id/read ────────────────────────────
 exports.markRead = asyncHandler(async (req, res, next) => {
-  const notification = await Notification.findByIdAndUpdate(
-    req.params.id,
-    { read: true, readAt: new Date() },
-    { new: true }
-  );
+  const notification = await Notification.findById(req.params.id);
   if (!notification) return next(new AppError("Notification not found.", 404));
+
+  // ── Ownership check — user can only mark their own notifications ─
+  const mongoose = require("mongoose");
+  const userGymId = req.user.gym
+    ? (mongoose.Types.ObjectId.isValid(req.user.gym) ? req.user.gym.toString() : null)
+    : null;
+  const notifGymId = notification.gym
+    ? notification.gym.toString()
+    : null;
+
+  const isOwner =
+    // Personal notification addressed to this user
+    (notification.recipient && notification.recipient.toString() === req.user._id.toString()) ||
+    // Gym-scoped notification for this user's gym
+    (notifGymId && userGymId && notifGymId === userGymId) ||
+    // Broadcast to all
+    notification.audience === "all" ||
+    // Super-admin can mark any
+    req.user.role === "super-admin" ||
+    // Gym-owner notifications
+    (req.user.role === "gym-owner" && notification.audience === "gym-owners") ||
+    // Super-admin audience
+    (req.user.role === "super-admin" && notification.audience === "super-admin");
+
+  if (!isOwner) return next(new AppError("Not authorized to update this notification.", 403));
+
+  notification.read   = true;
+  notification.readAt = new Date();
+  await notification.save();
+
   res.json({ success: true, data: notification });
 });
 
@@ -135,7 +161,18 @@ exports.markAllRead = asyncHandler(async (req, res) => {
 
 // ── @DELETE /api/notifications/:id ────────────────────────────────
 exports.deleteNotification = asyncHandler(async (req, res, next) => {
-  const notification = await Notification.findByIdAndDelete(req.params.id);
+  const notification = await Notification.findById(req.params.id);
   if (!notification) return next(new AppError("Notification not found.", 404));
+
+  // ── Ownership check — only gym-owner of that gym or super-admin can delete ─
+  if (req.user.role !== "super-admin") {
+    const userGymId = req.user.gym?.toString();
+    const notifGymId = notification.gym?.toString();
+    if (!userGymId || !notifGymId || userGymId !== notifGymId) {
+      return next(new AppError("Not authorized to delete this notification.", 403));
+    }
+  }
+
+  await Notification.findByIdAndDelete(req.params.id);
   res.json({ success: true, message: "Notification deleted." });
 });

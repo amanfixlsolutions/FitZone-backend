@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const { getPlans, getPlan, createPlan, updatePlan, deletePlan, togglePlan } = require("../controllers/planController");
-const { protect, adminOrSuperAdmin } = require("../middleware/auth");
+const { protect, adminOrSuperAdmin, optionalProtect } = require("../middleware/auth");
 const { tenantScope } = require("../middleware/tenantScope");
 const { subscriptionGuard } = require("../middleware/subscriptionGuard");
 
 // ── Public — website visitors browse plans ─────────────────────────
-router.get("/public", getPlans);
+router.get("/public", optionalProtect, getPlans);
 
 // ── Protected routes ───────────────────────────────────────────────
 router.use(protect, adminOrSuperAdmin, tenantScope, subscriptionGuard);

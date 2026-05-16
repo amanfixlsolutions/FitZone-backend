@@ -9,6 +9,7 @@ const AppError         = require("../utils/AppError");
 const zoomService      = require("../services/zoomService");
 const { createNotification } = require("../services/notificationService");
 const logger           = require("../utils/logger");
+const { getTenantGymId, findMemberForUser } = require("../utils/tenantFilter");
 
 // ── Helper: check if user can manage live classes ─────────────────
 // Accepts gym-owner, super-admin, OR any user who owns a gym
@@ -83,6 +84,29 @@ exports.getLiveClass = asyncHandler(async (req, res, next) => {
   const lc = await LiveClass.findById(req.params.id)
     .populate("trainer", "name photo specialty certification");
   if (!lc) return next(new AppError("Live class not found.", 404));
+
+  // ── Tenant isolation for member role ──────────────────────────
+  if (req.user?.role === "member") {
+    const tenantGym = getTenantGymId(req.user);
+    if (tenantGym && String(tenantGym) !== String(lc.gym)) {
+      return next(new AppError("You can only view classes at your registered gym.", 403));
+    }
+    // Strip Zoom credentials — member must call /join to get the link
+    const obj = lc.toObject();
+    delete obj.zoomJoinUrl;
+    delete obj.zoomStartUrl;
+    delete obj.zoomPassword;
+    return res.json({ success: true, data: obj });
+  }
+
+  // Gym-owner: only their own gym
+  if (req.user?.role === "gym-owner") {
+    const gymId = await resolveGymId(req.user);
+    if (gymId && String(gymId) !== String(lc.gym)) {
+      return next(new AppError("Not authorized to view this class.", 403));
+    }
+  }
+
   res.json({ success: true, data: lc });
 });
 
@@ -372,7 +396,18 @@ exports.cancelLiveClass = asyncHandler(async (req, res, next) => {
 });
 
 // @GET /api/live-classes/:id/bookings  (gym-owner views bookings)
-exports.getClassBookings = asyncHandler(async (req, res) => {
+exports.getClassBookings = asyncHandler(async (req, res, next) => {
+  // Verify the live class belongs to this gym-owner's gym
+  const lc = await LiveClass.findById(req.params.id).select("gym");
+  if (!lc) return next(new AppError("Live class not found.", 404));
+
+  if (req.user.role === "gym-owner") {
+    const gymId = await resolveGymId(req.user);
+    if (gymId && String(gymId) !== String(lc.gym)) {
+      return next(new AppError("Not authorized to view bookings for this class.", 403));
+    }
+  }
+
   const { page, limit } = req.query;
   const filter = { liveClass: req.params.id };
 
@@ -410,15 +445,14 @@ exports.getUpcomingClasses = asyncHandler(async (req, res) => {
     ],
   };
 
-  if (gymId)    filter.gym      = gymId;
   if (category) filter.category = category;
 
-  // Tenant-scope for member role — only show classes from their own gym
-  if (req.user && req.user.role === "member") {
-    const member = await Member.findOne({ email: req.user.email.toLowerCase() });
-    if (member?.gym) {
-      filter.gym = member.gym;
-    }
+  // Tenant-scope for member — only their registered gym
+  if (req.user?.role === "member") {
+    const tenantGym = getTenantGymId(req.user) || (await findMemberForUser(req.user, Member))?.gym;
+    if (tenantGym) filter.gym = tenantGym;
+  } else if (gymId) {
+    filter.gym = gymId;
   }
 
   const total = await LiveClass.countDocuments(filter);
@@ -456,24 +490,14 @@ exports.bookClass = asyncHandler(async (req, res, next) => {
   if (lc.status === "completed") return next(new AppError("This class has already ended.", 400));
   // No booking window restriction — allow booking for scheduled and live classes
 
-  // Find member record for this user — auto-create if not found
-  let member = await Member.findOne({ gym: lc.gym }).where("email").equals(req.user.email);
-  if (!member) {
-    // Try any gym
-    member = await Member.findOne({ email: req.user.email.toLowerCase() });
+  const tenantGym = getTenantGymId(req.user);
+  if (tenantGym && String(tenantGym) !== String(lc.gym)) {
+    return next(new AppError("You can only book classes at your registered gym.", 403));
   }
+
+  const member = await findMemberForUser(req.user, Member, { gym: lc.gym });
   if (!member) {
-    // Auto-create member from user account
-    member = await Member.create({
-      user:    req.user._id,
-      gym:     lc.gym,
-      addedBy: req.user._id,
-      name:    req.user.name,
-      email:   req.user.email.toLowerCase(),
-      phone:   req.user.phone || "0000000000",
-      status:  "Active",
-      joinDate: new Date(),
-    });
+    return next(new AppError("You are not a member of this gym. Please sign up with this gym first.", 403));
   }
   if (member.status !== "Active") return next(new AppError(`Your membership is ${member.status}. Please renew.`, 403));
 
@@ -679,12 +703,13 @@ exports.joinClass = asyncHandler(async (req, res, next) => {
     return next(new AppError("Class is not available to join.", 400));
   }
 
-  // Find member — check gym first, then any gym
-  let member = await Member.findOne({ gym: lc.gym, email: req.user.email.toLowerCase() });
-  if (!member) {
-    member = await Member.findOne({ email: req.user.email.toLowerCase() });
+  const tenantGym = getTenantGymId(req.user);
+  if (tenantGym && String(tenantGym) !== String(lc.gym)) {
+    return next(new AppError("You can only join classes at your registered gym.", 403));
   }
-  if (!member) return next(new AppError("You are not a member. Please book the class first.", 403));
+
+  const member = await findMemberForUser(req.user, Member, { gym: lc.gym });
+  if (!member) return next(new AppError("You are not a member of this gym. Please book the class first.", 403));
 
   const booking = await LiveClassBooking.findOne({
     member:        member._id,
@@ -723,14 +748,7 @@ exports.joinClass = asyncHandler(async (req, res, next) => {
 
 // @GET /api/live-classes/member/history  (last 30 days attendance)
 exports.getMemberHistory = asyncHandler(async (req, res) => {
-  // Find member by email — no gymId required
-  let member = null;
-  if (req.query.gymId) {
-    member = await Member.findOne({ gym: req.query.gymId, email: req.user.email.toLowerCase() });
-  }
-  if (!member) {
-    member = await Member.findOne({ email: req.user.email.toLowerCase() });
-  }
+  const member = await findMemberForUser(req.user, Member);
   if (!member) return res.json({ success: true, data: { bookings: [], stats: {} } });
 
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
@@ -757,7 +775,7 @@ exports.getMemberHistory = asyncHandler(async (req, res) => {
 
 // @GET /api/live-classes/member/spending  (monthly spending)
 exports.getMemberSpending = asyncHandler(async (req, res) => {
-  const member = await Member.findOne({ gym: req.query.gymId }).where("email").equals(req.user.email);
+  const member = await findMemberForUser(req.user, Member);
   if (!member) return res.json({ success: true, data: { payments: [], stats: {} } });
 
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);

@@ -6,6 +6,7 @@ const { asyncHandler }                  = require("../utils/asyncHandler");
 const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError   = require("../utils/AppError");
 const { getIO }  = require("../sockets");
+const { applyGymScope, assertSameTenant } = require("../utils/tenantFilter");
 
 // ─────────────────────────────────────────────────────────────────
 // Helper: extract last 10 digits from any phone format
@@ -114,11 +115,8 @@ const markAttendance = async ({ member, method = "QR", type = "Gym Access", clas
 // @GET /api/attendance
 // ─────────────────────────────────────────────────────────────────
 exports.getAttendance = asyncHandler(async (req, res) => {
-  const { date, memberId, type, gymId } = req.query;
-  const filter = {};
-
-  if (req.user.role === "gym-owner") filter.gym = req.user.gym;
-  else if (gymId) filter.gym = gymId;
+  const { date, memberId, type } = req.query;
+  const filter = applyGymScope({}, req);
 
   if (date)     filter.date   = date;
   if (memberId) filter.member = memberId;
@@ -152,6 +150,7 @@ exports.checkIn = asyncHandler(async (req, res, next) => {
   else if (memberId) member = await Member.findById(memberId);
 
   if (!member)                     return next(new AppError("Member not found.", 404));
+  assertSameTenant(req.user, member);
   if (member.status === "Banned")  return next(new AppError("Member is banned.", 403));
   if (member.status === "Expired") return next(new AppError("Member's plan has expired.", 403));
 

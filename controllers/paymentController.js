@@ -12,6 +12,7 @@ const AppError = require("../utils/AppError");
 const { generateInvoiceNumber } = require("../utils/invoiceNumber");
 const { sendPaymentConfirmation } = require("../services/emailService");
 const { createNotification } = require("../services/notificationService");
+const { applyGymScope, findMemberForUser, getTenantGymId, assertSameTenant } = require("../utils/tenantFilter");
 
 // ── Initialize payment gateways ────────────────────────────────────
 const stripe = process.env.STRIPE_SECRET_KEY
@@ -26,11 +27,8 @@ const razorpay = process.env.RAZORPAY_KEY_ID
 // @GET /api/payments
 // ─────────────────────────────────────────────────────────────────
 exports.getPayments = asyncHandler(async (req, res) => {
-  const { status, type, gymId, memberId, from, to } = req.query;
-  const filter = {};
-
-  if (req.user.role === "gym-owner") filter.gym = req.user.gym;
-  else if (gymId) filter.gym = gymId;
+  const { status, type, memberId, from, to } = req.query;
+  const filter = applyGymScope({}, req);
 
   if (status)   filter.status = status;
   if (type)     filter.type = type;
@@ -70,8 +68,14 @@ exports.createRazorpayOrder = asyncHandler(async (req, res, next) => {
   // Resolve memberId — for logged-in members, find their member record
   let resolvedMemberId = memberId;
   if (!resolvedMemberId && req.user) {
-    const member = await Member.findOne({ email: req.user.email });
+    const member = await findMemberForUser(req.user, Member);
     if (member) resolvedMemberId = member._id;
+  }
+
+  if (req.user?.role === "member" && plan.gym && getTenantGymId(req.user)) {
+    if (String(plan.gym) !== String(getTenantGymId(req.user))) {
+      return next(new AppError("This plan does not belong to your gym.", 403));
+    }
   }
 
   // ── Downgrade prevention ───────────────────────────────────────
@@ -350,33 +354,20 @@ async function processPayment({ memberId, planId, gateway, gatewayPaymentId = ""
     member = await Member.findById(memberId).catch(() => null);
   }
 
-  // 2. Try by logged-in user's email
-  if (!member && user?.email) {
-    member = await Member.findOne({ email: user.email.toLowerCase() });
+  // 2. Try by logged-in user — scoped to their gym only
+  if (!member && user) {
+    member = await findMemberForUser(user, Member);
   }
 
-  // 3. Auto-create member from User account
-  if (!member && user) {
-    // Find the first active gym to attach this member to
-    const gym = await Gym.findOne({ status: "active" }).sort({ createdAt: 1 });
-    if (!gym) {
-      if (!fromWebhook && typeof next === "function") {
-        return next(new AppError("No active gym found. Please contact support.", 404));
-      }
-      return;
-    }
+  if (member && user?.role === "member") {
+    assertSameTenant(user, member);
+  }
 
-    // Create member record from user data
-    member = await Member.create({
-      user:    user._id,
-      gym:     gym._id,
-      addedBy: user._id,
-      name:    user.name,
-      email:   user.email.toLowerCase(),
-      phone:   user.phone || "0000000000",
-      status:  "Active",
-      joinDate: new Date(),
-    });
+  if (plan.gym && member && String(plan.gym) !== String(member.gym)) {
+    if (!fromWebhook && typeof next === "function") {
+      return next(new AppError("This plan does not belong to your gym.", 403));
+    }
+    return;
   }
 
   if (!member) {

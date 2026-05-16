@@ -5,19 +5,21 @@ const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError = require("../utils/AppError");
 const { createNotification } = require("../services/notificationService");
 const { deleteFromStorage, extractPublicId } = require("./uploadController");
+const { applyGymScope, assertSameTenant } = require("../utils/tenantFilter");
 
 // ── @GET /api/trainers ─────────────────────────────────────────────
 exports.getTrainers = asyncHandler(async (req, res) => {
-  const { status, specialty, search, gymId } = req.query;
+  const { status, specialty, search } = req.query;
   const filter = {};
 
   // Public access (no auth) — show only Active trainers
   if (!req.user) {
     filter.status = "Active";
-  } else if (req.user.role === "gym-owner") {
-    filter.gym = req.user.gym;
-  } else if (gymId) {
-    filter.gym = gymId;
+  } else if (req.user.role === "member") {
+    filter.status = "Active";
+    applyGymScope(filter, req);
+  } else {
+    applyGymScope(filter, req);
   }
 
   if (status && req.user) filter.status = status; // only override if authenticated
@@ -46,6 +48,7 @@ exports.getTrainers = asyncHandler(async (req, res) => {
 exports.getTrainer = asyncHandler(async (req, res, next) => {
   const trainer = await Trainer.findById(req.params.id).populate("gym", "name city");
   if (!trainer) return next(new AppError("Trainer not found.", 404));
+  if (req.user) assertSameTenant(req.user, trainer);
   res.json({ success: true, data: trainer });
 });
 

@@ -151,7 +151,8 @@ exports.register = asyncHandler(async (req, res, next) => {
     password,
     phone: phone || "",
     role,
-    gym:  linkedGym?._id || undefined,
+    gym:      linkedGym?._id || undefined,
+    tenantId: linkedGym?._id || undefined,
     isEmailVerified: true,
     avatar: name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2),
   });
@@ -168,6 +169,7 @@ exports.register = asyncHandler(async (req, res, next) => {
       await Member.create({
         user:     user._id,
         gym:      linkedGym._id,
+        tenantId: linkedGym._id,
         addedBy:  user._id,
         name:     name.trim(),
         email:    email.toLowerCase(),
@@ -314,21 +316,30 @@ exports.getMe = asyncHandler(async (req, res) => {
 
   // ── Also fetch Member record to get latest plan info ──────────
   // This ensures plan shows even if User.plan wasn't updated
-  if (user.role === "member" && !userData.plan) {
+  if (user.role === "member") {
     try {
       const Member = require("../models/Member");
-      const member = await Member.findOne({ email: user.email.toLowerCase() })
-        .populate("plan", "name");
-      if (member?.planName) {
-        userData.plan       = member.planName;
-        userData.planExpiry = member.expiryDate;
-        userData.planId     = member.plan?._id || member.plan;
-        // Also update User record so next getMe is faster
-        await User.findByIdAndUpdate(user._id, {
-          plan:       member.planName,
-          planExpiry: member.expiryDate,
-          planId:     member.plan?._id || member.plan,
-        });
+      const { findMemberForUser, getTenantGymId } = require("../utils/tenantFilter");
+      let member = await findMemberForUser(user, Member);
+
+      // Backfill gym on user if missing (legacy accounts)
+      if (!getTenantGymId(user) && member?.gym) {
+        await User.findByIdAndUpdate(user._id, { gym: member.gym, tenantId: member.gym });
+        userData.gym = member.gym;
+      }
+
+      if (member && !userData.plan) {
+        member = await Member.findById(member._id).populate("plan", "name");
+        if (member?.planName) {
+          userData.plan       = member.planName;
+          userData.planExpiry = member.expiryDate;
+          userData.planId     = member.plan?._id || member.plan;
+          await User.findByIdAndUpdate(user._id, {
+            plan:       member.planName,
+            planExpiry: member.expiryDate,
+            planId:     member.plan?._id || member.plan,
+          });
+        }
       }
     } catch { /* silent */ }
   }

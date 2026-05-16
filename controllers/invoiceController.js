@@ -3,14 +3,12 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const { paginate, buildPaginationMeta } = require("../utils/pagination");
 const AppError = require("../utils/AppError");
 const { sendEmail } = require("../services/emailService");
+const { applyGymScope, assertSameTenant } = require("../utils/tenantFilter");
 
 // ── @GET /api/invoices ─────────────────────────────────────────────
 exports.getInvoices = asyncHandler(async (req, res) => {
-  const { status, memberId, gymId } = req.query;
-  const filter = {};
-
-  if (req.user.role === "gym-owner") filter.gym = req.user.gym;
-  else if (gymId) filter.gym = gymId;
+  const { status, memberId } = req.query;
+  const filter = applyGymScope({}, req);
 
   if (status)   filter.status = status;
   if (memberId) filter.member = memberId;
@@ -33,6 +31,7 @@ exports.getInvoices = asyncHandler(async (req, res) => {
 exports.getInvoice = asyncHandler(async (req, res, next) => {
   const invoice = await Invoice.findById(req.params.id).populate("member plan gym");
   if (!invoice) return next(new AppError("Invoice not found.", 404));
+  assertSameTenant(req.user, invoice);
   res.json({ success: true, data: invoice });
 });
 
