@@ -95,8 +95,13 @@ app.use((req, res, next) => {
 });
 
 // ── Security Middleware ────────────────────────────────────────────
+// Disable helmet's default CSP — the backend is an API server, not a web app.
+// CSP on an API response blocks browsers from making cross-origin fetch calls.
+// Security headers that matter for APIs (X-Frame-Options, HSTS, etc.) are kept.
 app.use(helmet({
+  contentSecurityPolicy: false,          // ← DISABLE: breaks cross-origin API calls
   crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginOpenerPolicy: false,        // ← DISABLE: not needed for API
 }));
 
 // ── NoSQL Injection sanitizer (replaces express-mongo-sanitize) ────
